@@ -1,0 +1,9 @@
+{
+  "globalDependencies": {
+    "minimist": "registry:dt/minimist#1.1.3+20160317120654",
+    "node": "registry:dt/node#6.0.0+20160728152422",
+    "node-sass": "registry:dt/node-sass#0.0.0+20160316155526",
+    "optimist": "registry:dt/optimist#0.0.0+20160316171810",
+    "promise": "registry:dt/promise#7.1.1+20160602154553"
+  }
+}

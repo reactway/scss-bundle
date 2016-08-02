@@ -1,0 +1,30 @@
+{
+  "name": "scss-bundle",
+  "version": "0.1.0",
+  "description": "Bundling SCSS files to one file bundle.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p .",
+    "watch": "tsc -w"
+  },
+  "keywords": [
+    "scss",
+    "bundle"
+  ],
+  "author": "Martynas Zilinskas <martynas@quotrodev.com>",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "typescript": "1.8.10",
+    "typings": "^1.3.1"
+  },
+  "bin": {
+    "scss-rollup": "./rollup.js"
+  },
+  "dependencies": {
+    "minimist": "^1.2.0",
+    "node-sass": "^3.8.0",
+    "optimist": "^0.6.1",
+    "promise": "^7.1.1"
+  }
+}
