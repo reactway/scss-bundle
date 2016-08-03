@@ -29,7 +29,7 @@ export default class Bundle {
 
     constructor(config: Contracts.Config) {
         this.config = config;
-        this.entry_file = path.join(__dirname, this.config.entry);
+        this.entry_file = path.join(process.cwd(), this.config.entry);
         this.files.push(this.entry_file);
     }
 

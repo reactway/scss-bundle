@@ -1,4 +1,0 @@
-{
-    "entry": "../test/main.scss",
-    "dest": "bundled.scss"
-}
