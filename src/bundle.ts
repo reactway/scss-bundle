@@ -44,15 +44,6 @@ export default class Bundle {
         }
         let bundledFileContents = this.bundling(this.entry_file);
 
-
-
-
-        // sass.render({
-        //     data: bundledFileContents,
-        // }, () => {
-
-        // });
-
         return new Promise((resolve, reject) => {
             sass.render({ data: bundledFileContents }, (error, result) => {
                 if (error != null) {

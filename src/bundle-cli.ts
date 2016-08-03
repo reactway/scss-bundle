@@ -11,7 +11,8 @@ class Cli {
     private package: { [id: string]: any } = {};
 
     constructor(args: optimist.Parser) {
-        this.package = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+        let packageJSONPath = path.join(__dirname, '../package.json');
+        this.package = JSON.parse(fs.readFileSync(packageJSONPath, 'utf8'));
         let argv = args.argv as Contracts.Arguments;
 
         if (argv.help) {
