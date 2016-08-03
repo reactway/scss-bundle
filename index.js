@@ -1,2 +1,2 @@
 /* */ 
-module.exports = require('./dist/bundle-cli');
+module.exports = require('./dist/bundle');
