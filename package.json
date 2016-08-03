@@ -12,7 +12,10 @@
     "scss",
     "bundle"
   ],
-  "author": "Martynas Zilinskas <martynas@quotrodev.com>",
+  "author": "Martynas Zilinskas <martynas@quotrodev.com> (https://github.com/MartynasZilinskas)",
+  "bugs": "https://github.com/QuatroCode/scss-bundle/issues",
+  "repository": "QuatroCode/scss-bundle",
+  "homepage": "https://github.com/QuatroCode/scss-bundle",
   "license": "GPL-3.0",
   "devDependencies": {
     "typescript": "1.8.10",
