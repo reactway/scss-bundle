@@ -1,5 +1,6 @@
 scss-bundle
 ===========
+[![NPM version](http://img.shields.io/npm/v/scss-bundle.svg)](https://www.npmjs.com/package/scss-bundle) [![dependencies Status](https://david-dm.org/quatrocode/scss-bundle/status.svg)](https://david-dm.org/quatrocode/scss-bundle) [![devDependencies Status](https://david-dm.org/quatrocode/scss-bundle/dev-status.svg)](https://david-dm.org/quatrocode/scss-bundle?type=dev)
 
 ## Get started
 ```sh
