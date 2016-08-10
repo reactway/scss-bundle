@@ -13,11 +13,6 @@ interface Dependencies {
     [id: string]: string;
 }
 
-interface Config {
-    main: string;
-    out: string;
-}
-
 export default class Bundle {
     /**
      * Full path of entry file.
@@ -35,7 +30,7 @@ export default class Bundle {
 
     public Bundle() {
         while (this.files.length > 0) {
-            let file = this.files.shift();
+            let file = this.files.shift() as string;
             let imports = this.getImports(file);
             this.files.unshift(...imports);
             if (this.dependencies[file] == null) {
@@ -49,7 +44,7 @@ export default class Bundle {
                 if (error != null) {
                     reject(`${error.message} at line ${error.line}.`);
                 } else {
-                    resolve(null);
+                    resolve({});
                 }
                 this.writeToFile(bundledFileContents);
             });
