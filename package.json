@@ -1,7 +1,7 @@
 {
   "name": "scss-bundle",
-  "version": "0.1.2",
-  "description": "Bundling SCSS files to one file bundle.",
+  "version": "0.2.0",
+  "description": "Bundling SCSS files to one bundled file.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,16 +18,18 @@
   "homepage": "https://github.com/QuatroCode/scss-bundle",
   "license": "GPL-3.0",
   "devDependencies": {
-    "typescript": "1.8.10",
-    "typings": "^1.3.1"
+    "@types/node": "^6.0.32",
+    "@types/node-sass": "0.0.28",
+    "@types/promise": "^7.1.27",
+    "@types/yargs": "0.0.28",
+    "typescript": "1.8.10"
   },
   "bin": {
     "scss-bundle": "./dist/bundle-cli.js"
   },
   "dependencies": {
-    "minimist": "^1.2.0",
     "node-sass": "^3.8.0",
-    "optimist": "^0.6.1",
-    "promise": "^7.1.1"
+    "promise": "^7.1.1",
+    "yargs": "^4.8.1"
   }
 }

@@ -1,93 +1,94 @@
 #!/usr/bin/env node
 import * as fs from 'fs';
 import * as Contracts from './contracts';
-import DefaultConfig from './default-config';
-import * as optimist from 'optimist';
 import Bundle from './bundle';
+import argv from './arguments';
 import * as path from 'path';
 
+const DEFAULT_CONFIG_NAME = 'scss-bundle.config.json';
+
 class Cli {
-    private config: Contracts.Config;
-    private package: { [id: string]: any } = {};
+    constructor(argv: Contracts.Arguments) {
+        let configFileName = argv.config || DEFAULT_CONFIG_NAME;
+        this.main(configFileName, argv);
+    }
 
-    constructor(args: optimist.Parser) {
-        let packageJSONPath = path.join(__dirname, '../package.json');
-        this.package = JSON.parse(fs.readFileSync(packageJSONPath, 'utf8'));
-        let argv = args.argv as Contracts.Arguments;
 
-        if (argv.help) {
-            this.printVersion();
-            console.info(args.help());
-        } else if (argv.version) {
-            this.printVersion();
+    private async main(configFileName: string, argv: Contracts.Arguments) {
+        let fullPath = path.join(process.cwd(), configFileName);
+        let configExists = await this.checkConfigIsExist(fullPath);
+
+        if (argv.dest != null && argv.entry != null && argv.config == null) {
+            this.bundle({
+                entry: argv.entry,
+                dest: argv.dest
+            });
+        } else if ((argv.dest == null || argv.entry == null) && argv.config == null) {
+            this.throwError('[Error] `Dest` or `Entry` argument is missing.');
+        } else if (configExists) {
+            let config = await this.readConfigFile(configFileName).catch((err) => {
+                this.throwError(`[Error] Config file ${configFileName} is not valid.`);
+            }) as Contracts.Config;
+
+            console.info('Using config:', fullPath);
+            this.bundle(this.getConfig(config, argv));
         } else {
-            if (argv.config == null) {
-                args.demand(['e', 'd']);
-                argv = args.argv;
+            this.throwError(`[Error] Config file ${configFileName} was not found.`);
+        }
 
-                this.config = {
-                    entry: argv.entry,
-                    dest: argv.dest
+    }
+
+    private bundle(config: Contracts.Config) {
+        new Bundle(config)
+            .Bundle()
+            .then(() => {
+                console.info(`[Done] Bundling done. Destination: ${config.dest}.`);
+            })
+            .catch((error) => {
+                this.throwError(`[Error] Bundling done with errors. ${error}`);
+            });
+    }
+
+    private getConfig(config: Contracts.Config, argv: Contracts.Arguments) {
+        if (argv.entry != null) config.entry = argv.entry;
+        if (argv.dest != null) config.dest = argv.dest;
+        return config;
+    }
+
+    private async checkConfigIsExist(fullPath: string) {
+        return new Promise<boolean>((resolve, reject) => {
+            fs.access(fullPath, fs.F_OK, async (err) => {
+                if (!err) {
+                    resolve(true);
+                } else {
+                    resolve(false);
                 }
-            } else {
-                this.config = this.getConfig(argv.config);
-            }
-            new Bundle(this.config)
-                .Bundle()
-                .then(() => {
-                    console.info(`[Done] Bundling done. Destination: ${this.config.dest}.`);
-                })
-                .catch((error) => {
-                    console.error(`[Error] Bundling done with errors. ${error}`);
-                    process.exit(1);
-                });
-        }
+            });
+        });
     }
 
-    private getConfig(filePath: string) {
-        let fullPath = path.join(process.cwd(), filePath);
-        try {
-            fs.accessSync(fullPath, fs.F_OK);
-            return JSON.parse(fs.readFileSync(fullPath, 'utf8'));
-        } catch (e) {
-            if (typeof filePath === 'boolean') {
-                console.error(`[Error] Config file path is not set.`);
-            } else {
-                console.error(`[Error] Config ${filePath} was not found.`);
-            }
-            process.exit(1);
-        }
-
+    private async readConfigFile(fullPath: string) {
+        return new Promise<Contracts.Config>((resolve, reject) => {
+            fs.readFile(fullPath, 'utf8', (err, data) => {
+                if (!err) {
+                    let configData: Contracts.Config;
+                    try {
+                        configData = JSON.parse(data);
+                        resolve(configData);
+                    } catch (e) {
+                        reject(e);
+                    }
+                } else {
+                    reject(err);
+                }
+            });
+        });
     }
 
-    private printVersion() {
-        console.info(`Version ${this.package['version']} \n`);
+    private throwError(message: string) {
+        console.error(message);
+        process.exit(1);
     }
 }
 
-let argv = optimist
-    .options('h', {
-        alias: 'help',
-        describe: 'Prints this message.'
-    })
-    .options('v', {
-        alias: 'version',
-        describe: 'Prints version.'
-    })
-    .options('c', {
-        alias: 'config',
-        describe: 'Config file path.'
-    })
-    .options('e', {
-        alias: 'entry',
-        describe: 'Entry file.'
-    })
-    .options('d', {
-        alias: 'dest',
-        describe: 'Bundled file destination.'
-    })
-    .usage('Usage: scss-bundle [options]')
-    .boolean(['h', 'v'])
-    .string(['c', 'e', 'd']);
-
-let commandLine = new Cli(argv);
+new Cli(argv);
