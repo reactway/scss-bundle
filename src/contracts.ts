@@ -4,10 +4,7 @@ export interface Config {
 }
 
 export interface Arguments {
-    build: boolean;
     config: string;
     entry: string;
     dest: string;
-    help: boolean;
-    version: boolean;
 }
