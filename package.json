@@ -19,10 +19,10 @@
   "homepage": "https://github.com/QuatroCode/scss-bundle",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@types/node": "^6.0.32",
-    "@types/node-sass": "0.0.28",
+    "@types/node": "^7.0.8",
+    "@types/node-sass": "3.10.32",
     "@types/promise": "^7.1.27",
-    "@types/yargs": "0.0.28",
+    "@types/yargs": "6.6.0",
     "tslint": "^4.5.1",
     "typescript": "^2.2.1"
   },
@@ -30,8 +30,8 @@
     "scss-bundle": "./dist/bundle-cli.js"
   },
   "dependencies": {
-    "node-sass": "^3.8.0",
+    "node-sass": "^4.5.0",
     "promise": "^7.1.1",
-    "yargs": "^4.8.1"
+    "yargs": "^7.0.2"
   }
 }
