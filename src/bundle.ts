@@ -1,13 +1,13 @@
-import * as fs from "fs";
+import * as fs from "mz/fs";
 import * as os from "os";
 import * as path from "path";
 import * as sass from "node-sass";
-import * as Promise from "promise";
+import * as mkdirp from "mkdirp";
 
 import * as Helpers from "./helpers";
 import * as Contracts from "./contracts";
 
-const IMPORT_PATTERN = /@import '(.+)';/g;
+const IMPORT_PATTERN = /@import ['"](.+)['"];/g;
 const COMMENTED_IMPORT_PATTERN = /\/\/@import '(.+)';/g;
 const FILE_EXTENSION = ".scss";
 
@@ -15,12 +15,19 @@ interface Dependencies {
     [id: string]: string;
 }
 
+interface ImportData {
+    importString: string;
+    path: string;
+    fullPath: string;
+    found: boolean;
+}
+
 export class Bundle {
     /**
      * Full path of entry file.
      */
     private entryFile: string;
-    private dependencies: Dependencies = {};
+    private filesContents: Dependencies = {};
     private files = Array<string>();
     private config: Contracts.Config;
 
@@ -30,91 +37,97 @@ export class Bundle {
         this.files.push(this.entryFile);
     }
 
-    public Bundle() {
-        while (this.files.length > 0) {
-            let file = this.files.shift() as string;
-            let imports = this.getImports(file);
-            this.files.unshift(...imports);
-            if (this.dependencies[file] == null) {
-                this.dependencies[file] = this.getFileContents(file);
-            }
-        }
-        let bundledFileContents = this.bundling(this.entryFile);
+    public async Bundle() {
+        let filesToExplore = this.files;
 
-        return new Promise((resolve, reject) => {
-            sass.render({ data: bundledFileContents }, (error, result) => {
-                if (error != null) {
-                    reject(`${error.message} at line ${error.line}.`);
-                } else {
-                    resolve({});
+        // Bundle all files depth first
+        while (filesToExplore.length > 0) {
+            // Shift first file
+            let file = filesToExplore.shift() as string;
+
+            // Bundle it recursively
+            // let imports = await this.getImports(file);
+            let content = await fs.readFile(file, "utf-8");
+            let bundledFile = await this.bundle(file, content);
+
+            // Add resolved imports to the begining of files array
+            filesToExplore.unshift(...imports);
+        }
+
+        let bundledContent = this.bundle(this.entryFile);
+
+        return await this.render(bundledContent);
+    }
+
+    private async bundle(filePath: string, content: string): Promise<string> {
+        // Remove commented imports
+        content = content.replace(COMMENTED_IMPORT_PATTERN, "");
+
+        // Resolve path to work only with full paths
+        filePath = path.resolve(filePath);
+
+        let dirname = path.dirname(filePath);
+
+        if (this.filesContents[filePath] == null) {
+            this.filesContents[filePath] = content;
+        }
+
+        let importsPromises = Helpers.getAllMatches(content, IMPORT_PATTERN).map(async match => {
+            let importName = match[1];
+            // Append extension if it's absent
+            if (importName.indexOf(FILE_EXTENSION) === -1) {
+                importName += FILE_EXTENSION;
+            }
+            let fullPath = path.resolve(dirname, importName);
+
+            let importData: ImportData = {
+                importString: match[0],
+                path: importName,
+                fullPath: fullPath,
+                found: false
+            };
+
+            try {
+                await fs.access(fullPath);
+                importData.found = true;
+            } catch (error) {
+                let underscoredFilePath = path.join(dirname, `_${importName}`);
+                try {
+                    await fs.access(underscoredFilePath);
+                    importData.fullPath = underscoredFilePath;
+                    importData.found = true;
+                } catch (underscoreErr) {
+                    // Neither file, nor partial was found
                 }
-                this.writeToFile(bundledFileContents);
-            });
-        });
-    }
-
-    private writeToFile(contents: string) {
-        fs.writeFileSync(this.config.dest, contents);
-    }
-
-    private bundling(filePath: string) {
-        if (this.dependencies[filePath] == null) {
-            return undefined;
-        }
-        let content = this.removeCommentedImports(this.dependencies[filePath]);
-        delete this.dependencies[filePath];
-        let folderPath = path.dirname(filePath);
-
-        return this.replaceImports(content, (matches) => {
-            let file = matches[1];
-            if (file.indexOf(FILE_EXTENSION) === -1) {
-                file += FILE_EXTENSION;
             }
-            let fullPath = path.join(folderPath, file);
-            let content = this.bundling(fullPath) || "";
-            content += os.EOL;
-            return content;
-        });
-    }
 
-    private replaceImports(content: string, callback: (matches: Array<string>) => string) {
-        let imports = Helpers.getMatches(content, IMPORT_PATTERN, -1) as Array<Array<string>>;
-        for (let i = 0; i < imports.length; i++) {
-            if (imports[i].length > 0) {
-                content = content.replace(imports[i][0], callback(imports[i]));
+            return importData;
+        });
+
+        let imports = await Promise.all(importsPromises);
+
+        for (let imp of imports) {
+            if (this.filesContents[imp.fullPath] == null) {
+                let impContent = await fs.readFile(imp.fullPath, "utf-8");
+                this.filesContents[imp.fullPath] = await this.bundle(imp.fullPath, impContent);
             }
         }
 
         return content;
     }
 
-    private getImports(filePath: string, fullPaths = true): Array<string> {
-        let paths = Array<string>();
-        let fileFolder = path.dirname(filePath);
-        let content = this.getFileContents(filePath);
-        content = this.removeCommentedImports(content);
-        let imports = Helpers.getMatches(content, IMPORT_PATTERN);
-
-        let importsKeys = Object.keys(imports);
-        for (let i = 0; i < importsKeys.length; i++) {
-            let importItem = imports[importsKeys[i]];
-
-            let importFilePath = fullPaths ? path.join(fileFolder, importItem) : importItem;
-            if (importFilePath.indexOf(FILE_EXTENSION) === -1) {
-                importFilePath += FILE_EXTENSION;
-            }
-
-            paths.push(importFilePath as string);
-        }
-
-        return paths;
+    private async render(content: string) {
+        return new Promise((resolve, reject) => {
+            sass.render({ data: content }, async (error, result) => {
+                await this.writeToFile(content);
+                if (error != null) {
+                    reject(`${error.message} at line ${error.line}.`);
+                } else {
+                    resolve({});
+                }
+            });
+        })
     }
 
-    private removeCommentedImports(content: string) {
-        return content.replace(COMMENTED_IMPORT_PATTERN, "");
-    }
 
-    private getFileContents(filePath: string): string {
-        return fs.readFileSync(filePath, "utf8").toString();
-    }
 }

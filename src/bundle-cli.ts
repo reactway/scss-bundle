@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import * as fs from "fs";
+import * as fs from "mz/fs";
 import * as path from "path";
 
 import * as Contracts from "./contracts";
-import {Bundle } from "./bundle";
+import { Bundle } from "./bundle";
 import { argv } from "./arguments";
 
 const DEFAULT_CONFIG_NAME = "scss-bundle.config.json";
@@ -17,24 +17,28 @@ class Cli {
 
     private async main(configFileName: string, argv: Contracts.Arguments) {
         let fullPath = path.join(process.cwd(), configFileName);
-        let configExists = await this.checkConfigIsExist(fullPath);
+        let configExists = await this.checkConfigExists(fullPath);
 
         if (argv.dest != null && argv.entry != null && argv.config == null) {
             this.bundle({
                 entry: argv.entry,
                 dest: argv.dest
             });
-        } else if ((argv.dest == null || argv.entry == null) && argv.config == null) {
-            this.throwError("[Error] `Dest` or `Entry` argument is missing.");
+        } else if (
+            (argv.dest == null || argv.entry == null) &&
+            argv.config == null) {
+            this.exitWithError("[Error] `Dest` or `Entry` argument is missing.");
         } else if (configExists) {
-            let config = await this.readConfigFile(configFileName).catch((err) => {
-                this.throwError(`[Error] Config file ${configFileName} is not valid.`);
-            }) as Contracts.Config;
-
-            console.info("Using config:", fullPath);
-            this.bundle(this.getConfig(config, argv));
+            try {
+                let config = await this.readConfigFile(configFileName) as Contracts.Config;;
+                console.info("Using config:", fullPath);
+                this.bundle(this.getConfig(config, argv));
+            }
+            catch (err) {
+                this.exitWithError(`[Error] Config file ${configFileName} is not valid.`);
+            }
         } else {
-            this.throwError(`[Error] Config file ${configFileName} was not found.`);
+            this.exitWithError(`[Error] Config file ${configFileName} was not found.`);
         }
 
     }
@@ -43,10 +47,11 @@ class Cli {
         new Bundle(config)
             .Bundle()
             .then(() => {
-                console.info(`[Done] Bundling done. Destination: ${config.dest}.`);
+                let fullPath = path.resolve(config.dest);
+                console.info(`[Done] Bundling done. Destination: ${fullPath}.`);
             })
             .catch((error) => {
-                this.throwError(`[Error] Bundling done with errors. ${error}`);
+                this.exitWithError(`[Error] Bundling done with errors. ${error}`);
             });
     }
 
@@ -61,37 +66,24 @@ class Cli {
         return config;
     }
 
-    private async checkConfigIsExist(fullPath: string) {
-        return new Promise<boolean>((resolve, reject) => {
-            fs.access(fullPath, fs.constants.F_OK, async (err) => {
-                if (!err) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-            });
-        });
+    private async checkConfigExists(fullPath: string) {
+        try {
+            await fs.access(fullPath, fs.constants.F_OK);
+            return true;
+        }
+        catch (err) {
+            return false;
+        }
     }
 
     private async readConfigFile(fullPath: string) {
-        return new Promise<Contracts.Config>((resolve, reject) => {
-            fs.readFile(fullPath, "utf8", (err, data) => {
-                if (!err) {
-                    let configData: Contracts.Config;
-                    try {
-                        configData = JSON.parse(data);
-                        resolve(configData);
-                    } catch (e) {
-                        reject(e);
-                    }
-                } else {
-                    reject(err);
-                }
-            });
-        });
+        let data = await fs.readFile(fullPath, "utf8");
+        let configData: Contracts.Config;
+        configData = JSON.parse(data);
+        return configData;
     }
 
-    private throwError(message: string) {
+    private exitWithError(message: string) {
         console.error(message);
         process.exit(1);
     }
