@@ -1,11 +1,12 @@
 #!/usr/bin/env node
-import * as fs from 'fs';
-import * as Contracts from './contracts';
-import Bundle from './bundle';
-import argv from './arguments';
-import * as path from 'path';
+import * as fs from "fs";
+import * as path from "path";
 
-const DEFAULT_CONFIG_NAME = 'scss-bundle.config.json';
+import * as Contracts from "./contracts";
+import {Bundle } from "./bundle";
+import { argv } from "./arguments";
+
+const DEFAULT_CONFIG_NAME = "scss-bundle.config.json";
 
 class Cli {
     constructor(argv: Contracts.Arguments) {
@@ -24,13 +25,13 @@ class Cli {
                 dest: argv.dest
             });
         } else if ((argv.dest == null || argv.entry == null) && argv.config == null) {
-            this.throwError('[Error] `Dest` or `Entry` argument is missing.');
+            this.throwError("[Error] `Dest` or `Entry` argument is missing.");
         } else if (configExists) {
             let config = await this.readConfigFile(configFileName).catch((err) => {
                 this.throwError(`[Error] Config file ${configFileName} is not valid.`);
             }) as Contracts.Config;
 
-            console.info('Using config:', fullPath);
+            console.info("Using config:", fullPath);
             this.bundle(this.getConfig(config, argv));
         } else {
             this.throwError(`[Error] Config file ${configFileName} was not found.`);
@@ -50,14 +51,19 @@ class Cli {
     }
 
     private getConfig(config: Contracts.Config, argv: Contracts.Arguments) {
-        if (argv.entry != null) config.entry = argv.entry;
-        if (argv.dest != null) config.dest = argv.dest;
+        if (argv.entry != null) {
+            config.entry = argv.entry;
+        }
+        if (argv.dest != null) {
+            config.dest = argv.dest;
+        }
+
         return config;
     }
 
     private async checkConfigIsExist(fullPath: string) {
         return new Promise<boolean>((resolve, reject) => {
-            fs.access(fullPath, fs.F_OK, async (err) => {
+            fs.access(fullPath, fs.constants.F_OK, async (err) => {
                 if (!err) {
                     resolve(true);
                 } else {
@@ -69,7 +75,7 @@ class Cli {
 
     private async readConfigFile(fullPath: string) {
         return new Promise<Contracts.Config>((resolve, reject) => {
-            fs.readFile(fullPath, 'utf8', (err, data) => {
+            fs.readFile(fullPath, "utf8", (err, data) => {
                 if (!err) {
                     let configData: Contracts.Config;
                     try {

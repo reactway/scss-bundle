@@ -1,31 +1,33 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import * as Helpers from './helpers';
-import * as Contracts from './contracts';
-import * as sass from 'node-sass';
-import * as Promise from 'promise';
+import * as fs from "fs";
+import * as os from "os";
+import * as path from "path";
+import * as sass from "node-sass";
+import * as Promise from "promise";
+
+import * as Helpers from "./helpers";
+import * as Contracts from "./contracts";
 
 const IMPORT_PATTERN = /@import '(.+)';/g;
 const COMMENTED_IMPORT_PATTERN = /\/\/@import '(.+)';/g;
-const FILE_EXTENSION = '.scss';
+const FILE_EXTENSION = ".scss";
 
 interface Dependencies {
     [id: string]: string;
 }
 
-export default class Bundle {
+export class Bundle {
     /**
      * Full path of entry file.
      */
-    private entry_file: string;
+    private entryFile: string;
     private dependencies: Dependencies = {};
     private files = Array<string>();
     private config: Contracts.Config;
 
     constructor(config: Contracts.Config) {
         this.config = config;
-        this.entry_file = path.join(process.cwd(), this.config.entry);
-        this.files.push(this.entry_file);
+        this.entryFile = path.join(process.cwd(), this.config.entry);
+        this.files.push(this.entryFile);
     }
 
     public Bundle() {
@@ -37,7 +39,7 @@ export default class Bundle {
                 this.dependencies[file] = this.getFileContents(file);
             }
         }
-        let bundledFileContents = this.bundling(this.entry_file);
+        let bundledFileContents = this.bundling(this.entryFile);
 
         return new Promise((resolve, reject) => {
             sass.render({ data: bundledFileContents }, (error, result) => {
@@ -55,22 +57,22 @@ export default class Bundle {
         fs.writeFileSync(this.config.dest, contents);
     }
 
-    private bundling(file_path: string) {
-        if (this.dependencies[file_path] == null) {
+    private bundling(filePath: string) {
+        if (this.dependencies[filePath] == null) {
             return undefined;
         }
-        let content = this.removeCommentedImports(this.dependencies[file_path]);
-        delete this.dependencies[file_path];
-        let folder_path = path.dirname(file_path);
+        let content = this.removeCommentedImports(this.dependencies[filePath]);
+        delete this.dependencies[filePath];
+        let folderPath = path.dirname(filePath);
 
         return this.replaceImports(content, (matches) => {
             let file = matches[1];
             if (file.indexOf(FILE_EXTENSION) === -1) {
                 file += FILE_EXTENSION;
             }
-            let fullPath = path.join(folder_path, file);
-            let content = this.bundling(fullPath) || '';
-            content += '\n';
+            let fullPath = path.join(folderPath, file);
+            let content = this.bundling(fullPath) || "";
+            content += os.EOL;
             return content;
         });
     }
@@ -86,30 +88,33 @@ export default class Bundle {
         return content;
     }
 
-    private getImports(file_path: string, fullPaths = true): Array<string> {
+    private getImports(filePath: string, fullPaths = true): Array<string> {
         let paths = Array<string>();
-        let file_folder = path.dirname(file_path);
-        let content = this.getFileContents(file_path);
+        let fileFolder = path.dirname(filePath);
+        let content = this.getFileContents(filePath);
         content = this.removeCommentedImports(content);
         let imports = Helpers.getMatches(content, IMPORT_PATTERN);
 
-        for (let key in imports) {
-            let import_file_path = fullPaths ? path.join(file_folder, imports[key]) : imports[key];
-            if (import_file_path.indexOf(FILE_EXTENSION) === -1) {
-                import_file_path += FILE_EXTENSION;
+        let importsKeys = Object.keys(imports);
+        for (let i = 0; i < importsKeys.length; i++) {
+            let importItem = imports[importsKeys[i]];
+
+            let importFilePath = fullPaths ? path.join(fileFolder, importItem) : importItem;
+            if (importFilePath.indexOf(FILE_EXTENSION) === -1) {
+                importFilePath += FILE_EXTENSION;
             }
 
-            paths.push(import_file_path as string);
+            paths.push(importFilePath as string);
         }
 
         return paths;
     }
 
     private removeCommentedImports(content: string) {
-        return content.replace(COMMENTED_IMPORT_PATTERN, '');
+        return content.replace(COMMENTED_IMPORT_PATTERN, "");
     }
 
-    private getFileContents(file_path: string): string {
-        return fs.readFileSync(file_path, 'utf8').toString();
+    private getFileContents(filePath: string): string {
+        return fs.readFileSync(filePath, "utf8").toString();
     }
 }
