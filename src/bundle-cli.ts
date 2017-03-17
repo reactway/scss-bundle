@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 import * as fs from "fs";
-import * as Contracts from "./contracts";
-import Bundle from "./bundle";
-import argv from "./arguments";
 import * as path from "path";
+
+import * as Contracts from "./contracts";
+import {Bundle } from "./bundle";
+import { argv } from "./arguments";
 
 const DEFAULT_CONFIG_NAME = "scss-bundle.config.json";
 
@@ -50,8 +51,13 @@ class Cli {
     }
 
     private getConfig(config: Contracts.Config, argv: Contracts.Arguments) {
-        if (argv.entry != null) config.entry = argv.entry;
-        if (argv.dest != null) config.dest = argv.dest;
+        if (argv.entry != null) {
+            config.entry = argv.entry;
+        }
+        if (argv.dest != null) {
+            config.dest = argv.dest;
+        }
+
         return config;
     }
 

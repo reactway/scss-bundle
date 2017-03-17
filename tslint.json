@@ -16,7 +16,7 @@
     "semicolon": [ true ],
     "no-eval": true,
     "no-internal-module": true,
-    "no-require-imports": true,
+    "no-default-export": true,
     "no-trailing-whitespace": true,
     "no-var-keyword": false,
     "one-line": [ true, "check-catch", "check-else", "check-finally", "check-open-brace", "check-whitespace" ],
