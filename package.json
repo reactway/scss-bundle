@@ -4,7 +4,8 @@
   "description": "Bundling SCSS files to one bundled file.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "tsc -p . --noEmit && npm run tslint-test",
+    "tslint-test": "tslint --config ./tslint.json --project . --exclude test/**/* && echo TsLint test successfully passed.",
     "build": "tsc -p .",
     "watch": "tsc -w"
   },
@@ -22,7 +23,8 @@
     "@types/node-sass": "0.0.28",
     "@types/promise": "^7.1.27",
     "@types/yargs": "0.0.28",
-    "typescript": "1.8.10"
+    "tslint": "^4.5.1",
+    "typescript": "^2.2.1"
   },
   "bin": {
     "scss-bundle": "./dist/bundle-cli.js"
