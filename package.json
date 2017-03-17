@@ -6,7 +6,7 @@
   "scripts": {
     "test": "tsc -p . --noEmit && npm run tslint-test",
     "tslint-test": "tslint --config ./tslint.json --project . --exclude test/**/* && echo TsLint test successfully passed.",
-    "build": "tsc -p .",
+    "build": "tsc -p . --newLine lf",
     "watch": "tsc -w"
   },
   "keywords": [
