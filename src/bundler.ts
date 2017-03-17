@@ -8,37 +8,38 @@ const IMPORT_PATTERN = /@import ['"](.+)['"];/g;
 const COMMENTED_IMPORT_PATTERN = /\/\/@import '(.+)';/g;
 const FILE_EXTENSION = ".scss";
 
-interface Dictionary {
-    [id: string]: string;
+export interface Registry {
+    [id: string]: string | undefined;
 }
 
-interface ImportData {
+export interface ImportData {
     importString: string;
     path: string;
     fullPath: string;
     found: boolean;
 }
 
-interface BundleResult {
-    imports: ImportData[];
+export interface BundleResult {
+    imports?: BundleResult[];
     filePath: string;
-    content: string;
+    content?: string;
+    found: boolean;
 }
 
 export class Bundler {
-    public static async Bundle(file: string): Promise<BundleResult> {
+    public static async Bundle(file: string, filesRegistry: Registry = {}): Promise<BundleResult> {
         let content = await fs.readFile(file, "utf-8");
         return await this.bundle(file, content);
     }
 
-    public static async BundleAll(files: string[]): Promise<BundleResult[]> {
-        let resultsPromises = files.map(this.Bundle);
+    public static async BundleAll(files: string[], filesRegistry: Registry = {}): Promise<BundleResult[]> {
+        let resultsPromises = files.map(file => this.Bundle(file, filesRegistry));
         return await Promise.all(resultsPromises);
     }
 
-    private static async bundle(filePath: string, content: string, filesContents?: Dictionary): Promise<BundleResult> {
-        if (filesContents == null) {
-            filesContents = {};
+    private static async bundle(filePath: string, content: string, filesRegistry?: Registry): Promise<BundleResult> {
+        if (filesRegistry == null) {
+            filesRegistry = {};
         }
 
         // Remove commented imports
@@ -49,8 +50,8 @@ export class Bundler {
 
         let dirname = path.dirname(filePath);
 
-        if (filesContents[filePath] == null) {
-            filesContents[filePath] = content;
+        if (filesRegistry[filePath] == null) {
+            filesRegistry[filePath] = content;
         }
 
         let importsPromises = Helpers.getAllMatches(content, IMPORT_PATTERN).map(async match => {
@@ -86,20 +87,23 @@ export class Bundler {
         });
 
         let imports = await Promise.all(importsPromises);
-        let allImports: ImportData[] = [];
+        let allImports: BundleResult[] = [];
         for (let imp of imports) {
-            // Push current import
-            allImports.push(imp);
-
             let contentToReplace;
-            if (imp.found && filesContents[imp.fullPath] == null) {
+
+            if (!imp.found) {
+                allImports.push({
+                    filePath: imp.fullPath,
+                    found: false
+                });
+            } else if (filesRegistry[imp.fullPath] == null) {
                 let impContent = await fs.readFile(imp.fullPath, "utf-8");
                 let bundledImport = await this.bundle(imp.fullPath, impContent);
-                filesContents[imp.fullPath] = bundledImport.content;
-                allImports = allImports.concat(bundledImport.imports);
+                filesRegistry[imp.fullPath] = bundledImport.content;
+                allImports.push(bundledImport);
             }
 
-            contentToReplace = filesContents[imp.fullPath];
+            contentToReplace = filesRegistry[imp.fullPath];
 
             if (contentToReplace == null) {
                 contentToReplace = `/*** IMPORTED FILE NOT FOUND ***/${os.EOL}${imp.importString}/*** --- ***/`;
@@ -111,7 +115,8 @@ export class Bundler {
         return {
             content: content,
             filePath: filePath,
-            imports: allImports
+            imports: allImports,
+            found: true
         };
     }
 }
