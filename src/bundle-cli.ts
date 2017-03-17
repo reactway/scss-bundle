@@ -3,7 +3,7 @@ import * as fs from "mz/fs";
 import * as path from "path";
 
 import * as Contracts from "./contracts";
-import { Bundle } from "./bundle";
+import { Bundler } from "./bundler";
 import { argv } from "./arguments";
 
 const DEFAULT_CONFIG_NAME = "scss-bundle.config.json";
@@ -30,7 +30,7 @@ class Cli {
             this.exitWithError("[Error] `Dest` or `Entry` argument is missing.");
         } else if (configExists) {
             try {
-                let config = await this.readConfigFile(configFileName) as Contracts.Config;;
+                let config = await this.readConfigFile(configFileName) as Contracts.Config;
                 console.info("Using config:", fullPath);
                 this.bundle(this.getConfig(config, argv));
             }
@@ -44,8 +44,7 @@ class Cli {
     }
 
     private bundle(config: Contracts.Config) {
-        new Bundle(config)
-            .Bundle()
+        Bundler.Bundle(config.entry)
             .then(() => {
                 let fullPath = path.resolve(config.dest);
                 console.info(`[Done] Bundling done. Destination: ${fullPath}.`);
