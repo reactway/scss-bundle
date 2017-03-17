@@ -20,6 +20,7 @@
   "homepage": "https://github.com/QuatroCode/scss-bundle",
   "license": "GPL-3.0",
   "devDependencies": {
+    "@types/archy": "0.0.30",
     "@types/mkdirp": "^0.3.29",
     "@types/mz": "0.0.30",
     "@types/node": "^7.0.8",
@@ -33,6 +34,7 @@
     "scss-bundle": "./dist/bundle-cli.js"
   },
   "dependencies": {
+    "archy": "^1.0.0",
     "mkdirp": "^0.5.1",
     "mz": "^2.6.0",
     "node-sass": "^4.5.0",

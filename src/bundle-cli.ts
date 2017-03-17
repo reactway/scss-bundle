@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 import * as fs from "mz/fs";
 import * as path from "path";
+import * as os from "os";
+import * as archy from "archy";
 
 import * as Contracts from "./contracts";
-import { Bundler } from "./bundler";
+import { Bundler, BundleResult } from "./bundler";
 import { argv } from "./arguments";
 
 const DEFAULT_CONFIG_NAME = "scss-bundle.config.json";
@@ -43,15 +45,43 @@ class Cli {
 
     }
 
-    private bundle(config: Contracts.Config) {
-        Bundler.Bundle(config.entry)
-            .then(() => {
-                let fullPath = path.resolve(config.dest);
-                console.info(`[Done] Bundling done. Destination: ${fullPath}.`);
-            })
-            .catch((error) => {
-                this.exitWithError(`[Error] Bundling done with errors. ${error}`);
+    private async bundle(config: Contracts.Config) {
+        try {
+            let bundleResult = await Bundler.Bundle(config.entry);
+
+            // console.log(JSON.stringify(bundleResult, null, 4));
+            let archyData = this.getArchyData(bundleResult, path.dirname(config.entry));
+            console.log(archy(archyData));
+
+            let fullPath = path.resolve(config.dest);
+            console.info(`[Done] Bundling done. Destination: ${fullPath}.`);
+        }
+        catch (error) {
+            this.exitWithError(`[Error] An error has occured:${os.EOL}${error}`);
+        }
+    }
+
+    private getArchyData(bundleResult: BundleResult, sourceDirectory?: string) {
+        if (sourceDirectory == null) {
+            sourceDirectory = process.cwd();
+        }
+        let archyData: archy.Data = {
+            label: path.relative(sourceDirectory, bundleResult.filePath)
+        };
+
+        if (!bundleResult.found) {
+            archyData.label += ` [NOT FOUND]`;
+        }
+
+        if (bundleResult.imports != null) {
+            archyData.nodes = bundleResult.imports.map(x => {
+                if (x != null) {
+                    return this.getArchyData(x, sourceDirectory);
+                }
+                return "";
             });
+        }
+        return archyData;
     }
 
     private getConfig(config: Contracts.Config, argv: Contracts.Arguments) {
