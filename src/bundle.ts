@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as os from "os";
 import * as path from "path";
 import * as sass from "node-sass";
 import * as Promise from "promise";
@@ -71,7 +72,7 @@ export class Bundle {
             }
             let fullPath = path.join(folderPath, file);
             let content = this.bundling(fullPath) || "";
-            content += "\n";
+            content += os.EOL;
             return content;
         });
     }
