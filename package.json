@@ -15,6 +15,9 @@
     "bundle"
   ],
   "author": "Martynas Zilinskas <martynas@quatrodev.com> (https://github.com/MartynasZilinskas)",
+  "contributors": [
+    "Dovydas Navickas <dovydas@quatrodev.com> (https://github.com/DovydasNavickas)"
+  ],
   "bugs": "https://github.com/QuatroCode/scss-bundle/issues",
   "repository": "QuatroCode/scss-bundle",
   "homepage": "https://github.com/QuatroCode/scss-bundle",
