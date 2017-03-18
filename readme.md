@@ -8,7 +8,7 @@ $ npm install scss-bundle -g
 ```
 
 ## Features
-- Bundles all SCSS files through import to one file.
+- Bundles all SCSS imports into a single file.
 
 ## Usage
 ```sh
