@@ -1,6 +1,6 @@
 {
   "name": "scss-bundle",
-  "version": "1.0.0-beta",
+  "version": "0.2.3-beta",
   "description": "Bundling SCSS files to one bundled file.",
   "main": "index.js",
   "scripts": {
