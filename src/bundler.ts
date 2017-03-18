@@ -81,7 +81,10 @@ export class Bundler {
                 await fs.access(fullPath);
                 importData.found = true;
             } catch (error) {
-                let underscoredFilePath = path.join(dirname, `_${importName}`);
+                let underscoredDirname = path.dirname(fullPath);
+                let underscoredBasename = path.basename(fullPath);
+                let underscoredFilePath = path.join(underscoredDirname, `_${underscoredBasename}`);
+                console.log(`Looking for ${underscoredFilePath}`);
                 try {
                     await fs.access(underscoredFilePath);
                     importData.fullPath = underscoredFilePath;

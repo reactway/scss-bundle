@@ -14,9 +14,9 @@
             ],
             "args": [
                 "-e",
-                ".\\examples\\partial-error\\main.scss",
+                ".\\examples\\partial-in-subdir\\main.scss",
                 "-d",
-                ".\\examples\\output\\simple.scss"
+                ".\\examples\\output\\partial-in-subdir.scss"
             ],
             "sourceMaps": true
         }
