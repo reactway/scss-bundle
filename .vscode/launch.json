@@ -14,19 +14,11 @@
             ],
             "args": [
                 "-e",
-                ".\\example\\partial\\main.scss",
+                ".\\examples\\partial-error\\main.scss",
                 "-d",
-                ".\\example\\output\\partial.scss"
+                ".\\examples\\output\\simple.scss"
             ],
             "sourceMaps": true
-        },
-        {
-            "type": "node",
-            "request": "attach",
-            "name": "Attach to Process",
-            "address": "localhost",
-            "port": 5858,
-            "outFiles": []
         }
     ]
 }
