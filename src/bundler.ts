@@ -28,8 +28,16 @@ export interface BundleResult {
 
 export class Bundler {
     public static async Bundle(file: string, filesRegistry: Registry = {}): Promise<BundleResult> {
-        let content = await fs.readFile(file, "utf-8");
-        return await this.bundle(file, content);
+        try {
+            await fs.access(file);
+            let content = await fs.readFile(file, "utf-8");
+            return await this.bundle(file, content);
+        } catch (error) {
+            return {
+                filePath: file,
+                found: false
+            };
+        }
     }
 
     public static async BundleAll(files: string[], filesRegistry: Registry = {}): Promise<BundleResult[]> {
