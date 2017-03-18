@@ -78,7 +78,7 @@ class Cli {
             await fs.writeFile(config.dest, bundleResult.content);
 
             let fullPath = path.resolve(config.dest);
-            console.info(`[Done] Bundled into:${os.EOL}${fullPath}.`);
+            console.info(`[Done] Bundled into:${os.EOL}${fullPath}`);
         }
         catch (error) {
             this.exitWithError(`[Error] An error has occured:${os.EOL}${error}`);
