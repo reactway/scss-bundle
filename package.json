@@ -8,7 +8,8 @@
     "tslint-test": "tslint --config ./tslint.json --project . --exclude test/**/* && echo TsLint test successfully passed.",
     "build": "tsc -p . --newLine lf",
     "watch": "tsc -w",
-    "test-scss": "node ./dist/bundle-cli.js -e ./example/simple/main.scss -d ./example/output/simple.scss"
+    "test-scss": "node ./dist/bundle-cli.js -e ./example/simple/main.scss -d ./example/output/simple.scss",
+    "prepublish": "npm run build"
   },
   "keywords": [
     "scss",
