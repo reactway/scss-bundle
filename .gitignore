@@ -23,3 +23,5 @@ wwwroot
 dist
 test
 bundled.scss
+yarn.lock
+examples/output

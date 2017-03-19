@@ -1,28 +1,35 @@
 {
   "name": "scss-bundle",
-  "version": "0.2.3-beta",
+  "version": "1.0.0-beta.2",
   "description": "Bundling SCSS files to one bundled file.",
   "main": "index.js",
   "scripts": {
     "test": "tsc -p . --noEmit && npm run tslint-test",
     "tslint-test": "tslint --config ./tslint.json --project . --exclude test/**/* && echo TsLint test successfully passed.",
     "build": "tsc -p . --newLine lf",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "test-scss": "node ./dist/bundle-cli.js -e ./example/simple/main.scss -d ./example/output/simple.scss"
   },
   "keywords": [
     "scss",
     "bundle"
   ],
   "author": "Martynas Zilinskas <martynas@quatrodev.com> (https://github.com/MartynasZilinskas)",
+  "contributors": [
+    "Dovydas Navickas <dovydas@quatrodev.com> (https://github.com/DovydasNavickas)"
+  ],
   "bugs": "https://github.com/QuatroCode/scss-bundle/issues",
   "repository": "QuatroCode/scss-bundle",
   "homepage": "https://github.com/QuatroCode/scss-bundle",
   "license": "GPL-3.0",
   "devDependencies": {
-    "@types/node": "^6.0.32",
-    "@types/node-sass": "0.0.28",
+    "@types/archy": "0.0.30",
+    "@types/mkdirp": "^0.3.29",
+    "@types/mz": "0.0.30",
+    "@types/node": "^7.0.8",
+    "@types/node-sass": "3.10.32",
     "@types/promise": "^7.1.27",
-    "@types/yargs": "0.0.28",
+    "@types/yargs": "6.6.0",
     "tslint": "^4.5.1",
     "typescript": "^2.2.1"
   },
@@ -30,8 +37,11 @@
     "scss-bundle": "./dist/bundle-cli.js"
   },
   "dependencies": {
-    "node-sass": "^3.8.0",
+    "archy": "^1.0.0",
+    "mkdirp": "^0.5.1",
+    "mz": "^2.6.0",
+    "node-sass": "^4.5.0",
     "promise": "^7.1.1",
-    "yargs": "^4.8.1"
+    "yargs": "^7.0.2"
   }
 }

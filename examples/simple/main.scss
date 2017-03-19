@@ -1,0 +1,7 @@
+@import "./a.scss";
+@import "b";
+
+.class {
+    background-color: $a-variable;
+    color: $b-variable;
+}

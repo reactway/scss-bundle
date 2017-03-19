@@ -1,0 +1,4 @@
+$partial-variable: red;
+.partial-class {
+    color: $partial-variable;
+}
