@@ -44,8 +44,7 @@ class Cli {
                 let config = await this.readConfigFile(configFileName) as Contracts.Config;
                 console.info("Using config:", fullConfigPath);
                 this.bundle(this.getConfig(config, argv));
-            }
-            catch (err) {
+            } catch (err) {
                 this.exitWithError(`[Error] Config file ${configFileName} is not valid.`);
             }
             return;
@@ -62,14 +61,13 @@ class Cli {
             console.info(archy(archyData));
 
             if (bundleResult.content == null) {
-                this.exitWithError(`[Error] An error has occured:${os.EOL} Concatenation result has no content.`)
+                this.exitWithError(`[Error] An error has occured:${os.EOL} Concatenation result has no content.`);
                 return;
             }
             try {
                 await this.renderScss(bundleResult.content);
-            }
-            catch (scssError) {
-                this.exitWithError(`[Error] There is an error in your styles:${os.EOL}${scssError}`)
+            } catch (scssError) {
+                this.exitWithError(`[Error] There is an error in your styles:${os.EOL}${scssError}`);
             }
 
             // Ensure the directory exists
@@ -79,8 +77,7 @@ class Cli {
 
             let fullPath = path.resolve(config.dest);
             console.info(`[Done] Bundled into:${os.EOL}${fullPath}`);
-        }
-        catch (error) {
+        } catch (error) {
             this.exitWithError(`[Error] An error has occured:${os.EOL}${error}`);
         }
     }
@@ -96,7 +93,7 @@ class Cli {
                     reject(`${error.message} on line (${error.line}, ${error.column})`);
                 }
             });
-        })
+        });
     }
 
     private getArchyData(bundleResult: BundleResult, sourceDirectory?: string) {
@@ -137,8 +134,7 @@ class Cli {
         try {
             await fs.access(fullPath, fs.constants.F_OK);
             return true;
-        }
-        catch (err) {
+        } catch (err) {
             return false;
         }
     }
