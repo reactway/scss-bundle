@@ -3,6 +3,7 @@ scss-bundle
 [![NPM version](http://img.shields.io/npm/v/scss-bundle.svg)](https://www.npmjs.com/package/scss-bundle) [![dependencies Status](https://david-dm.org/quatrocode/scss-bundle/status.svg)](https://david-dm.org/quatrocode/scss-bundle) [![devDependencies Status](https://david-dm.org/quatrocode/scss-bundle/dev-status.svg)](https://david-dm.org/quatrocode/scss-bundle?type=dev)
 
 ## Get started
+If you want to use `scss-bundle` globally
 ```sh
 $ npm install scss-bundle -g
 ```
@@ -22,7 +23,7 @@ $ scss-bundle -c scss-bundle.config.json
 ```
 _Without config:_
 
-Without config `entry` and `dest` arguments are required.
+If you want to use `scss-bundle` without configuration file, `entry` and `dest` arguments are required.
 ```sh
 $ scss-bundle -e ./src/main.scss -d bundled.scss
 ```
@@ -35,12 +36,13 @@ $ scss-bundle -e ./src/main.scss -d bundled.scss
 }
 ```
 
-| Argument | Type   | Description                              |
-|----------|--------|------------------------------------------|
-| entry`*` | string | Main entry file where to start bundling. |
-| dest`*`  | string | Destination file when bundling is done.  |
+| Argument  | Type   | Description                                      | Values                | Default |
+|-----------|--------|--------------------------------------------------|                       |         |
+| entry<sup>`*`</sup>  | string | Main entry file where to start bundling.         |                       |         |
+| dest<sup>`*`</sup>   | string | Destination file when bundling is done.          |                       |         |
+| verbosity | string choices | Destination file when bundling is done.  | None, Errors, Verbose | Verbose |
 
 `*` - Required
 
 ## License
-Released under the [GPL-3.0 license](LICENSE).
+Released under the [AGPL-3.0 license](LICENSE).

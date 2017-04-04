@@ -14,54 +14,84 @@ import { argv } from "./arguments";
 const DEFAULT_CONFIG_NAME = "scss-bundle.config.json";
 
 class Cli {
-    constructor(argv: Contracts.Arguments) {
-        let configFileName = argv.config || DEFAULT_CONFIG_NAME;
-        this.main(configFileName, argv);
+    Config: Contracts.Config;
+
+    constructor(protected ArgumentValues: Contracts.ArgumentsValues) {
+        this.main(this.ArgumentValues);
     }
 
+    private async main(argumentValues: Contracts.ArgumentsValues) {
+        let config: Contracts.Config;
 
-    private async main(configFileName: string, argv: Contracts.Arguments) {
-        let fullConfigPath = path.join(process.cwd(), configFileName);
-        let configExists = await this.configExists(fullConfigPath);
+        // Resolve config file path
+        let fullConfigPath = path.resolve(argumentValues.config || DEFAULT_CONFIG_NAME);
 
-        if (argv.dest != null && argv.entry != null && argv.config == null) {
-            this.bundle({
-                entry: argv.entry,
-                dest: argv.dest
-            });
-            return;
-        }
+        let verbosity: Contracts.Verbosity = Contracts.Verbosity.Verbose;
 
-        if ((argv.dest == null || argv.entry == null) &&
-            argv.config == null) {
-            this.exitWithError("[Error] `Dest` or `Entry` argument is missing.");
-            return;
-        }
-
-
-        if (configExists) {
+        // Resolve config
+        if (await this.configExists(fullConfigPath)) {
             try {
-                let config = await this.readConfigFile(configFileName) as Contracts.Config;
-                console.info("Using config:", fullConfigPath);
-                this.bundle(this.getConfig(config, argv));
+                let readConfig = await this.readConfigFile(fullConfigPath);
+                verbosity = this.resolveVerbosity(argumentValues.verbosity || readConfig.verbosity);
+                config = {
+                    Entry: argumentValues.entry || readConfig.entry,
+                    Destination: argumentValues.dest || readConfig.dest,
+                    Verbosity: verbosity
+                };
+
+                if (verbosity === Contracts.Verbosity.Verbose) {
+                    console.info("Using config file:", fullConfigPath);
+                }
             } catch (err) {
-                this.exitWithError(`[Error] Config file ${configFileName} is not valid.`);
+                this.exitWithError(`[Error] Config file ${fullConfigPath} is not valid.`);
+                return;
             }
+        } else if (argumentValues.entry != null && argumentValues.dest != null) {
+            verbosity = this.resolveVerbosity(argumentValues.verbosity);
+            config = {
+                Entry: argumentValues.entry,
+                Destination: argumentValues.dest,
+                Verbosity: verbosity
+            };
+        } else {
+            this.exitWithError("[Error] Entry and destination arguments are missing and no config was found.");
             return;
         }
 
-        this.exitWithError(`[Error] Config file ${configFileName} was not found.`);
+        if (config.Verbosity === Contracts.Verbosity.Verbose) {
+            console.info("Using config:");
+            console.info(JSON.stringify(config, null, 4));
+        }
+
+        this.Config = config;
+
+        // Bundle the styles
+        this.bundle();
     }
 
-    private async bundle(config: Contracts.Config) {
+    private async bundle() {
         try {
-            let bundleResult = await Bundler.Bundle(config.entry);
+            let bundleResult = await Bundler.Bundle(this.Config.Entry);
 
-            let archyData = this.getArchyData(bundleResult, path.dirname(config.entry));
-            console.info(archy(archyData));
+            if (!bundleResult.found) {
+                if (this.Config.Verbosity !== Contracts.Verbosity.None) {
+                    let resolvedPath = path.resolve(bundleResult.filePath);
+                    let errorMessage = `[Error] An error has occured${os.EOL}`;
+                    errorMessage += `Entry file was not found:${os.EOL}${bundleResult.filePath}${os.EOL}`;
+                    errorMessage += `Looked at (full path):${os.EOL}${resolvedPath}`;
+                    this.exitWithError(errorMessage);
+                }
+            }
+
+            let archyData = this.getArchyData(bundleResult, path.dirname(this.Config.Entry));
+            if (this.Config.Verbosity === Contracts.Verbosity.Verbose) {
+                console.info(archy(archyData));
+            }
 
             if (bundleResult.content == null) {
-                this.exitWithError(`[Error] An error has occured:${os.EOL} Concatenation result has no content.`);
+                if (this.Config.Verbosity !== Contracts.Verbosity.None) {
+                    this.exitWithError(`[Error] An error has occured${os.EOL}Concatenation result has no content.`);
+                }
                 return;
             }
             try {
@@ -71,14 +101,18 @@ class Cli {
             }
 
             // Ensure the directory exists
-            mkdirp.sync(path.dirname(config.dest));
+            mkdirp.sync(path.dirname(this.Config.Destination));
 
-            await fs.writeFile(config.dest, bundleResult.content);
+            await fs.writeFile(this.Config.Destination, bundleResult.content);
 
-            let fullPath = path.resolve(config.dest);
-            console.info(`[Done] Bundled into:${os.EOL}${fullPath}`);
+            let fullPath = path.resolve(this.Config.Destination);
+            if (this.Config.Verbosity === Contracts.Verbosity.Verbose) {
+                console.info(`[Done] Bundled into:${os.EOL}${fullPath}`);
+            }
         } catch (error) {
-            this.exitWithError(`[Error] An error has occured:${os.EOL}${error}`);
+            if (this.Config.Verbosity !== Contracts.Verbosity.None) {
+                this.exitWithError(`[Error] An error has occured${os.EOL}${error}`);
+            }
         }
     }
 
@@ -119,15 +153,11 @@ class Cli {
         return archyData;
     }
 
-    private getConfig(config: Contracts.Config, argv: Contracts.Arguments) {
-        if (argv.entry != null) {
-            config.entry = argv.entry;
-        }
-        if (argv.dest != null) {
-            config.dest = argv.dest;
-        }
-
-        return config;
+    private resolveVerbosity(verbosity: any) {
+        // Convert given value to an appropriate Verbosity enum value.
+        // 'as any as number' is used because TypeScript thinks 
+        //  that we cast string to number, even though we get a number there
+        return Contracts.Verbosity[verbosity] as any as number;
     }
 
     private async configExists(fullPath: string) {
@@ -139,15 +169,15 @@ class Cli {
         }
     }
 
-    private async readConfigFile(fullPath: string) {
+    private async readConfigFile(fullPath: string): Promise<any> {
         let data = await fs.readFile(fullPath, "utf8");
-        let configData: Contracts.Config;
-        configData = JSON.parse(data);
-        return configData;
+        return JSON.parse(data);
     }
 
     private exitWithError(message: string) {
-        console.error(message);
+        if (this.Config.Verbosity !== Contracts.Verbosity.None) {
+            console.error(message);
+        }
         process.exit(1);
     }
 }

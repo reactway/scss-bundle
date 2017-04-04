@@ -22,7 +22,7 @@
   "bugs": "https://github.com/QuatroCode/scss-bundle/issues",
   "repository": "QuatroCode/scss-bundle",
   "homepage": "https://github.com/QuatroCode/scss-bundle",
-  "license": "GPL-3.0",
+  "license": "AGPL-3.0",
   "devDependencies": {
     "@types/archy": "0.0.30",
     "@types/mkdirp": "^0.3.29",
