@@ -155,7 +155,7 @@ class Cli {
 
     private resolveVerbosity(verbosity: any) {
         // Convert given value to an appropriate Verbosity enum value.
-        // 'as any as number' is used because TypeScript thinks 
+        // 'as any as number' is used because TypeScript thinks
         //  that we cast string to number, even though we get a number there
         return Contracts.Verbosity[verbosity] as any as number;
     }
