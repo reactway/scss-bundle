@@ -22,7 +22,7 @@
   "bugs": "https://github.com/SimplrJS/scss-bundle/issues",
   "repository": "SimplrJS/scss-bundle",
   "homepage": "https://github.com/SimplrJS/scss-bundle",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "devDependencies": {
     "@types/archy": "0.0.30",
     "@types/mkdirp": "^0.3.29",
