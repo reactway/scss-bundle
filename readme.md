@@ -1,6 +1,6 @@
 scss-bundle
 ===========
-[![NPM version](http://img.shields.io/npm/v/scss-bundle.svg)](https://www.npmjs.com/package/scss-bundle) [![dependencies Status](https://david-dm.org/quatrocode/scss-bundle/status.svg)](https://david-dm.org/quatrocode/scss-bundle) [![devDependencies Status](https://david-dm.org/quatrocode/scss-bundle/dev-status.svg)](https://david-dm.org/quatrocode/scss-bundle?type=dev)
+[![NPM version](http://img.shields.io/npm/v/scss-bundle.svg)](https://www.npmjs.com/package/scss-bundle) [![dependencies Status](https://david-dm.org/simplrjs/scss-bundle/status.svg)](https://david-dm.org/simplrjs/scss-bundle) [![devDependencies Status](https://david-dm.org/simplrjs/scss-bundle/dev-status.svg)](https://david-dm.org/simplrjs/scss-bundle?type=dev)
 
 ## Get started
 If you want to use `scss-bundle` globally
@@ -45,4 +45,4 @@ $ scss-bundle -e ./src/main.scss -d bundled.scss
 `*` - Required
 
 ## License
-Released under the [AGPL-3.0 license](LICENSE).
+Released under the [MIT license](LICENSE).

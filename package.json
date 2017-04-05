@@ -19,10 +19,10 @@
   "contributors": [
     "Dovydas Navickas <dovydas@quatrodev.com> (https://github.com/DovydasNavickas)"
   ],
-  "bugs": "https://github.com/QuatroCode/scss-bundle/issues",
-  "repository": "QuatroCode/scss-bundle",
-  "homepage": "https://github.com/QuatroCode/scss-bundle",
-  "license": "AGPL-3.0",
+  "bugs": "https://github.com/SimplrJS/scss-bundle/issues",
+  "repository": "SimplrJS/scss-bundle",
+  "homepage": "https://github.com/SimplrJS/scss-bundle",
+  "license": "MIT",
   "devDependencies": {
     "@types/archy": "0.0.30",
     "@types/mkdirp": "^0.3.29",
