@@ -1,5 +1,6 @@
 scss-bundle
 ===========
+[![Build Status](https://travis-ci.org/SimplrJS/scss-bundle.svg?branch=master)](https://travis-ci.org/SimplrJS/scss-bundle)
 [![NPM version](http://img.shields.io/npm/v/scss-bundle.svg)](https://www.npmjs.com/package/scss-bundle) [![dependencies Status](https://david-dm.org/simplrjs/scss-bundle/status.svg)](https://david-dm.org/simplrjs/scss-bundle) [![devDependencies Status](https://david-dm.org/simplrjs/scss-bundle/dev-status.svg)](https://david-dm.org/simplrjs/scss-bundle?type=dev)
 
 ## Get started
