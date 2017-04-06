@@ -39,8 +39,8 @@ $ scss-bundle -e ./src/main.scss -d bundled.scss
 
 | Argument             | Type   | Description                                         | Values                | Default |
 |----------------------|--------|-----------------------------------------------------|-----------------------|---------|
-| entry<sup>`*`</sup>  | string | Main entry file where to start bundling.            | ` `                   | ` `     |
-| dest<sup>`*`</sup>   | string | Destination file when bundling is done.             | ` `                   | ` `     |
+| entry <sup>`*`</sup>  | string | Main entry file where to start bundling.            | ` `                   | ` `     |
+| dest <sup>`*`</sup>   | string | Destination file when bundling is done.             | ` `                   | ` `     |
 | verbosity            | string choices | Destination file when bundling is done.     | None, Errors, Verbose | Verbose |
 
 `*` - Required
