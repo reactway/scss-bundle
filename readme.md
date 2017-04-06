@@ -45,5 +45,14 @@ $ scss-bundle -e ./src/main.scss -d bundled.scss
 
 `*` - Required
 
+## Output verbosity
+CLI option `verbosity` is used to control how much output you get. By default, you will get `Verbose` level of verbosity with the most output.
+
+| Value   | Description                                                                |
+|---------|----------------------------------------------------------------------------|
+| None    | Produces no output, only process success/error return code.                |
+| Errors  | Outputs all errors and skips any additional information.                   |
+| Verbose | Outputs the most information. This is the `default` value for verbosity level. |
+
 ## License
 Released under the [MIT license](LICENSE).
