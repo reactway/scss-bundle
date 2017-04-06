@@ -24,6 +24,11 @@ If you want to use `scss-bundle` without configuration file, `entry` and `dest` 
 ```sh
 $ scss-bundle -e ./src/main.scss -d bundled.scss
 ```
+Or specifying output `verbosity` level.
+```sh
+$ scss-bundle -e ./src/main.scss -d bundled.scss --verbosity Errors
+```
+
 
 _With config file:_
 ```sh
