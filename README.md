@@ -6,7 +6,8 @@ Bundles all SCSS imports into a single file recursively.
 
 ### Who uses `scss-bundle`
 A few of the projects who use the package:
-- [Angular/material2](https://github.com/angular/material2/blob/master/package.json#L107)
+- [Angular/material2](https://github.com/angular/material2)
+- [Grassy](https://github.com/lazarljubenovic/grassy)
 - [Copictures](https://copictures.com)
 
 ## Get started
