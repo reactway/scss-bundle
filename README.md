@@ -1,7 +1,10 @@
-scss-bundle
-===========
+# scss-bundle
+Bundles all SCSS imports into a single file recursively.
+
 [![Build Status](https://travis-ci.org/SimplrJS/scss-bundle.svg?branch=master)](https://travis-ci.org/SimplrJS/scss-bundle)
 [![NPM version](http://img.shields.io/npm/v/scss-bundle.svg)](https://www.npmjs.com/package/scss-bundle) [![dependencies Status](https://david-dm.org/simplrjs/scss-bundle/status.svg)](https://david-dm.org/simplrjs/scss-bundle) [![devDependencies Status](https://david-dm.org/simplrjs/scss-bundle/dev-status.svg)](https://david-dm.org/simplrjs/scss-bundle?type=dev)
+
+
 
 ## Get started
 If you want to use `scss-bundle` globally
@@ -9,24 +12,22 @@ If you want to use `scss-bundle` globally
 $ npm install scss-bundle -g
 ```
 
-## Features
-- Bundles all SCSS imports into a single file.
-
 ## Usage
 ```sh
 $ scss-bundle -h
 ```
 
 ### Examples
-_Using config:_
-```sh
-$ scss-bundle -c scss-bundle.config.json
-```
-_Without config:_
+_Without config file:_
 
 If you want to use `scss-bundle` without configuration file, `entry` and `dest` arguments are required.
 ```sh
 $ scss-bundle -e ./src/main.scss -d bundled.scss
+```
+
+_With config file:_
+```sh
+$ scss-bundle -c scss-bundle.config.json
 ```
 
 ## Config example
