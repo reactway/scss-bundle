@@ -2,6 +2,13 @@ import * as yargs from "yargs";
 
 import * as Contracts from "./contracts";
 
+let verbosityValues: string[] = [];
+for (let key in Contracts.Verbosity) {
+    if (Number(key) % 1 !== 0) {
+        verbosityValues.push(key);
+    }
+}
+
 export let argv = yargs
     .help("h", "Show help.")
     .alias("h", "help")
@@ -24,6 +31,11 @@ export let argv = yargs
         describe: "Bundled file destination.",
         type: "string"
     })
+    .options("verbosity", {
+        describe: "Verbosity of output.",
+        choices: verbosityValues,
+        default: Contracts.Verbosity[Contracts.Verbosity.Verbose]
+    })
     .usage("Usage: scss-bundle [options]")
     .string(["c", "e", "d"])
-    .argv as Contracts.Arguments;
+    .argv as Contracts.ArgumentsValues;
