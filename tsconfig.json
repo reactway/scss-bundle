@@ -10,14 +10,15 @@
         "inlineSources": true,
         "outDir": "dist",
         "rootDir": "src",
-        "declaration": false,
-        "typeRoots": [
-            "node_modules/@types"
-        ],
         "noUnusedLocals": true,
         "noImplicitThis": true,
         "noImplicitUseStrict": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "declaration": true,
+        "declarationDir": "@types",
+        "typeRoots": [
+            "node_modules/@types"
+        ]
     },
     "exclude": [
         "node_modules"

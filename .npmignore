@@ -1,5 +1,6 @@
 src
 test
+examples
 scss-bundle.config.json
 tsconfig.json
 .npmignore
