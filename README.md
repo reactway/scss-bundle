@@ -16,7 +16,7 @@ If you want to use `scss-bundle` globally
 $ npm install scss-bundle -g
 ```
 
-## Usage
+## CLI Usage
 ```sh
 $ scss-bundle -h
 ```
@@ -63,6 +63,98 @@ CLI option `verbosity` is used to control how much output you get. By default, y
 | None    | Produces no output, only process success/error return code.                |
 | Errors  | Outputs all errors and skips any additional information.                   |
 | Verbose | Outputs the most information. This is the `default` value for verbosity level. |
+
+## Non-CLI usage
+
+### Simple example
+```typescript
+import { Bundler } from "scss-bundle";
+import * as path from "path";
+
+const fullPath = path.resolve("./examples/simple/main.scss");
+
+Bundler.Bundle(fullPath)
+    .then(result => {
+        console.log("Bundled SCSS content: ", result.content);
+    }).catch(error => {
+        console.error(error);
+    });
+```
+
+# API
+
+## Bundler
+```typescript
+import { Bundler } from "scss-bundle";
+```
+
+### Methods 
+
+#### Bundle
+```typescript
+public static async Bundle(file: string, filesRegistry: Registry = {}): Promise<BundleResult>
+```
+
+##### Arguments
+- `file: string` - Main file full path
+- `filesRegistry:` [Registry](#registry) - Dictionary of files contents by full path
+
+##### Returns
+`Promise<`[BundleResult](#bundleresult)`>`
+
+
+#### BundleAll
+```typescript
+public static async BundleAll(files: string[], filesRegistry: Registry = {}): Promise<BundleResult[]> 
+```
+
+##### Arguments
+- `files: string[]` - Array of full path files
+- `filesRegistry: `[Registry](#registry) - Dictionary of files contents by full path
+
+##### Returns
+`Promise<`[BundleResult](#bundleresult)`[]>`
+
+### Contracts
+
+#### BundleResult
+```typescript
+import { BundleResult } from "scss-bundle";
+```
+
+```typescript
+interface BundleResult {
+    imports?: BundleResult[];
+    filePath: string;
+    content?: string;
+    found: boolean;
+}
+```
+
+##### Properties
+- `imports:` [BundleResult](#bundleresult)`[]` - File imports array 
+- `filePath: string` - Full file path
+- `content: string` - File content
+- `found: boolean` -  Is file found
+
+
+#### Registry
+```typescript
+import { Registry } from "scss-bundle";
+```
+
+```typescript
+interface Registry {
+    [id: string]: string | undefined;
+}
+```
+
+##### Key
+`id: string` - File full path as dictionary id
+
+##### Value
+`string | undefined` - File content
+
 
 ## License
 Released under the [MIT license](LICENSE).
