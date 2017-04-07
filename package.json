@@ -2,6 +2,7 @@
   "name": "scss-bundle",
   "version": "1.1.1",
   "description": "Bundling SCSS files to one bundled file.",
+  "types": "@types/index.d.ts",
   "main": "index.js",
   "scripts": {
     "test": "tsc -p . --noEmit && npm run tslint-test",
