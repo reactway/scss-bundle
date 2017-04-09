@@ -1,0 +1,11 @@
+@import "a";
+
+.d {
+    color: darken($my-var, 15);
+}
+
+$my-var: grey;
+
+.d:hover {
+    color: darken($my-var, 15);
+}
