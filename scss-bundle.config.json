@@ -1,4 +1,9 @@
 {
     "entry": "./test/main.scss",
-    "dest": "bundled.scss"
+    "dest": "bundled.scss",
+    "dedupePaths": [
+        "./examples/simple/a.scss",
+        "./examples/simple/b.scss",
+        "./examples/simple/c.scss"
+    ]
 }
