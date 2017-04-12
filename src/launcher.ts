@@ -31,14 +31,14 @@ export class Launcher {
                 console.info(archy(archyData));
             }
 
-            if (bundleResult.content == null) {
+            if (bundleResult.bundledContent == null) {
                 if (this.config.Verbosity !== Contracts.Verbosity.None) {
                     this.exitWithError(`[Error] An error has occured${os.EOL}Concatenation result has no content.`);
                 }
                 return;
             }
             try {
-                await this.renderScss(bundleResult.content);
+                await this.renderScss(bundleResult.bundledContent);
             } catch (scssError) {
                 this.exitWithError(`[Error] There is an error in your styles:${os.EOL}${scssError}`);
             }
@@ -46,7 +46,7 @@ export class Launcher {
             // Ensure the directory exists
             mkdirp.sync(path.dirname(this.config.Destination));
 
-            await fs.writeFile(this.config.Destination, bundleResult.content);
+            await fs.writeFile(this.config.Destination, bundleResult.bundledContent);
 
             let fullPath = path.resolve(this.config.Destination);
             if (this.config.Verbosity === Contracts.Verbosity.Verbose) {
