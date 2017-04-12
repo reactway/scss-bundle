@@ -16,11 +16,8 @@ export let argv = yargs
         return `Current version: ${require("../package.json").version}.`;
     })
     .alias("v", "version")
-    .options("c", {
-        alias: "config",
-        describe: "Config file path.",
-        type: "string"
-    })
+    .config("config")
+    .alias("c", "config")
     .options("e", {
         alias: "entry",
         describe: "Entry file.",
