@@ -63,8 +63,6 @@ export class Bundler {
             fileRegistry = {};
         }
 
-        console.warn(filePath);
-
         // Remove commented imports
         content = content.replace(COMMENTED_IMPORT_PATTERN, "");
 
@@ -147,11 +145,18 @@ export class Bundler {
                 // Read
                 let impContent = await fs.readFile(imp.fullPath, "utf-8");
 
+                const currentRoot = rootBundleResult || bundleResult;
+
                 // and bundle it
-                let bundledImport = await this.bundle(imp.fullPath, impContent, fileRegistry, rootBundleResult || bundleResult);
+                let bundledImport = await this.bundle(imp.fullPath, impContent, fileRegistry, currentRoot);
 
                 // Then add its bundled content to the registry
                 fileRegistry[imp.fullPath] = bundledImport.bundledContent;
+
+                // Add it to used imports, if it's not there
+                if (currentRoot.usedImports != null && currentRoot.usedImports.indexOf(imp.fullPath) === -1) {
+                    currentRoot.usedImports.push(imp.fullPath);
+                }
 
                 // And whole BundleResult to current imports
                 currentImports.push(bundledImport);
