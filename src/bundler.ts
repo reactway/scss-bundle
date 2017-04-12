@@ -8,7 +8,7 @@ const IMPORT_PATTERN = /@import ['"](.+)['"];/g;
 const COMMENTED_IMPORT_PATTERN = /\/\/@import '(.+)';/g;
 const FILE_EXTENSION = ".scss";
 
-export interface Registry {
+export interface FileRegistry {
     [id: string]: string | undefined;
 }
 
@@ -27,7 +27,7 @@ export interface BundleResult {
 }
 
 export class Bundler {
-    public static async Bundle(file: string, filesRegistry: Registry = {}): Promise<BundleResult> {
+    public static async Bundle(file: string, filesRegistry: FileRegistry = {}): Promise<BundleResult> {
         try {
             await fs.access(file);
             let content = await fs.readFile(file, "utf-8");
@@ -40,12 +40,12 @@ export class Bundler {
         }
     }
 
-    public static async BundleAll(files: string[], filesRegistry: Registry = {}): Promise<BundleResult[]> {
+    public static async BundleAll(files: string[], filesRegistry: FileRegistry = {}): Promise<BundleResult[]> {
         let resultsPromises = files.map(file => this.Bundle(file, filesRegistry));
         return await Promise.all(resultsPromises);
     }
 
-    private static async bundle(filePath: string, content: string, filesRegistry?: Registry): Promise<BundleResult> {
+    private static async bundle(filePath: string, content: string, filesRegistry?: FileRegistry): Promise<BundleResult> {
         if (filesRegistry == null) {
             filesRegistry = {};
         }
