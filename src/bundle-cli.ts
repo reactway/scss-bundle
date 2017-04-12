@@ -6,19 +6,23 @@ import { Launcher } from "./launcher";
 
 class BundleCli {
     constructor(argv: Contracts.ArgumentsValues) {
-        new Launcher(this.getConfig(argv)).Bundle();
+        this.bundle();
+    }
+
+    private async bundle() {
+        await new Launcher(this.getConfig(argv)).Bundle();
     }
 
     private getConfig(argv: Contracts.ArgumentsValues): Contracts.Config {
         return {
             Destination: argv.dest,
             Entry: argv.entry,
-            DedupePaths: argv.dedupePaths || [],
+            DedupeGlobs: argv.dedupeGlobs,
             Verbosity: this.resolveVerbosity(argv.verbosity)
         };
     }
 
-    private resolveVerbosity(verbosity: any) {
+    private resolveVerbosity(verbosity: any): number {
         // Convert given value to an appropriate Verbosity enum value.
         // 'as any as number' is used because TypeScript thinks
         //  that we cast string to number, even though we get a number there
