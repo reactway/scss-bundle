@@ -21,8 +21,6 @@ export interface ImportData {
 }
 
 export interface BundleResult {
-    // Reference to root bundle result for easy usedImports check
-    rootBundleResult: BundleResult | undefined;
     // Child imports (if any)
     imports?: BundleResult[];
     deduped?: boolean;
@@ -30,25 +28,27 @@ export interface BundleResult {
     filePath: string;
     bundledContent?: string;
     found: boolean;
-
-    // Only on root BundleResult:
-    // Full paths of used imports and their count
-    usedImports?: { [key: string]: number };
-    // Imports dictionary by file
-    importsByFile?: { [key: string]: BundleResult[] };
 }
 
 export class Bundler {
-    public static async BundleAll(
+    // Full paths of used imports and their count
+    private usedImports: { [key: string]: number } = {};
+    // Imports dictionary by file
+    private importsByFile: { [key: string]: BundleResult[] } = {};
+
+    constructor(private fileRegistry: FileRegistry = {}) {
+
+    }
+
+    public async BundleAll(
         files: string[],
-        dedupeFiles: string[],
-        fileRegistry: FileRegistry = {}
+        dedupeGlobs: string[]
     ): Promise<BundleResult[]> {
-        let resultsPromises = files.map(file => this.Bundle(file, dedupeFiles, fileRegistry));
+        let resultsPromises = files.map(file => this.Bundle(file, dedupeGlobs));
         return await Promise.all(resultsPromises);
     }
 
-    public static async Bundle(file: string, dedupeGlobs: string[] = [], fileRegistry: FileRegistry = {}): Promise<BundleResult> {
+    public async Bundle(file: string, dedupeGlobs: string[] = []): Promise<BundleResult> {
         try {
             await fs.access(file);
             const contentPromise = fs.readFile(file, "utf-8");
@@ -57,27 +57,20 @@ export class Bundler {
             // Await all async operations and extract results
             const [content, dedupeFiles] = await Promise.all([contentPromise, dedupeFilesPromise]);
 
-            return await this.bundle(file, content, dedupeFiles, fileRegistry);
+            return await this.bundle(file, content, dedupeFiles);
         } catch (error) {
             return {
-                rootBundleResult: undefined,
                 filePath: file,
                 found: false
             };
         }
     }
 
-    private static async bundle(
+    private async bundle(
         filePath: string,
         content: string,
-        dedupeFiles: string[],
-        fileRegistry?: FileRegistry,
-        rootBundleResult?: BundleResult
+        dedupeFiles: string[]
     ): Promise<BundleResult> {
-        if (fileRegistry == null) {
-            fileRegistry = {};
-        }
-
         // Remove commented imports
         content = content.replace(COMMENTED_IMPORT_PATTERN, "");
 
@@ -86,8 +79,8 @@ export class Bundler {
 
         const dirname = path.dirname(filePath);
 
-        if (fileRegistry[filePath] == null) {
-            fileRegistry[filePath] = content;
+        if (this.fileRegistry[filePath] == null) {
+            this.fileRegistry[filePath] = content;
         }
 
         // Resolve imports file names (prepend underscore for partials)
@@ -130,19 +123,10 @@ export class Bundler {
         const imports = await Promise.all(importsPromises);
 
         const bundleResult: BundleResult = {
-            rootBundleResult: rootBundleResult,
             filePath: filePath,
             found: true
         };
 
-        // if this is the root BundleResult
-        if (rootBundleResult == null) {
-            // Initialize usedImports array
-            bundleResult.usedImports = {};
-            bundleResult.importsByFile = {};
-        }
-
-        const root = rootBundleResult || bundleResult;
         const shouldCheckForDedupes = dedupeFiles != null && dedupeFiles.length > 0;
 
         // Bundle all imports
@@ -156,24 +140,23 @@ export class Bundler {
             if (!imp.found) {
                 // Add empty bundle result with found: false
                 currentImport = {
-                    rootBundleResult: root,
                     filePath: imp.fullPath,
                     found: false
                 };
-            } else if (fileRegistry[imp.fullPath] == null) {
+            } else if (this.fileRegistry[imp.fullPath] == null) {
                 // If file is not yet in the registry
                 // Read
                 let impContent = await fs.readFile(imp.fullPath, "utf-8");
 
                 // and bundle it
-                let bundledImport = await this.bundle(imp.fullPath, impContent, dedupeFiles, fileRegistry, root);
+                let bundledImport = await this.bundle(imp.fullPath, impContent, dedupeFiles);
 
                 // Then add its bundled content to the registry
-                fileRegistry[imp.fullPath] = bundledImport.bundledContent;
+                this.fileRegistry[imp.fullPath] = bundledImport.bundledContent;
 
                 // Add it to used imports, if it's not there
-                if (root.usedImports != null && root.usedImports[imp.fullPath] == null) {
-                    root.usedImports[imp.fullPath] = 1;
+                if (this.usedImports != null && this.usedImports[imp.fullPath] == null) {
+                    this.usedImports[imp.fullPath] = 1;
                 }
 
                 // And whole BundleResult to current imports
@@ -181,19 +164,18 @@ export class Bundler {
             } else {
                 // File is in the registry
                 // Increment it's usage count
-                if (root.usedImports != null) {
-                    root.usedImports[imp.fullPath]++;
+                if (this.usedImports != null) {
+                    this.usedImports[imp.fullPath]++;
                 }
 
                 // Resolve child imports, if there are any
                 let childImports: BundleResult[] = [];
-                if (root.importsByFile != null) {
-                    childImports = root.importsByFile[imp.fullPath];
+                if (this.importsByFile != null) {
+                    childImports = this.importsByFile[imp.fullPath];
                 }
 
                 // Construct and add result to current imports
                 currentImport = {
-                    rootBundleResult: root,
                     filePath: imp.fullPath,
                     found: true,
                     imports: childImports
@@ -201,7 +183,7 @@ export class Bundler {
             }
 
             // Take contentToReplace from the fileRegistry
-            contentToReplace = fileRegistry[imp.fullPath];
+            contentToReplace = this.fileRegistry[imp.fullPath];
 
             // If the content is not found
             if (contentToReplace == null) {
@@ -210,9 +192,9 @@ export class Bundler {
             }
 
             // If usedImports dictionary is defined
-            if (shouldCheckForDedupes && root.usedImports != null) {
+            if (shouldCheckForDedupes && this.usedImports != null) {
                 // And current import path should be deduped and is used already
-                const timesUsed = root.usedImports[imp.fullPath];
+                const timesUsed = this.usedImports[imp.fullPath];
                 if (dedupeFiles.indexOf(imp.fullPath) !== -1 &&
                     timesUsed != null &&
                     timesUsed > 1) {
@@ -234,14 +216,14 @@ export class Bundler {
         bundleResult.bundledContent = content;
         bundleResult.imports = currentImports;
 
-        if (root.importsByFile != null) {
-            root.importsByFile[filePath] = currentImports;
+        if (this.importsByFile != null) {
+            this.importsByFile[filePath] = currentImports;
         }
 
         return bundleResult;
     }
 
-    private static async globFilesOrEmpty(globsList: string[]) {
+    private async globFilesOrEmpty(globsList: string[]) {
         return new Promise<string[]>((resolve, reject) => {
             if (globsList == null || globsList.length === 0) {
                 resolve([]);

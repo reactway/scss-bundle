@@ -9,7 +9,7 @@ for (let key in Contracts.Verbosity) {
     }
 }
 
-const dedupeGlobsKey = "dedupeGlobs";
+const dedupeGlobsKey = "dedupe";
 
 export let argv = yargs
     .help("h", "Show help.")
