@@ -35,7 +35,7 @@ export interface BundleResult {
     // Full paths of used imports and their count
     usedImports?: { [key: string]: number };
     // Imports dictionary by file
-    importsByFile?: { [key: string]: BundleResult[] }
+    importsByFile?: { [key: string]: BundleResult[] };
 }
 
 export class Bundler {
@@ -188,7 +188,7 @@ export class Bundler {
                 // Resolve child imports, if there are any
                 let childImports: BundleResult[] = [];
                 if (root.importsByFile != null) {
-                    childImports = root.importsByFile[imp.fullPath]
+                    childImports = root.importsByFile[imp.fullPath];
                 }
 
                 // Construct and add result to current imports
