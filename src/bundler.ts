@@ -44,7 +44,7 @@ export class Bundler {
         files: string[],
         dedupeGlobs: string[]
     ): Promise<BundleResult[]> {
-        let resultsPromises = files.map(file => this.Bundle(file, dedupeGlobs));
+        const resultsPromises = files.map(file => this.Bundle(file, dedupeGlobs));
         return await Promise.all(resultsPromises);
     }
 
@@ -90,9 +90,9 @@ export class Bundler {
             if (importName.indexOf(FILE_EXTENSION) === -1) {
                 importName += FILE_EXTENSION;
             }
-            let fullPath = path.resolve(dirname, importName);
+            const fullPath = path.resolve(dirname, importName);
 
-            let importData: ImportData = {
+            const importData: ImportData = {
                 importString: match[0],
                 path: importName,
                 fullPath: fullPath,
