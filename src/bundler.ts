@@ -36,9 +36,7 @@ export class Bundler {
     // Imports dictionary by file
     private importsByFile: { [key: string]: BundleResult[] } = {};
 
-    constructor(private fileRegistry: FileRegistry = {}) {
-
-    }
+    constructor(private fileRegistry: FileRegistry = {}) { }
 
     public async BundleAll(
         files: string[],
