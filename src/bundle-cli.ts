@@ -17,7 +17,7 @@ class BundleCli {
         return {
             Destination: argv.dest,
             Entry: argv.entry,
-            DedupeGlobs: argv.dedupeGlobs,
+            DedupeGlobs: argv.dedupe,
             Verbosity: this.resolveVerbosity(argv.verbosity)
         };
     }
