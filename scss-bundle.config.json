@@ -1,4 +1,4 @@
 {
-    "entry": "./test/main.scss",
-    "dest": "bundled.scss"
+    "entry": ".\\examples\\partial-in-subdir\\main.scss",
+    "dest": ".\\examples\\output\\partial-in-subdir.scss"
 }

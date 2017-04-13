@@ -92,12 +92,12 @@ import { Bundler } from "scss-bundle";
 
 #### Bundle
 ```typescript
-public static async Bundle(file: string, filesRegistry: Registry = {}): Promise<BundleResult>
+public static async Bundle(file: string, fileRegistry: Registry = {}): Promise<BundleResult>
 ```
 
 ##### Arguments
 - `file: string` - Main file full path
-- `filesRegistry:` [Registry](#registry) - Dictionary of files contents by full path
+- `fileRegistry:` [Registry](#registry) - Dictionary of files contents by full path
 
 ##### Returns
 `Promise<`[BundleResult](#bundleresult)`>`
@@ -105,12 +105,12 @@ public static async Bundle(file: string, filesRegistry: Registry = {}): Promise<
 
 #### BundleAll
 ```typescript
-public static async BundleAll(files: string[], filesRegistry: Registry = {}): Promise<BundleResult[]> 
+public static async BundleAll(files: string[], fileRegistry: Registry = {}): Promise<BundleResult[]> 
 ```
 
 ##### Arguments
 - `files: string[]` - Array of full path files
-- `filesRegistry: `[Registry](#registry) - Dictionary of files contents by full path
+- `fileRegistry: `[Registry](#registry) - Dictionary of files contents by full path
 
 ##### Returns
 `Promise<`[BundleResult](#bundleresult)`[]>`
