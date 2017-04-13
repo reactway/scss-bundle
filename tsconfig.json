@@ -2,7 +2,6 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es6",
-        "noImplicitAny": false,
         "removeComments": false,
         "preserveConstEnums": true,
         "noLib": false,
@@ -10,10 +9,9 @@
         "inlineSources": true,
         "outDir": "dist",
         "rootDir": "src",
+        "noUnusedParameters": true,
         "noUnusedLocals": true,
-        "noImplicitThis": true,
-        "noImplicitUseStrict": true,
-        "strictNullChecks": true,
+        "noImplicitReturns": true,
         "declaration": true,
         "declarationDir": "@types",
         "typeRoots": [

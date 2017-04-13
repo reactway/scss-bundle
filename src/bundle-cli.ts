@@ -5,20 +5,20 @@ import { argv } from "./arguments";
 import { Launcher } from "./launcher";
 
 class BundleCli {
-    constructor(argv: Contracts.ArgumentsValues) {
-        this.bundle();
+    constructor(argumentValues: Contracts.ArgumentsValues) {
+        this.bundle(argumentValues);
     }
 
-    private async bundle() {
-        await new Launcher(this.getConfig(argv)).Bundle();
+    private async bundle(argumentValues: Contracts.ArgumentsValues) {
+        await new Launcher(this.getConfig(argumentValues)).Bundle();
     }
 
-    private getConfig(argv: Contracts.ArgumentsValues): Contracts.Config {
+    private getConfig(argumentValues: Contracts.ArgumentsValues): Contracts.Config {
         return {
-            Destination: argv.dest,
-            Entry: argv.entry,
-            DedupeGlobs: argv.dedupe,
-            Verbosity: this.resolveVerbosity(argv.verbosity)
+            Destination: argumentValues.dest,
+            Entry: argumentValues.entry,
+            DedupeGlobs: argumentValues.dedupe,
+            Verbosity: this.resolveVerbosity(argumentValues.verbosity)
         };
     }
 

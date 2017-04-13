@@ -70,11 +70,10 @@ export class Launcher {
             nodeSass.render({
                 data: content
             }, (error, result) => {
-                if (error == null) {
-                    resolve();
-                } else {
+                if (error != null) {
                     reject(`${error.message} on line (${error.line}, ${error.column})`);
                 }
+                resolve(result);
             });
         });
     }
