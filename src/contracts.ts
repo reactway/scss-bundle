@@ -16,5 +16,5 @@ export interface ArgumentsValues {
     entry: string;
     dest: string;
     verbosity: Verbosity;
-    dedupeGlobs?: string[];
+    dedupe?: string[];
 }

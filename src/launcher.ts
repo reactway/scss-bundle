@@ -16,7 +16,8 @@ export class Launcher {
     public async Bundle() {
         try {
             const fileRegistry: FileRegistry = {};
-            let bundleResult = await Bundler.Bundle(this.config.Entry, this.config.DedupeGlobs, fileRegistry);
+            const bundler = new Bundler(fileRegistry);
+            const bundleResult = await bundler.Bundle(this.config.Entry, this.config.DedupeGlobs);
 
             if (!bundleResult.found) {
                 if (this.config.Verbosity !== Contracts.Verbosity.None) {
@@ -51,7 +52,7 @@ export class Launcher {
 
             await fs.writeFile(this.config.Destination, bundleResult.bundledContent);
 
-            let fullPath = path.resolve(this.config.Destination);
+            const fullPath = path.resolve(this.config.Destination);
             if (this.config.Verbosity === Contracts.Verbosity.Verbose) {
                 console.info(`[Done] Bundled into:${os.EOL}${fullPath}`);
                 console.info(`Total size       : ${prettyBytes(bundleResult.bundledContent.length)}`);
@@ -82,7 +83,7 @@ export class Launcher {
         if (sourceDirectory == null) {
             sourceDirectory = process.cwd();
         }
-        let archyData: archy.Data = {
+        const archyData: archy.Data = {
             label: path.relative(sourceDirectory, bundleResult.filePath)
         };
 
