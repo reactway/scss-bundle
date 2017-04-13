@@ -1,4 +1,4 @@
-export interface Registry {
+export interface FileRegistry {
     [id: string]: string | undefined;
 }
 export interface ImportData {
@@ -9,12 +9,18 @@ export interface ImportData {
 }
 export interface BundleResult {
     imports?: BundleResult[];
+    deduped?: boolean;
     filePath: string;
-    content?: string;
+    bundledContent?: string;
     found: boolean;
 }
 export declare class Bundler {
-    static Bundle(file: string, filesRegistry?: Registry): Promise<BundleResult>;
-    static BundleAll(files: string[], filesRegistry?: Registry): Promise<BundleResult[]>;
-    private static bundle(filePath, content, filesRegistry?);
+    private fileRegistry;
+    private usedImports;
+    private importsByFile;
+    constructor(fileRegistry?: FileRegistry);
+    BundleAll(files: string[], dedupeGlobs: string[]): Promise<BundleResult[]>;
+    Bundle(file: string, dedupeGlobs?: string[]): Promise<BundleResult>;
+    private bundle(filePath, content, dedupeFiles);
+    private globFilesOrEmpty(globsList);
 }
