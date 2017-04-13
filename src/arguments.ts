@@ -9,6 +9,8 @@ for (let key in Contracts.Verbosity) {
     }
 }
 
+const DEDUPE_KEY = "dedupe";
+
 export let argv = yargs
     .help("h", "Show help.")
     .alias("h", "help")
@@ -16,11 +18,8 @@ export let argv = yargs
         return `Current version: ${require("../package.json").version}.`;
     })
     .alias("v", "version")
-    .options("c", {
-        alias: "config",
-        describe: "Config file path.",
-        type: "string"
-    })
+    .config("config")
+    .alias("c", "config")
     .options("e", {
         alias: "entry",
         describe: "Entry file.",
@@ -36,6 +35,8 @@ export let argv = yargs
         choices: verbosityValues,
         default: Contracts.Verbosity[Contracts.Verbosity.Verbose]
     })
+    .array(DEDUPE_KEY)
+    .default(DEDUPE_KEY, [], "[]")
     .usage("Usage: scss-bundle [options]")
     .string(["c", "e", "d"])
     .argv as Contracts.ArgumentsValues;
