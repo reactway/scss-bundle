@@ -9,6 +9,8 @@ for (let key in Contracts.Verbosity) {
     }
 }
 
+const dedupeGlobsKey = "dedupeGlobs";
+
 export let argv = yargs
     .help("h", "Show help.")
     .alias("h", "help")
@@ -33,6 +35,8 @@ export let argv = yargs
         choices: verbosityValues,
         default: Contracts.Verbosity[Contracts.Verbosity.Verbose]
     })
+    .array(dedupeGlobsKey)
+    .default(dedupeGlobsKey, [], "[]")
     .usage("Usage: scss-bundle [options]")
     .string(["c", "e", "d"])
     .argv as Contracts.ArgumentsValues;

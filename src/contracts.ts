@@ -2,7 +2,7 @@ export interface Config {
     Entry: string;
     Destination: string;
     Verbosity: Verbosity;
-    DedupePaths: string[];
+    DedupeGlobs?: string[];
 }
 
 export enum Verbosity {
@@ -12,9 +12,9 @@ export enum Verbosity {
 }
 
 export interface ArgumentsValues {
-    config: string;
+    config?: string;
     entry: string;
     dest: string;
     verbosity: Verbosity;
-    dedupePaths?: string[];
+    dedupeGlobs?: string[];
 }
