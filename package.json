@@ -25,10 +25,7 @@
     "!*.config.js",
     "!@types"
   ],
-  "author": "Martynas Zilinskas <martynas@quatrodev.com> (https://github.com/MartynasZilinskas)",
-  "contributors": [
-    "Dovydas Navickas <dovydas@quatrodev.com> (https://github.com/DovydasNavickas)"
-  ],
+  "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
   "bugs": "https://github.com/SimplrJS/scss-bundle/issues",
   "repository": "SimplrJS/scss-bundle",
   "homepage": "https://github.com/SimplrJS/scss-bundle",
