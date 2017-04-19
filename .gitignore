@@ -23,3 +23,4 @@ wwwroot
 bundled.scss
 examples/output
 yarn.lock
+dist
