@@ -197,7 +197,7 @@ export class Bundler {
                     timesUsed != null &&
                     timesUsed > 1) {
                     // Reset content to an empty string to skip it
-                    content = "";
+                    contentToReplace = "";
                     // And indicate that import was deduped
                     currentImport.deduped = true;
                 }
