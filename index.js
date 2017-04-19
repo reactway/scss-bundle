@@ -1,2 +1,2 @@
 /* */ 
-module.exports = require('./dist/bundle');
+module.exports = require('./dist/bundler');
