@@ -1,6 +1,6 @@
 {
   "name": "scss-bundle",
-  "version": "2.0.1-beta",
+  "version": "2.0.1-beta.4",
   "description": "Bundling SCSS files to one bundled file.",
   "types": "@types/index.d.ts",
   "main": "index.js",
@@ -22,8 +22,8 @@
     "dist",
     "**/*.md",
     "*.js",
-    "!*.config.js",
-    "!@types"
+    "@types",
+    "!*.config.js"
   ],
   "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
   "bugs": "https://github.com/SimplrJS/scss-bundle/issues",
