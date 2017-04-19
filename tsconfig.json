@@ -1,26 +1,21 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es6",
-        "removeComments": false,
-        "preserveConstEnums": true,
-        "noLib": false,
-        "inlineSourceMap": true,
-        "inlineSources": true,
-        "outDir": "dist",
-        "rootDir": "src",
-        "noUnusedParameters": true,
-        "noUnusedLocals": true,
-        "noImplicitReturns": true,
-        "declaration": true,
-        "declarationDir": "@types",
-        "typeRoots": [
-            "node_modules/@types"
-        ]
-    },
-    "exclude": [
-        "node_modules",
-        "dist",
-        "@types"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2015",
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "outDir": "dist",
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "declaration": true
+  },
+  "include": [
+    "src/**.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -2,12 +2,10 @@
   "name": "scss-bundle",
   "version": "2.0.1-beta",
   "description": "Bundling SCSS files to one bundled file.",
-  "types": "@types/index.d.ts",
-  "main": "index.js",
   "scripts": {
-    "test": "tsc -p . --noEmit && npm run tslint-test",
+    "test": "tsc --noEmit && npm run tslint-test",
     "tslint-test": "tslint --config ./tslint.json --project . --exclude test/**/* && echo TsLint test successfully passed.",
-    "build": "tsc -p . --newLine lf",
+    "build": "tsc --newLine lf",
     "watch": "tsc -w",
     "test-scss": "node ./dist/bundle-cli.js -e ./example/simple/main.scss -d ./example/output/simple.scss",
     "prepublish": "npm run build"
@@ -18,18 +16,19 @@
     "sass",
     "node-sass"
   ],
-  "files": [
-    "dist",
-    "**/*.md",
-    "*.js",
-    "!*.config.js",
-    "!@types"
-  ],
   "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
   "bugs": "https://github.com/SimplrJS/scss-bundle/issues",
   "repository": "SimplrJS/scss-bundle",
   "homepage": "https://github.com/SimplrJS/scss-bundle",
   "license": "MIT",
+  "bin": {
+    "scss-bundle": "./dist/bundle-cli.js"
+  },
+  "files": [
+    "dist/"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "devDependencies": {
     "@types/archy": "0.0.30",
     "@types/mkdirp": "^0.3.29",
@@ -40,9 +39,6 @@
     "@types/yargs": "6.6.0",
     "tslint": "^4.5.1",
     "typescript": "^2.2.2"
-  },
-  "bin": {
-    "scss-bundle": "./dist/bundle-cli.js"
   },
   "dependencies": {
     "archy": "^1.0.0",
