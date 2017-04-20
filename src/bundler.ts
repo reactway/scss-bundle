@@ -196,8 +196,8 @@ export class Bundler {
                 if (dedupeFiles.indexOf(imp.fullPath) !== -1 &&
                     timesUsed != null &&
                     timesUsed > 1) {
-                    // Reset content to an empty string to skip it
-                    content = "";
+                    // Reset content to replace to an empty string to skip it
+                    contentToReplace = "";
                     // And indicate that import was deduped
                     currentImport.deduped = true;
                 }
