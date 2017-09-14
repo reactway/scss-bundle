@@ -3,6 +3,7 @@ export interface Config {
     Destination: string;
     Verbosity: Verbosity;
     DedupeGlobs?: string[];
+    IncludePaths?: string[];
 }
 export declare enum Verbosity {
     None = 0,
@@ -15,4 +16,5 @@ export interface ArgumentsValues {
     dest: string;
     verbosity: Verbosity;
     dedupe?: string[];
+    includePaths?: string[];
 }

@@ -17,7 +17,7 @@ export class Launcher {
         try {
             const fileRegistry: FileRegistry = {};
             const bundler = new Bundler(fileRegistry);
-            const bundleResult = await bundler.Bundle(this.config.Entry, this.config.DedupeGlobs);
+            const bundleResult = await bundler.Bundle(this.config.Entry, this.config.DedupeGlobs, this.config.IncludePaths);
 
             if (!bundleResult.found) {
                 if (this.config.Verbosity !== Contracts.Verbosity.None) {

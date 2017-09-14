@@ -18,7 +18,8 @@ class BundleCli {
             Destination: argumentValues.dest,
             Entry: argumentValues.entry,
             DedupeGlobs: argumentValues.dedupe,
-            Verbosity: this.resolveVerbosity(argumentValues.verbosity)
+            Verbosity: this.resolveVerbosity(argumentValues.verbosity),
+            IncludePaths: argumentValues.includePaths
         };
     }
 

@@ -35,6 +35,10 @@ export let argv = yargs
         choices: verbosityValues,
         default: Contracts.Verbosity[Contracts.Verbosity.Verbose]
     })
+    .options("includePaths", {
+        describe: "Include paths for resolving imports.",
+        type: "array"
+    })
     .array(DEDUPE_KEY)
     .default(DEDUPE_KEY, [], "[]")
     .usage("Usage: scss-bundle [options]")
