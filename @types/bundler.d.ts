@@ -20,7 +20,8 @@ export declare class Bundler {
     private importsByFile;
     constructor(fileRegistry?: FileRegistry);
     BundleAll(files: string[], dedupeGlobs: string[]): Promise<BundleResult[]>;
-    Bundle(file: string, dedupeGlobs?: string[]): Promise<BundleResult>;
-    private bundle(filePath, content, dedupeFiles);
+    Bundle(file: string, dedupeGlobs?: string[], includePaths?: string[]): Promise<BundleResult>;
+    private bundle(filePath, content, dedupeFiles, includePaths);
+    private resolveImport(importData, includePaths);
     private globFilesOrEmpty(globsList);
 }

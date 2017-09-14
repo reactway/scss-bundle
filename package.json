@@ -1,6 +1,6 @@
 {
   "name": "scss-bundle",
-  "version": "2.0.1-beta.7",
+  "version": "2.1.0",
   "description": "Bundling SCSS files to one bundled file.",
   "types": "@types/index.d.ts",
   "main": "index.js",
@@ -9,7 +9,8 @@
     "tslint-test": "tslint --config ./tslint.json --project . --exclude test/**/* && echo TsLint test successfully passed.",
     "build": "tsc -p . --newLine lf",
     "watch": "tsc -w",
-    "test-scss": "node ./dist/bundle-cli.js -e ./example/simple/main.scss -d ./example/output/simple.scss",
+    "test-scss": "node ./dist/bundle-cli.js -e ./examples/simple/main.scss -d ./examples/output/simple.scss",
+    "test-scss-include-paths": "node ./dist/bundle-cli.js -e ./examples/include-paths/main.scss -d ./examples/output/include-paths.scss --includePaths ./examples ./node_modules",
     "prepublish": "npm run build"
   },
   "keywords": [

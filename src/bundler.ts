@@ -46,7 +46,7 @@ export class Bundler {
         return await Promise.all(resultsPromises);
     }
 
-    public async Bundle(file: string, dedupeGlobs: string[] = []): Promise<BundleResult> {
+    public async Bundle(file: string, dedupeGlobs: string[] = [], includePaths: string[] = []): Promise<BundleResult> {
         try {
             await fs.access(file);
             const contentPromise = fs.readFile(file, "utf-8");
@@ -55,7 +55,7 @@ export class Bundler {
             // Await all async operations and extract results
             const [content, dedupeFiles] = await Promise.all([contentPromise, dedupeFilesPromise]);
 
-            return await this.bundle(file, content, dedupeFiles);
+            return await this.bundle(file, content, dedupeFiles, includePaths);
         } catch (error) {
             return {
                 filePath: file,
@@ -67,7 +67,8 @@ export class Bundler {
     private async bundle(
         filePath: string,
         content: string,
-        dedupeFiles: string[]
+        dedupeFiles: string[],
+        includePaths: string[]
     ): Promise<BundleResult> {
         // Remove commented imports
         content = content.replace(COMMENTED_IMPORT_PATTERN, "");
@@ -97,22 +98,7 @@ export class Bundler {
                 found: false
             };
 
-            try {
-                await fs.access(fullPath);
-                importData.found = true;
-            } catch (error) {
-                const underscoredDirname = path.dirname(fullPath);
-                const underscoredBasename = path.basename(fullPath);
-                const underscoredFilePath = path.join(underscoredDirname, `_${underscoredBasename}`);
-                try {
-                    await fs.access(underscoredFilePath);
-                    importData.fullPath = underscoredFilePath;
-                    importData.found = true;
-                } catch (underscoreErr) {
-                    // Neither file, nor partial was found
-                    // Skipping...
-                }
-            }
+            await this.resolveImport(importData, includePaths);
 
             return importData;
         });
@@ -147,7 +133,7 @@ export class Bundler {
                 let impContent = await fs.readFile(imp.fullPath, "utf-8");
 
                 // and bundle it
-                let bundledImport = await this.bundle(imp.fullPath, impContent, dedupeFiles);
+                let bundledImport = await this.bundle(imp.fullPath, impContent, dedupeFiles, includePaths);
 
                 // Then add its bundled content to the registry
                 this.fileRegistry[imp.fullPath] = bundledImport.bundledContent;
@@ -219,6 +205,33 @@ export class Bundler {
         }
 
         return bundleResult;
+    }
+
+    private async resolveImport(importData, includePaths) {
+        try {
+            await fs.access(importData.fullPath);
+            importData.found = true;
+        } catch (error) {
+            const underscoredDirname = path.dirname(importData.fullPath);
+            const underscoredBasename = path.basename(importData.fullPath);
+            const underscoredFilePath = path.join(underscoredDirname, `_${underscoredBasename}`);
+            try {
+                await fs.access(underscoredFilePath);
+                importData.fullPath = underscoredFilePath;
+                importData.found = true;
+            } catch (underscoreErr) {
+                // If there are any includePaths
+                if (includePaths.length) {
+                    // Resolve fullPath using its first entry
+                    importData.fullPath = path.resolve(includePaths[0], importData.path);
+                    // Try resolving import with the remaining includePaths
+                    const remainingIncludePaths = includePaths.slice(1);
+                    return this.resolveImport(importData, remainingIncludePaths);
+                }
+            }
+        }
+
+        return importData;
     }
 
     private async globFilesOrEmpty(globsList: string[]) {

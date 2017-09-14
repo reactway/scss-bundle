@@ -52,6 +52,7 @@ $ scss-bundle -c scss-bundle.config.json
 | entry <sup>`*`</sup>  | string | Main entry file where to start bundling.            | ` `                   | ` `     |
 | dest <sup>`*`</sup>   | string | Destination file when bundling is done.             | ` `                   | ` `     |
 | verbosity            | string choices | Destination file when bundling is done.     | None, Errors, Verbose | Verbose |
+| includePaths         | array   | Include paths for resolving imports                | ` `                   | ` `     |
 
 `*` - Required
 
