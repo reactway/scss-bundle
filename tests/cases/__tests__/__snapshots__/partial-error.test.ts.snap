@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`partial-error 1`] = `
+"/*** IMPORTED FILE NOT FOUND ***/
+@import \\"non-existent\\";/*** --- ***/
+
+$partial-variable: red;
+$partial-variable: lightgreen;
+
+.class {
+    background-color: $partial-variable;
+}"
+`;

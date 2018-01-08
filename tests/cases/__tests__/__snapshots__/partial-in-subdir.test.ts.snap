@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`partial-in-subdir 1`] = `
+"$partial-variable: lightgreen;
+$a-super-long-variable-name: red;
+
+$another-variable: red;
+$a-super-long-variable-name: red;
+
+$another-variable: red;
+
+$partial-variable: red;
+
+.partial-class {
+    color: $partial-variable;
+}
+
+.class {
+    background-color: $partial-variable;
+}"
+`;

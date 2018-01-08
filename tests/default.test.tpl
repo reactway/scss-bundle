@@ -9,7 +9,7 @@ test("{{caseName}}", async done => {
         const bundleResult = await new Bundler()
             .Bundle(path.join(projectDirectory, testConfig.Entry));
 
-        expect(bundleResult).toMatchSnapshot();
+        expect(bundleResult.bundledContent).toMatchSnapshot();
         done();
     } catch (error) {
         done.fail(error);
