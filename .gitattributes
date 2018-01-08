@@ -1,0 +1,4 @@
+@types/* linguist-generated=true
+dist/* linguist-generated=true
+**/__snapshots__/* linguist-generated=true
+**/examples/* linguist-generated=true
