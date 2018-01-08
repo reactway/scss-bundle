@@ -5,15 +5,15 @@
   "types": "@types/index.d.ts",
   "main": "index.js",
   "scripts": {
-    "test": "tsc -p . --noEmit && npm run tslint-test",
-    "test-ci": "npm run test",
-    "tslint-test": "tslint --config ./tslint.json --project . --exclude test/**/* && echo TsLint test successfully passed.",
+    "pretest": "npm run build -- --noEmit && npm run build-tests && npm run tslint",
+    "test": "jest",
+    "test-ci": "npm run pretest && npm run tslint && jest --maxWorkers=4 -b",
+    "test-watch": "start npm run build-tests -- --watchAll && jest --watchAll",
+    "tslint": "tslint --config ./tslint.json --project . --exclude test/**/* && echo TsLint test successfully passed.",
     "build": "tsc -p . --newLine lf",
     "watch": "tsc -w",
-    "test-scss": "node ./dist/bundle-cli.js -e ./examples/simple/main.scss -d ./examples/output/simple.scss",
-    "test-scss-include-paths": "node ./dist/bundle-cli.js -e ./examples/include-paths/main.scss -d ./examples/output/include-paths.scss --includePaths ./examples ./node_modules",
     "prepublish": "npm run build",
-    "build-test-cases": "test-generator-cli"
+    "build-tests": "test-generator-cli"
   },
   "keywords": [
     "scss",
