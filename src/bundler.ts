@@ -6,7 +6,8 @@ import * as globs from "globs";
 import * as Helpers from "./helpers";
 
 const IMPORT_PATTERN = /@import ['"](.+)['"];/g;
-const COMMENTED_IMPORT_PATTERN = /\/\/@import '(.+)';/g;
+const COMMENT_PATTERN = /\/\/.+?\n/g;
+const MULTILINE_COMMENT_PATTERN = /\/\/.+?\n/g;
 const FILE_EXTENSION = ".scss";
 
 export interface FileRegistry {
@@ -71,7 +72,7 @@ export class Bundler {
         includePaths: string[]
     ): Promise<BundleResult> {
         // Remove commented imports
-        content = content.replace(COMMENTED_IMPORT_PATTERN, "");
+        content = this.removeImportsFromComments(content);
 
         // Resolve path to work only with full paths
         filePath = path.resolve(filePath);
@@ -205,6 +206,21 @@ export class Bundler {
         }
 
         return bundleResult;
+    }
+
+    private removeImportsFromComments(text: string): string {
+        const patterns = [
+            COMMENT_PATTERN,
+            MULTILINE_COMMENT_PATTERN
+        ];
+
+        for (const pattern of patterns) {
+            text = text.replace(pattern, found => {
+                return found.replace(IMPORT_PATTERN, "");
+            });
+        }
+
+        return text;
     }
 
     private async resolveImport(importData, includePaths) {
