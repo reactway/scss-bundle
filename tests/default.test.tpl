@@ -4,12 +4,13 @@ import { Bundler } from "@src/bundler";
 test("{{caseName}}", async done => {
     const projectDirectory = "{{projectDirectory}}";
     const testConfig = {{{json testConfig}}};
+    const entryFile = path.join(projectDirectory, testConfig.Entry);
 
     try {
         const bundleResult = await new Bundler()
-            .Bundle(path.join(projectDirectory, testConfig.Entry));
+            .BundleAll([entryFile]);
 
-        expect(bundleResult.bundledContent).toMatchSnapshot();
+        expect(bundleResult[0].bundledContent).toMatchSnapshot();
         done();
     } catch (error) {
         done.fail(error);
