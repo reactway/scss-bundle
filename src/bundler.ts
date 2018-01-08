@@ -1,4 +1,4 @@
-import * as fs from "mz/fs";
+import * as fs from "fs-extra";
 import * as os from "os";
 import * as path from "path";
 import * as globs from "globs";
@@ -43,7 +43,7 @@ export class Bundler {
         files: string[],
         dedupeGlobs: string[]
     ): Promise<BundleResult[]> {
-        const resultsPromises = files.map(file => this.Bundle(file, dedupeGlobs));
+        const resultsPromises = files.map(async file => this.Bundle(file, dedupeGlobs));
         return await Promise.all(resultsPromises);
     }
 
@@ -131,10 +131,10 @@ export class Bundler {
             } else if (this.fileRegistry[imp.fullPath] == null) {
                 // If file is not yet in the registry
                 // Read
-                let impContent = await fs.readFile(imp.fullPath, "utf-8");
+                const impContent = await fs.readFile(imp.fullPath, "utf-8");
 
                 // and bundle it
-                let bundledImport = await this.bundle(imp.fullPath, impContent, dedupeFiles, includePaths);
+                const bundledImport = await this.bundle(imp.fullPath, impContent, dedupeFiles, includePaths);
 
                 // Then add its bundled content to the registry
                 this.fileRegistry[imp.fullPath] = bundledImport.bundledContent;
@@ -215,15 +215,13 @@ export class Bundler {
         ];
 
         for (const pattern of patterns) {
-            text = text.replace(pattern, found => {
-                return found.replace(IMPORT_PATTERN, "");
-            });
+            text = text.replace(pattern, x => x.replace(IMPORT_PATTERN, ""));
         }
 
         return text;
     }
 
-    private async resolveImport(importData, includePaths) {
+    private async resolveImport(importData, includePaths): Promise<any> {
         try {
             await fs.access(importData.fullPath);
             importData.found = true;
@@ -250,7 +248,7 @@ export class Bundler {
         return importData;
     }
 
-    private async globFilesOrEmpty(globsList: string[]) {
+    private async globFilesOrEmpty(globsList: string[]): Promise<string[]> {
         return new Promise<string[]>((resolve, reject) => {
             if (globsList == null || globsList.length === 0) {
                 resolve([]);

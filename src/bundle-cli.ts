@@ -9,7 +9,7 @@ class BundleCli {
         this.bundle(argumentValues);
     }
 
-    private async bundle(argumentValues: Contracts.ArgumentsValues) {
+    private async bundle(argumentValues: Contracts.ArgumentsValues): Promise<void> {
         await new Launcher(this.getConfig(argumentValues)).Bundle();
     }
 

@@ -2,8 +2,8 @@ import * as yargs from "yargs";
 
 import * as Contracts from "./contracts";
 
-let verbosityValues: string[] = [];
-for (let key in Contracts.Verbosity) {
+const verbosityValues: string[] = [];
+for (const key in Contracts.Verbosity) {
     if (Number(key) % 1 !== 0) {
         verbosityValues.push(key);
     }
@@ -11,12 +11,10 @@ for (let key in Contracts.Verbosity) {
 
 const DEDUPE_KEY = "dedupe";
 
-export let argv = yargs
+export const argv = yargs
     .help("h", "Show help.")
     .alias("h", "help")
-    .version(() => {
-        return `Current version: ${require("../package.json").version}.`;
-    })
+    .version()
     .alias("v", "version")
     .config("config")
     .alias("c", "config")
