@@ -12,7 +12,8 @@
     "watch": "tsc -w",
     "test-scss": "node ./dist/bundle-cli.js -e ./examples/simple/main.scss -d ./examples/output/simple.scss",
     "test-scss-include-paths": "node ./dist/bundle-cli.js -e ./examples/include-paths/main.scss -d ./examples/output/include-paths.scss --includePaths ./examples ./node_modules",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "build-test-cases": "test-generator-cli"
   },
   "keywords": [
     "scss",
@@ -33,13 +34,17 @@
   "homepage": "https://github.com/SimplrJS/scss-bundle",
   "license": "MIT",
   "devDependencies": {
+    "@simplrjs/test-generator-cli": "^0.1.2",
     "@types/archy": "0.0.31",
     "@types/fs-extra": "^5.0.0",
+    "@types/jest": "^22.0.1",
     "@types/node": "^8.5.7",
     "@types/node-sass": "3.10.32",
     "@types/promise": "^7.1.30",
     "@types/yargs": "10.0.1",
+    "jest": "^22.0.4",
     "simplr-tslint": "0.0.1",
+    "ts-jest": "^22.0.1",
     "tslint": "^5.8.0",
     "typescript": "^2.6.2"
   },
@@ -54,5 +59,32 @@
     "pretty-bytes": "^4.0.2",
     "promise": "^8.0.1",
     "yargs": "^10.0.3"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "mapCoverage": true,
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "globals": {
+      "ts-jest": {
+        "skipBabel": true,
+        "tsConfigFile": "tests/tsconfig.json"
+      }
+    },
+    "testRegex": "/__tests__/.*\\.(test|spec).(ts|tsx|js)$",
+    "moduleNameMapper": {
+      "@src/(.*)": "<rootDir>/src/$1"
+    },
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "verbose": true
   }
 }
