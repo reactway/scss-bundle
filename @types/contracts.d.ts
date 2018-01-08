@@ -1,3 +1,4 @@
+import * as yargs from "yargs";
 export interface Config {
     Entry: string;
     Destination: string;
@@ -10,7 +11,7 @@ export declare enum Verbosity {
     Errors = 8,
     Verbose = 256,
 }
-export interface ArgumentsValues {
+export interface ArgumentsValues extends yargs.Arguments {
     config?: string;
     entry: string;
     dest: string;

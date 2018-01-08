@@ -1,2 +1,2 @@
 import * as Contracts from "./contracts";
-export declare let argv: Contracts.ArgumentsValues;
+export declare const argv: Contracts.ArgumentsValues;

@@ -22,6 +22,7 @@ export declare class Bundler {
     BundleAll(files: string[], dedupeGlobs: string[]): Promise<BundleResult[]>;
     Bundle(file: string, dedupeGlobs?: string[], includePaths?: string[]): Promise<BundleResult>;
     private bundle(filePath, content, dedupeFiles, includePaths);
+    private removeImportsFromComments(text);
     private resolveImport(importData, includePaths);
     private globFilesOrEmpty(globsList);
 }
