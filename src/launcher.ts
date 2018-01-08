@@ -1,11 +1,10 @@
-import * as fs from "mz/fs";
+import * as fs from "fs-extra";
 import * as path from "path";
 import * as os from "os";
 import * as archy from "archy";
 import * as prettyBytes from "pretty-bytes";
 
 import * as nodeSass from "node-sass";
-import * as mkdirp from "mkdirp";
 
 import * as Contracts from "./contracts";
 import { Bundler, BundleResult, FileRegistry } from "./bundler";
@@ -13,7 +12,7 @@ import { Bundler, BundleResult, FileRegistry } from "./bundler";
 export class Launcher {
     constructor(private config: Contracts.Config) { }
 
-    public async Bundle() {
+    public async Bundle(): Promise<void> {
         try {
             const fileRegistry: FileRegistry = {};
             const bundler = new Bundler(fileRegistry);
@@ -48,7 +47,7 @@ export class Launcher {
             }
 
             // Ensure the directory exists
-            mkdirp.sync(path.dirname(this.config.Destination));
+            fs.mkdirpSync(path.dirname(this.config.Destination));
 
             await fs.writeFile(this.config.Destination, bundleResult.bundledContent);
 
@@ -65,7 +64,7 @@ export class Launcher {
         }
     }
 
-    private async renderScss(content: string) {
+    private async renderScss(content: string): Promise<{}> {
         return new Promise((resolve, reject) => {
             nodeSass.render({
                 data: content
@@ -78,7 +77,7 @@ export class Launcher {
         });
     }
 
-    private getArchyData(bundleResult: BundleResult, sourceDirectory?: string) {
+    private getArchyData(bundleResult: BundleResult, sourceDirectory?: string): archy.Data {
         if (sourceDirectory == null) {
             sourceDirectory = process.cwd();
         }
@@ -104,7 +103,7 @@ export class Launcher {
         return archyData;
     }
 
-    private countSavedBytesByDeduping(bundleResult: BundleResult, fileRegistry: FileRegistry) {
+    private countSavedBytesByDeduping(bundleResult: BundleResult, fileRegistry: FileRegistry): number {
         let savedBytes = 0;
         const content = fileRegistry[bundleResult.filePath];
         if (bundleResult.deduped === true && content != null) {
@@ -118,7 +117,7 @@ export class Launcher {
         return savedBytes;
     }
 
-    private exitWithError(message: string) {
+    private exitWithError(message: string): void {
         if (this.config.Verbosity !== Contracts.Verbosity.None) {
             console.error(message);
         }

@@ -5,13 +5,15 @@
   "types": "@types/index.d.ts",
   "main": "index.js",
   "scripts": {
-    "test": "tsc -p . --noEmit && npm run tslint-test",
-    "tslint-test": "tslint --config ./tslint.json --project . --exclude test/**/* && echo TsLint test successfully passed.",
+    "pretest": "npm run build -- --noEmit && npm run build-tests && npm run tslint",
+    "test": "jest",
+    "test-ci": "npm run pretest && npm run tslint && jest --maxWorkers=4 -b",
+    "test-watch": "start npm run build-tests -- --watchAll && jest --watchAll",
+    "tslint": "tslint --config ./tslint.json --project . --exclude test/**/* && echo TsLint test successfully passed.",
     "build": "tsc -p . --newLine lf",
     "watch": "tsc -w",
-    "test-scss": "node ./dist/bundle-cli.js -e ./examples/simple/main.scss -d ./examples/output/simple.scss",
-    "test-scss-include-paths": "node ./dist/bundle-cli.js -e ./examples/include-paths/main.scss -d ./examples/output/include-paths.scss --includePaths ./examples ./node_modules",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run build",
+    "build-tests": "test-generator-cli"
   },
   "keywords": [
     "scss",
@@ -32,27 +34,57 @@
   "homepage": "https://github.com/SimplrJS/scss-bundle",
   "license": "MIT",
   "devDependencies": {
-    "@types/archy": "0.0.30",
-    "@types/mkdirp": "^0.3.29",
-    "@types/mz": "0.0.30",
-    "@types/node": "^7.0.8",
+    "@simplrjs/test-generator-cli": "^0.1.2",
+    "@types/archy": "0.0.31",
+    "@types/fs-extra": "^5.0.0",
+    "@types/jest": "^22.0.1",
+    "@types/node": "^8.5.7",
     "@types/node-sass": "3.10.32",
-    "@types/promise": "^7.1.27",
-    "@types/yargs": "6.6.0",
-    "tslint": "^4.5.1",
-    "typescript": "^2.2.2"
+    "@types/promise": "^7.1.30",
+    "@types/yargs": "10.0.1",
+    "jest": "^22.0.4",
+    "simplr-tslint": "0.0.1",
+    "ts-jest": "^22.0.1",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2"
   },
   "bin": {
     "scss-bundle": "./dist/bundle-cli.js"
   },
   "dependencies": {
     "archy": "^1.0.0",
+    "fs-extra": "^5.0.0",
     "globs": "^0.1.3",
-    "mkdirp": "^0.5.1",
-    "mz": "^2.6.0",
-    "node-sass": "^4.5.0",
+    "node-sass": "^4.7.2",
     "pretty-bytes": "^4.0.2",
-    "promise": "^7.1.1",
-    "yargs": "^7.0.2"
+    "promise": "^8.0.1",
+    "yargs": "^10.0.3"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "mapCoverage": true,
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "globals": {
+      "ts-jest": {
+        "skipBabel": true,
+        "tsConfigFile": "tests/tsconfig.json"
+      }
+    },
+    "testRegex": "/__tests__/.*\\.(test|spec).(ts|tsx|js)$",
+    "moduleNameMapper": {
+      "@src/(.*)": "<rootDir>/src/$1"
+    },
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/tests/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "verbose": true
   }
 }

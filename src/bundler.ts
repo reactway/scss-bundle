@@ -1,4 +1,4 @@
-import * as fs from "mz/fs";
+import * as fs from "fs-extra";
 import * as os from "os";
 import * as path from "path";
 import * as globs from "globs";
@@ -6,7 +6,8 @@ import * as globs from "globs";
 import * as Helpers from "./helpers";
 
 const IMPORT_PATTERN = /@import ['"](.+)['"];/g;
-const COMMENTED_IMPORT_PATTERN = /\/\/@import '(.+)';/g;
+const COMMENT_PATTERN = /\/\/.+?[\r\n|\n]/g;
+const MULTILINE_COMMENT_PATTERN = /\/\*[\s\S]*?\*\//g;
 const FILE_EXTENSION = ".scss";
 
 export interface FileRegistry {
@@ -42,7 +43,7 @@ export class Bundler {
         files: string[],
         dedupeGlobs: string[]
     ): Promise<BundleResult[]> {
-        const resultsPromises = files.map(file => this.Bundle(file, dedupeGlobs));
+        const resultsPromises = files.map(async file => this.Bundle(file, dedupeGlobs));
         return await Promise.all(resultsPromises);
     }
 
@@ -71,7 +72,7 @@ export class Bundler {
         includePaths: string[]
     ): Promise<BundleResult> {
         // Remove commented imports
-        content = content.replace(COMMENTED_IMPORT_PATTERN, "");
+        content = this.removeImportsFromComments(content);
 
         // Resolve path to work only with full paths
         filePath = path.resolve(filePath);
@@ -130,10 +131,10 @@ export class Bundler {
             } else if (this.fileRegistry[imp.fullPath] == null) {
                 // If file is not yet in the registry
                 // Read
-                let impContent = await fs.readFile(imp.fullPath, "utf-8");
+                const impContent = await fs.readFile(imp.fullPath, "utf-8");
 
                 // and bundle it
-                let bundledImport = await this.bundle(imp.fullPath, impContent, dedupeFiles, includePaths);
+                const bundledImport = await this.bundle(imp.fullPath, impContent, dedupeFiles, includePaths);
 
                 // Then add its bundled content to the registry
                 this.fileRegistry[imp.fullPath] = bundledImport.bundledContent;
@@ -207,7 +208,20 @@ export class Bundler {
         return bundleResult;
     }
 
-    private async resolveImport(importData, includePaths) {
+    private removeImportsFromComments(text: string): string {
+        const patterns = [
+            COMMENT_PATTERN,
+            MULTILINE_COMMENT_PATTERN
+        ];
+
+        for (const pattern of patterns) {
+            text = text.replace(pattern, x => x.replace(IMPORT_PATTERN, "").trim());
+        }
+
+        return text;
+    }
+
+    private async resolveImport(importData, includePaths): Promise<any> {
         try {
             await fs.access(importData.fullPath);
             importData.found = true;
@@ -234,7 +248,7 @@ export class Bundler {
         return importData;
     }
 
-    private async globFilesOrEmpty(globsList: string[]) {
+    private async globFilesOrEmpty(globsList: string[]): Promise<string[]> {
         return new Promise<string[]>((resolve, reject) => {
             if (globsList == null || globsList.length === 0) {
                 resolve([]);

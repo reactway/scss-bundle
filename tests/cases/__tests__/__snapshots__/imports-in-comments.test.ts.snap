@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`imports-in-comments 1`] = `
+"/*
+            Hello this is the comment.
+            
+        */
+        
+        // This is one line comment
+        
+        //
+"
+`;

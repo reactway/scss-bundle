@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`include-paths 1`] = `
+"/*** IMPORTED FILE NOT FOUND ***/
+@import 'simple/main';/*** --- ***/
+/*** IMPORTED FILE NOT FOUND ***/
+@import 'node-sass/test/fixtures/custom-functions/setter';/*** --- ***/
+"
+`;
