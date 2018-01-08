@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "tsc -p . --noEmit && npm run tslint-test",
+    "test-ci": "npm run test",
     "tslint-test": "tslint --config ./tslint.json --project . --exclude test/**/* && echo TsLint test successfully passed.",
     "build": "tsc -p . --newLine lf",
     "watch": "tsc -w",
@@ -32,27 +33,26 @@
   "homepage": "https://github.com/SimplrJS/scss-bundle",
   "license": "MIT",
   "devDependencies": {
-    "@types/archy": "0.0.30",
-    "@types/mkdirp": "^0.3.29",
-    "@types/mz": "0.0.30",
-    "@types/node": "^7.0.8",
+    "@types/archy": "0.0.31",
+    "@types/fs-extra": "^5.0.0",
+    "@types/node": "^8.5.7",
     "@types/node-sass": "3.10.32",
-    "@types/promise": "^7.1.27",
-    "@types/yargs": "6.6.0",
-    "tslint": "^4.5.1",
-    "typescript": "^2.2.2"
+    "@types/promise": "^7.1.30",
+    "@types/yargs": "10.0.1",
+    "simplr-tslint": "0.0.1",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2"
   },
   "bin": {
     "scss-bundle": "./dist/bundle-cli.js"
   },
   "dependencies": {
     "archy": "^1.0.0",
+    "fs-extra": "^5.0.0",
     "globs": "^0.1.3",
-    "mkdirp": "^0.5.1",
-    "mz": "^2.6.0",
-    "node-sass": "^4.5.0",
+    "node-sass": "^4.7.2",
     "pretty-bytes": "^4.0.2",
-    "promise": "^7.1.1",
-    "yargs": "^7.0.2"
+    "promise": "^8.0.1",
+    "yargs": "^10.0.3"
   }
 }
