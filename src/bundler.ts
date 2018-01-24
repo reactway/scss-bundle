@@ -6,7 +6,7 @@ import * as globs from "globs";
 import * as Helpers from "./helpers";
 
 const IMPORT_PATTERN = /@import ['"](.+)['"];/g;
-const COMMENT_PATTERN = /\/\/.+?[\r\n|\n]/g;
+const COMMENT_PATTERN = /\/\/.*$/gm;
 const MULTILINE_COMMENT_PATTERN = /\/\*[\s\S]*?\*\//g;
 const FILE_EXTENSION = ".scss";
 
@@ -215,7 +215,7 @@ export class Bundler {
         ];
 
         for (const pattern of patterns) {
-            text = text.replace(pattern, x => x.replace(IMPORT_PATTERN, "").trim());
+            text = text.replace(pattern, x => x.replace(IMPORT_PATTERN, ""));
         }
 
         return text;
