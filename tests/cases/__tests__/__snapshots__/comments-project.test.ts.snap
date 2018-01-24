@@ -96,7 +96,9 @@ $backdrop-animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1) !default;
 
 @include cdk-overlay();
 
+
 html {
   color: black;
-}"
+}
+"
 `;
