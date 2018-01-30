@@ -44,7 +44,7 @@ export class Bundler {
         dedupeGlobs: string[]
     ): Promise<BundleResult[]> {
         const resultsPromises = files.map(async file => this.Bundle(file, dedupeGlobs));
-        return await Promise.all(resultsPromises);
+        return Promise.all(resultsPromises);
     }
 
     public async Bundle(file: string, dedupeGlobs: string[] = [], includePaths: string[] = []): Promise<BundleResult> {
@@ -56,7 +56,7 @@ export class Bundler {
             // Await all async operations and extract results
             const [content, dedupeFiles] = await Promise.all([contentPromise, dedupeFilesPromise]);
 
-            return await this.bundle(file, content, dedupeFiles, includePaths);
+            return this.bundle(file, content, dedupeFiles, includePaths);
         } catch (error) {
             return {
                 filePath: file,
