@@ -41,7 +41,7 @@ export class Bundler {
 
     public async BundleAll(
         files: string[],
-        dedupeGlobs: string[]
+        dedupeGlobs: string[] = []
     ): Promise<BundleResult[]> {
         const resultsPromises = files.map(async file => this.Bundle(file, dedupeGlobs));
         return await Promise.all(resultsPromises);
