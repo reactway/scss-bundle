@@ -16,6 +16,10 @@
         "declarationDir": "@types",
         "typeRoots": [
             "node_modules/@types"
+        ],
+        "lib": [
+            "es6",
+            "es2017.object"
         ]
     },
     "exclude": [
