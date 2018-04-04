@@ -15,7 +15,7 @@ export class Launcher {
     public async Bundle(): Promise<void> {
         try {
             const fileRegistry: FileRegistry = {};
-            const bundler = new Bundler(fileRegistry);
+            const bundler = new Bundler(fileRegistry, this.config.ProjectDirectory);
             const bundleResult = await bundler.Bundle(this.config.Entry, this.config.DedupeGlobs, this.config.IncludePaths);
 
             if (!bundleResult.found) {
