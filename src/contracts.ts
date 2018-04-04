@@ -4,7 +4,7 @@ export interface Config {
     Entry: string;
     Destination: string;
     Verbosity: Verbosity;
-    ProjectDirectory: string;
+    ProjectDirectory?: string;
     DedupeGlobs?: string[];
     IncludePaths?: string[];
 }

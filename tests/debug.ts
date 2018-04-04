@@ -1,7 +1,11 @@
 import * as path from "path";
-import { Bundler } from "../src/bundler";
+import { Launcher } from "../src/launcher";
 
 (async () => {
-    const bundler = new Bundler({}, path.resolve(__dirname, "./cases/tilde-import"));
-    await bundler.Bundle("./cases/tilde-import/main.scss");
+    const launcher = new Launcher({
+        Destination: "",
+        Entry: "./cases/tilde-import/main.scss",
+        Verbosity: 256
+    });
+    await launcher.Bundle();
 })();

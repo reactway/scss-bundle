@@ -10,7 +10,7 @@ import * as Contracts from "./contracts";
 import { Bundler, BundleResult, FileRegistry } from "./bundler";
 
 export class Launcher {
-    constructor(private config: Contracts.Config) { }
+    constructor(private config: Contracts.Config) {}
 
     public async Bundle(): Promise<void> {
         try {
@@ -18,8 +18,10 @@ export class Launcher {
             const bundler = new Bundler(fileRegistry, this.config.ProjectDirectory);
             const bundleResult = await bundler.Bundle(this.config.Entry, this.config.DedupeGlobs, this.config.IncludePaths);
 
+            // Entry file searching.
             if (!bundleResult.found) {
                 if (this.config.Verbosity !== Contracts.Verbosity.None) {
+                    debugger;
                     const resolvedPath = path.resolve(bundleResult.filePath);
                     let errorMessage = `[Error] An error has occured${os.EOL}`;
                     errorMessage += `Entry file was not found:${os.EOL}${bundleResult.filePath}${os.EOL}`;
@@ -27,6 +29,23 @@ export class Launcher {
                     this.exitWithError(errorMessage);
                 }
             }
+
+            // Imports searching. TODO: Remake this in major version.
+            this.bundleResultForEach(bundleResult, result => {
+                if (
+                    !result.found &&
+                    result.tilde &&
+                    this.config.ProjectDirectory == null &&
+                    this.config.Verbosity !== Contracts.Verbosity.None
+                ) {
+                    const resolvedPath = path.resolve(bundleResult.filePath);
+                    let errorMessage = `[Error] An error has occured${os.EOL}`;
+                    errorMessage += `Import file was not found:${os.EOL}${result.filePath}${os.EOL}`;
+                    errorMessage += `Looked at (full path):${os.EOL}${resolvedPath}${os.EOL}`;
+                    errorMessage += `NOTICE: Found tilde import, but project directory was not specified.${os.EOL}`;
+                    this.exitWithError(errorMessage);
+                }
+            });
 
             if (this.config.Verbosity === Contracts.Verbosity.Verbose) {
                 console.info("Imports tree:");
@@ -66,14 +85,17 @@ export class Launcher {
 
     private async renderScss(content: string): Promise<{}> {
         return new Promise((resolve, reject) => {
-            nodeSass.render({
-                data: content
-            }, (error, result) => {
-                if (error != null) {
-                    reject(`${error.message} on line (${error.line}, ${error.column})`);
+            nodeSass.render(
+                {
+                    data: content
+                },
+                (error, result) => {
+                    if (error != null) {
+                        reject(`${error.message} on line (${error.line}, ${error.column})`);
+                    }
+                    resolve(result);
                 }
-                resolve(result);
-            });
+            );
         });
     }
 
@@ -101,6 +123,18 @@ export class Launcher {
             });
         }
         return archyData;
+    }
+
+    /**
+     * TODO: Rewrite this in major version.
+     */
+    private bundleResultForEach(bundleResult: BundleResult, cb: (bundleResult: BundleResult) => void): void {
+        cb(bundleResult);
+        if (bundleResult.imports != null) {
+            for (const bundleResultChild of bundleResult.imports) {
+                this.bundleResultForEach(bundleResultChild, cb);
+            }
+        }
     }
 
     private countSavedBytesByDeduping(bundleResult: BundleResult, fileRegistry: FileRegistry): number {

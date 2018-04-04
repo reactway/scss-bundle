@@ -18,6 +18,7 @@ export interface FileRegistry {
 
 export interface ImportData {
     importString: string;
+    tilde: boolean;
     path: string;
     fullPath: string;
     found: boolean;
@@ -26,6 +27,7 @@ export interface ImportData {
 export interface BundleResult {
     // Child imports (if any)
     imports?: BundleResult[];
+    tilde?: boolean;
     deduped?: boolean;
     // Full path of the file
     filePath: string;
@@ -87,7 +89,8 @@ export class Bundler {
 
             let fullPath: string;
             // Check for tilde import.
-            if (importName.startsWith(TILDE) && this.projectDirectory != null) {
+            let tilde: boolean = importName.startsWith(TILDE);
+            if (tilde && this.projectDirectory != null) {
                 importName = `./${NODE_MODULES}/${importName.substr(TILDE.length, importName.length)}`;
                 fullPath = path.resolve(this.projectDirectory, importName);
             } else {
@@ -96,6 +99,7 @@ export class Bundler {
 
             const importData: ImportData = {
                 importString: match[0],
+                tilde: tilde,
                 path: importName,
                 fullPath: fullPath,
                 found: false
@@ -128,6 +132,7 @@ export class Bundler {
                 // Add empty bundle result with found: false
                 currentImport = {
                     filePath: imp.fullPath,
+                    tilde: imp.tilde,
                     found: false
                 };
             } else if (this.fileRegistry[imp.fullPath] == null) {
@@ -164,6 +169,7 @@ export class Bundler {
                 // Construct and add result to current imports
                 currentImport = {
                     filePath: imp.fullPath,
+                    tilde: imp.tilde,                    
                     found: true,
                     imports: childImports
                 };
