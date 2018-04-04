@@ -89,7 +89,7 @@ export class Bundler {
 
             let fullPath: string;
             // Check for tilde import.
-            let tilde: boolean = importName.startsWith(TILDE);
+            const tilde: boolean = importName.startsWith(TILDE);
             if (tilde && this.projectDirectory != null) {
                 importName = `./${NODE_MODULES}/${importName.substr(TILDE.length, importName.length)}`;
                 fullPath = path.resolve(this.projectDirectory, importName);
@@ -169,7 +169,7 @@ export class Bundler {
                 // Construct and add result to current imports
                 currentImport = {
                     filePath: imp.fullPath,
-                    tilde: imp.tilde,                    
+                    tilde: imp.tilde,
                     found: true,
                     imports: childImports
                 };

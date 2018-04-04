@@ -21,7 +21,6 @@ export class Launcher {
             // Entry file searching.
             if (!bundleResult.found) {
                 if (this.config.Verbosity !== Contracts.Verbosity.None) {
-                    debugger;
                     const resolvedPath = path.resolve(bundleResult.filePath);
                     let errorMessage = `[Error] An error has occured${os.EOL}`;
                     errorMessage += `Entry file was not found:${os.EOL}${bundleResult.filePath}${os.EOL}`;
