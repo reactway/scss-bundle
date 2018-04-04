@@ -1,4 +1,4 @@
-# `scss-bundle`
+# scss-bundle
 
 Bundles all SCSS imports into a single file recursively.
 
