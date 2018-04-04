@@ -159,6 +159,7 @@ import { BundleResult } from "scss-bundle";
 ```typescript
 interface BundleResult {
     imports?: BundleResult[];
+    tilde?: boolean;
     filePath: string;
     content?: string;
     found: boolean;
@@ -168,6 +169,7 @@ interface BundleResult {
 ##### Properties
 
 *   `imports:` [BundleResult](#bundleresult)`[]` - File imports array
+*   `tidle?: boolean` - Used tilde import
 *   `filePath: string` - Full file path
 *   `content: string` - File content
 *   `found: boolean` - Is file found
