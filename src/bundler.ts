@@ -79,7 +79,6 @@ export class Bundler {
 
         // Resolve imports file names (prepend underscore for partials)
         const importsPromises = Helpers.getAllMatches(content, IMPORT_PATTERN).map(async match => {
-            debugger;
             let importName = match[1];
             // Append extension if it's absent
             if (importName.indexOf(FILE_EXTENSION) === -1) {
@@ -91,7 +90,6 @@ export class Bundler {
             if (importName.startsWith(TILDE) && this.projectDirectory != null) {
                 importName = `./${NODE_MODULES}/${importName.substr(TILDE.length, importName.length)}`;
                 fullPath = path.resolve(this.projectDirectory, importName);
-                debugger;
             } else {
                 fullPath = path.resolve(dirname, importName);
             }
@@ -173,7 +171,6 @@ export class Bundler {
 
             // Take contentToReplace from the fileRegistry
             contentToReplace = this.fileRegistry[imp.fullPath];
-
             // If the content is not found
             if (contentToReplace == null) {
                 // Indicate this with a comment for easier debugging
