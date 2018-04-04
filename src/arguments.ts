@@ -30,7 +30,7 @@ export const argv = yargs
     })
     .options("p", {
         alias: "project",
-        describe: "Project directory where node_modules located.",
+        describe: "Project locatation, where `node_modules` located.",
         type: "string"
     })
     .options("verbosity", {

@@ -42,7 +42,7 @@ export class Launcher {
                     let errorMessage = `[Error] An error has occured${os.EOL}`;
                     errorMessage += `Import file was not found:${os.EOL}${result.filePath}${os.EOL}`;
                     errorMessage += `Looked at (full path):${os.EOL}${resolvedPath}${os.EOL}`;
-                    errorMessage += `NOTICE: Found tilde import, but project directory was not specified.${os.EOL}`;
+                    errorMessage += `NOTICE: Found tilde import, but project location was not specified.${os.EOL}`;
                     this.exitWithError(errorMessage);
                 }
             });

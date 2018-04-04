@@ -3,8 +3,9 @@ import { Launcher } from "../src/launcher";
 
 (async () => {
     const launcher = new Launcher({
-        Destination: "",
+        Destination: "./good.scss",
         Entry: "./cases/tilde-import/main.scss",
+        ProjectDirectory: "./cases/tilde-import",
         Verbosity: 256
     });
     await launcher.Bundle();
