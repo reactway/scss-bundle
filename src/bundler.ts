@@ -9,6 +9,8 @@ const IMPORT_PATTERN = /@import ['"](.+)['"];/g;
 const COMMENT_PATTERN = /\/\/.*$/gm;
 const MULTILINE_COMMENT_PATTERN = /\/\*[\s\S]*?\*\//g;
 const FILE_EXTENSION = ".scss";
+const NODE_MODULES = "node_modules";
+const TILDE = "~";
 
 export interface FileRegistry {
     [id: string]: string | undefined;
@@ -37,12 +39,9 @@ export class Bundler {
     // Imports dictionary by file
     private importsByFile: { [key: string]: BundleResult[] } = {};
 
-    constructor(private fileRegistry: FileRegistry = {}) { }
+    constructor(private fileRegistry: FileRegistry = {}, private readonly projectDirectory?: string) {}
 
-    public async BundleAll(
-        files: string[],
-        dedupeGlobs: string[] = []
-    ): Promise<BundleResult[]> {
+    public async BundleAll(files: string[], dedupeGlobs: string[] = []): Promise<BundleResult[]> {
         const resultsPromises = files.map(async file => this.Bundle(file, dedupeGlobs));
         return Promise.all(resultsPromises);
     }
@@ -65,12 +64,7 @@ export class Bundler {
         }
     }
 
-    private async bundle(
-        filePath: string,
-        content: string,
-        dedupeFiles: string[],
-        includePaths: string[]
-    ): Promise<BundleResult> {
+    private async bundle(filePath: string, content: string, dedupeFiles: string[], includePaths: string[]): Promise<BundleResult> {
         // Remove commented imports
         content = this.removeImportsFromComments(content);
 
@@ -85,12 +79,22 @@ export class Bundler {
 
         // Resolve imports file names (prepend underscore for partials)
         const importsPromises = Helpers.getAllMatches(content, IMPORT_PATTERN).map(async match => {
+            debugger;
             let importName = match[1];
             // Append extension if it's absent
             if (importName.indexOf(FILE_EXTENSION) === -1) {
                 importName += FILE_EXTENSION;
             }
-            const fullPath = path.resolve(dirname, importName);
+
+            let fullPath: string;
+            // Check for tilde import.
+            if (importName.startsWith(TILDE) && this.projectDirectory != null) {
+                importName = `./${NODE_MODULES}/${importName.substr(TILDE.length, importName.length)}`;
+                fullPath = path.resolve(this.projectDirectory, importName);
+                debugger;
+            } else {
+                fullPath = path.resolve(dirname, importName);
+            }
 
             const importData: ImportData = {
                 importString: match[0],
@@ -180,9 +184,7 @@ export class Bundler {
             if (shouldCheckForDedupes && this.usedImports != null) {
                 // And current import path should be deduped and is used already
                 const timesUsed = this.usedImports[imp.fullPath];
-                if (dedupeFiles.indexOf(imp.fullPath) !== -1 &&
-                    timesUsed != null &&
-                    timesUsed > 1) {
+                if (dedupeFiles.indexOf(imp.fullPath) !== -1 && timesUsed != null && timesUsed > 1) {
                     // Reset content to replace to an empty string to skip it
                     contentToReplace = "";
                     // And indicate that import was deduped
@@ -209,10 +211,7 @@ export class Bundler {
     }
 
     private removeImportsFromComments(text: string): string {
-        const patterns = [
-            COMMENT_PATTERN,
-            MULTILINE_COMMENT_PATTERN
-        ];
+        const patterns = [COMMENT_PATTERN, MULTILINE_COMMENT_PATTERN];
 
         for (const pattern of patterns) {
             text = text.replace(pattern, x => x.replace(IMPORT_PATTERN, ""));
