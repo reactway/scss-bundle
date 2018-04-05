@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tilde-import-2 1`] = `
+"$red: red;
+$black: black;
+$blue: blue;
+
+
+.foo {
+    color: $red;
+}
+
+"
+`;
