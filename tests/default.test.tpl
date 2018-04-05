@@ -7,7 +7,7 @@ test("{{caseName}}", async done => {
     const entryFile = path.join(projectDirectory, testConfig.Entry);
 
     try {
-        const bundleResult = await new Bundler({}, projectDirectory)
+        const bundleResult = await new Bundler(undefined, projectDirectory)
             .BundleAll([entryFile]);
 
         expect(bundleResult[0].bundledContent).toMatchSnapshot();
