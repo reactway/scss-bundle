@@ -50,6 +50,10 @@ export class Bundler {
 
     public async Bundle(file: string, dedupeGlobs: string[] = [], includePaths: string[] = []): Promise<BundleResult> {
         try {
+            if (this.projectDirectory != null) {
+                file = path.resolve(this.projectDirectory, file);
+            }
+
             await fs.access(file);
             const contentPromise = fs.readFile(file, "utf-8");
             const dedupeFilesPromise = this.globFilesOrEmpty(dedupeGlobs);
@@ -58,7 +62,7 @@ export class Bundler {
             const [content, dedupeFiles] = await Promise.all([contentPromise, dedupeFilesPromise]);
 
             return this.bundle(file, content, dedupeFiles, includePaths);
-        } catch (error) {
+        } catch {
             return {
                 filePath: file,
                 found: false

@@ -83,18 +83,17 @@ CLI option `verbosity` is used to control how much output you get. By default, y
 ### Simple example
 
 ```typescript
-import { Bundler } from "scss-bundle";
 import * as path from "path";
+import { Bundler } from "scss-bundle";
 
-const fullPath = path.resolve("./examples/simple/main.scss");
+(async () => {
+    // Absolute project directory path.
+    const projectDirectory = path.resolve(__dirname, "./cases/tilde-import");
+    const bundler = new Bundler(undefined, projectDirectory);
+    // Relative file path to project directory path.
+    const result = await bundler.Bundle("./main.scss");
+})();
 
-Bundler.Bundle(fullPath)
-    .then(result => {
-        console.log("Bundled SCSS content: ", result.content);
-    })
-    .catch(error => {
-        console.error(error);
-    });
 ```
 
 # API
