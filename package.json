@@ -1,6 +1,9 @@
 {
     "name": "scss-bundle",
-    "version": "2.2.0-beta",
+    "version": "2.2.0-beta.2",
+    "publishConfig": {
+        "tag": "next"
+    },
     "description": "Bundling SCSS files to one bundled file.",
     "types": "@types/index.d.ts",
     "main": "index.js",
@@ -68,8 +71,5 @@
         "coveragePathIgnorePatterns": ["/node_modules/", "/tests/"],
         "moduleFileExtensions": ["ts", "tsx", "js"],
         "verbose": true
-    },
-    "publishConfig": {
-        "tag": "next"
     }
 }
