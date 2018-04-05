@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import * as path from "path";
 import * as Contracts from "./contracts";
 import { argv } from "./arguments";
 import { Launcher } from "./launcher";
@@ -19,7 +20,8 @@ class BundleCli {
             Entry: argumentValues.entry,
             DedupeGlobs: argumentValues.dedupe,
             Verbosity: this.resolveVerbosity(argumentValues.verbosity),
-            IncludePaths: argumentValues.includePaths
+            IncludePaths: argumentValues.includePaths,
+            ProjectDirectory: path.resolve(process.cwd(), argumentValues.project)
         };
     }
 

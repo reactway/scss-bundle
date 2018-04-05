@@ -1,3 +1,6 @@
 {
-  "extends": "simplr-tslint"
+    "extends": "simplr-tslint",
+    "rules": {
+        "class-members-name": false
+    }
 }

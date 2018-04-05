@@ -28,6 +28,11 @@ export const argv = yargs
         describe: "Bundled file destination.",
         type: "string"
     })
+    .options("p", {
+        alias: "project",
+        describe: "Project locatation, where `node_modules` are located.",
+        type: "string"
+    })
     .options("verbosity", {
         describe: "Verbosity of output.",
         choices: verbosityValues,
