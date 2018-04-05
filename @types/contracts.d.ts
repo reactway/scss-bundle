@@ -3,6 +3,7 @@ export interface Config {
     Entry: string;
     Destination: string;
     Verbosity: Verbosity;
+    ProjectDirectory?: string;
     DedupeGlobs?: string[];
     IncludePaths?: string[];
 }
@@ -18,4 +19,5 @@ export interface ArgumentsValues extends yargs.Arguments {
     verbosity: Verbosity;
     dedupe?: string[];
     includePaths?: string[];
+    project?: string;
 }

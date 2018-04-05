@@ -5,6 +5,10 @@ export declare class Launcher {
     Bundle(): Promise<void>;
     private renderScss(content);
     private getArchyData(bundleResult, sourceDirectory?);
+    /**
+     * TODO: Rewrite this in major version.
+     */
+    private bundleResultForEach(bundleResult, cb);
     private countSavedBytesByDeduping(bundleResult, fileRegistry);
     private exitWithError(message);
 }

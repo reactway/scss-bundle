@@ -3,12 +3,14 @@ export interface FileRegistry {
 }
 export interface ImportData {
     importString: string;
+    tilde: boolean;
     path: string;
     fullPath: string;
     found: boolean;
 }
 export interface BundleResult {
     imports?: BundleResult[];
+    tilde?: boolean;
     deduped?: boolean;
     filePath: string;
     bundledContent?: string;
@@ -16,10 +18,11 @@ export interface BundleResult {
 }
 export declare class Bundler {
     private fileRegistry;
+    private readonly projectDirectory;
     private usedImports;
     private importsByFile;
-    constructor(fileRegistry?: FileRegistry);
-    BundleAll(files: string[], dedupeGlobs: string[]): Promise<BundleResult[]>;
+    constructor(fileRegistry?: FileRegistry, projectDirectory?: string);
+    BundleAll(files: string[], dedupeGlobs?: string[]): Promise<BundleResult[]>;
     Bundle(file: string, dedupeGlobs?: string[], includePaths?: string[]): Promise<BundleResult>;
     private bundle(filePath, content, dedupeFiles, includePaths);
     private removeImportsFromComments(text);
