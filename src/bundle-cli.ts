@@ -7,7 +7,12 @@ import { Launcher } from "./launcher";
 
 class BundleCli {
     constructor(argumentValues: Contracts.ArgumentsValues) {
-        this.bundle(argumentValues);
+        if (argumentValues.entry != null && argumentValues.dest != null) {
+            this.bundle(argumentValues);
+        } else if (argumentValues.verbosity !== Contracts.Verbosity.None) {
+            console.error("[Error] 'entry' and 'dest' are required.");
+            process.exit(1);
+        }
     }
 
     private async bundle(argumentValues: Contracts.ArgumentsValues): Promise<void> {
