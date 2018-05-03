@@ -31,7 +31,8 @@ export const argv = yargs
     .options("p", {
         alias: "project",
         describe: "Project locatation, where `node_modules` are located.",
-        type: "string"
+        type: "string",
+        default: "."
     })
     .options("verbosity", {
         describe: "Verbosity of output.",

@@ -1,6 +1,6 @@
 {
     "name": "scss-bundle",
-    "version": "2.2.0-beta.2",
+    "version": "2.2.0",
     "publishConfig": {
         "tag": "next"
     },
@@ -18,8 +18,19 @@
         "prepublishOnly": "npm run build",
         "build-tests": "test-generator-cli"
     },
-    "keywords": ["scss", "bundle", "sass", "node-sass"],
-    "files": ["dist", "**/*.md", "*.js", "@types", "!*.config.js"],
+    "keywords": [
+        "scss",
+        "bundle",
+        "sass",
+        "node-sass"
+    ],
+    "files": [
+        "dist",
+        "**/*.md",
+        "*.js",
+        "@types",
+        "!*.config.js"
+    ],
     "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
     "bugs": "https://github.com/SimplrJS/scss-bundle/issues",
     "repository": "SimplrJS/scss-bundle",
@@ -48,7 +59,7 @@
         "archy": "^1.0.0",
         "fs-extra": "^5.0.0",
         "globs": "^0.1.3",
-        "node-sass": "^4.8.3",
+        "node-sass": "^4.9.0",
         "pretty-bytes": "^4.0.2",
         "promise": "^8.0.1",
         "yargs": "^11.0.0"
@@ -68,8 +79,15 @@
         "moduleNameMapper": {
             "@src/(.*)": "<rootDir>/src/$1"
         },
-        "coveragePathIgnorePatterns": ["/node_modules/", "/tests/"],
-        "moduleFileExtensions": ["ts", "tsx", "js"],
+        "coveragePathIgnorePatterns": [
+            "/node_modules/",
+            "/tests/"
+        ],
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js"
+        ],
         "verbose": true
     }
 }
