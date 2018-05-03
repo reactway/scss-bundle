@@ -3,7 +3,10 @@
 Bundles all SCSS imports into a single file recursively.
 
 [![Build Status](https://travis-ci.org/SimplrJS/scss-bundle.svg?branch=master)](https://travis-ci.org/SimplrJS/scss-bundle)
-[![NPM version](http://img.shields.io/npm/v/scss-bundle.svg)](https://www.npmjs.com/package/scss-bundle) [![dependencies Status](https://david-dm.org/simplrjs/scss-bundle/status.svg)](https://david-dm.org/simplrjs/scss-bundle) [![devDependencies Status](https://david-dm.org/simplrjs/scss-bundle/dev-status.svg)](https://david-dm.org/simplrjs/scss-bundle?type=dev)
+[![NPM version](http://img.shields.io/npm/v/scss-bundle.svg)](https://www.npmjs.com/package/scss-bundle) 
+[![npm (tag)](https://img.shields.io/npm/v/scss-bundle/next.svg)](https://www.npmjs.com/package/scss-bundle)
+[![dependencies Status](https://david-dm.org/simplrjs/scss-bundle/status.svg)](https://david-dm.org/simplrjs/scss-bundle) 
+[![devDependencies Status](https://david-dm.org/simplrjs/scss-bundle/dev-status.svg)](https://david-dm.org/simplrjs/scss-bundle?type=dev)
 
 ### Who uses `scss-bundle`
 
@@ -19,6 +22,12 @@ If you want to use `scss-bundle` globally
 
 ```sh
 $ npm install scss-bundle -g
+```
+
+Latest pre-release is published under `next` tag.
+
+```sh
+$ npm install scss-bundle@next
 ```
 
 ## CLI Usage
