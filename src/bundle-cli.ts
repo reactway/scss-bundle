@@ -26,6 +26,7 @@ class BundleCli {
             DedupeGlobs: argumentValues.dedupe,
             Verbosity: this.resolveVerbosity(argumentValues.verbosity),
             IncludePaths: argumentValues.includePaths,
+            IgnoredImports: argumentValues.ignoredImports,
             ProjectDirectory: path.resolve(process.cwd(), argumentValues.project)
         };
     }

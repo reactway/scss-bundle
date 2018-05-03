@@ -65,7 +65,7 @@ $ scss-bundle -c scss-bundle.config.json
 | verbosity            | string choices | Destination file when bundling is done.             | None, Errors, Verbose | Verbose |
 | includePaths         | array          | Include paths for resolving imports                 |                       |         |
 | project              | string         | Project location, where `node_modules` are located. |                       |         |
-
+| ignoredImports       | array          | Ignore resolving import content by matching a regular expression.|          |         |
 `*` - Required
 
 ## Output verbosity

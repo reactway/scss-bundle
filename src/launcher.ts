@@ -16,7 +16,13 @@ export class Launcher {
         try {
             const fileRegistry: FileRegistry = {};
             const bundler = new Bundler(fileRegistry, this.config.ProjectDirectory);
-            const bundleResult = await bundler.Bundle(this.config.Entry, this.config.DedupeGlobs, this.config.IncludePaths);
+
+            const bundleResult = await bundler.Bundle(
+                this.config.Entry,
+                this.config.DedupeGlobs,
+                this.config.IncludePaths,
+                this.config.IgnoredImports
+            );
 
             // Entry file searching.
             if (!bundleResult.found) {
@@ -86,7 +92,8 @@ export class Launcher {
         return new Promise((resolve, reject) => {
             nodeSass.render(
                 {
-                    data: content
+                    data: content,
+                    importer: this.tildeImporter
                 },
                 (error, result) => {
                     if (error != null) {
@@ -96,6 +103,14 @@ export class Launcher {
                 }
             );
         });
+    }
+
+    private tildeImporter: nodeSass.Importer = (url: string) => {
+        if (url[0] === "~") {
+            const filePath = path.resolve("node_modules", url.substr(1));
+            return { file: filePath };
+        }
+        return { file: url };
     }
 
     private getArchyData(bundleResult: BundleResult, sourceDirectory?: string): archy.Data {

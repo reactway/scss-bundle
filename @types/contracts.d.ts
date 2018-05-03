@@ -6,6 +6,7 @@ export interface Config {
     ProjectDirectory?: string;
     DedupeGlobs?: string[];
     IncludePaths?: string[];
+    IgnoredImports?: string[];
 }
 export declare enum Verbosity {
     None = 0,
@@ -19,5 +20,6 @@ export interface ArgumentsValues extends yargs.Arguments {
     verbosity: Verbosity;
     dedupe?: string[];
     includePaths?: string[];
+    ignoredImports?: string[];
     project?: string;
 }
