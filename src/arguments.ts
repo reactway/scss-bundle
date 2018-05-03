@@ -43,6 +43,10 @@ export const argv = yargs
         describe: "Include paths for resolving imports.",
         type: "array"
     })
+    .options("ignoredImports", {
+        describe: "Ignore resolving import content by matching a regular expression.",
+        type: "array"
+    })
     .array(DEDUPE_KEY)
     .default(DEDUPE_KEY, [], "[]")
     .usage("Usage: scss-bundle [options]")

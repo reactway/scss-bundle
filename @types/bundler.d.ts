@@ -7,6 +7,7 @@ export interface ImportData {
     path: string;
     fullPath: string;
     found: boolean;
+    ignored?: boolean;
 }
 export interface BundleResult {
     imports?: BundleResult[];
@@ -23,8 +24,9 @@ export declare class Bundler {
     private importsByFile;
     constructor(fileRegistry?: FileRegistry, projectDirectory?: string);
     BundleAll(files: string[], dedupeGlobs?: string[]): Promise<BundleResult[]>;
-    Bundle(file: string, dedupeGlobs?: string[], includePaths?: string[]): Promise<BundleResult>;
-    private bundle(filePath, content, dedupeFiles, includePaths);
+    Bundle(file: string, dedupeGlobs?: string[], includePaths?: string[], ignoredImports?: string[]): Promise<BundleResult>;
+    private bundle(filePath, content, dedupeFiles, includePaths, ignoredImports);
+    private replaceLastOccurance(content, importString, contentToReplace);
     private removeImportsFromComments(text);
     private resolveImport(importData, includePaths);
     private globFilesOrEmpty(globsList);

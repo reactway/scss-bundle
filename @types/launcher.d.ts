@@ -4,6 +4,7 @@ export declare class Launcher {
     constructor(config: Contracts.Config);
     Bundle(): Promise<void>;
     private renderScss(content);
+    private tildeImporter;
     private getArchyData(bundleResult, sourceDirectory?);
     /**
      * TODO: Rewrite this in major version.

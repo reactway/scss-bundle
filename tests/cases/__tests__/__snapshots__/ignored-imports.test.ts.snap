@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ignored-imports 1`] = `
+"@import '~@angular/material/theming';
+
+@include mat-core();
+
+.test {
+  color: red;
+}
+
+
+
+html {
+  color: black;
+}
+"
+`;

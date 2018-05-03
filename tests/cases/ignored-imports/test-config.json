@@ -1,0 +1,6 @@
+{
+    "Entry": "main.scss",
+    "IgnoredImports": [
+        "~@angular/.*"
+    ]
+}

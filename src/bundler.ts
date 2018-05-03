@@ -22,6 +22,7 @@ export interface ImportData {
     path: string;
     fullPath: string;
     found: boolean;
+    ignored?: boolean;
 }
 
 export interface BundleResult {
@@ -41,14 +42,19 @@ export class Bundler {
     // Imports dictionary by file
     private importsByFile: { [key: string]: BundleResult[] } = {};
 
-    constructor(private fileRegistry: FileRegistry = {}, private readonly projectDirectory?: string) {}
+    constructor(private fileRegistry: FileRegistry = {}, private readonly projectDirectory?: string) { }
 
     public async BundleAll(files: string[], dedupeGlobs: string[] = []): Promise<BundleResult[]> {
         const resultsPromises = files.map(async file => this.Bundle(file, dedupeGlobs));
         return Promise.all(resultsPromises);
     }
 
-    public async Bundle(file: string, dedupeGlobs: string[] = [], includePaths: string[] = []): Promise<BundleResult> {
+    public async Bundle(
+        file: string,
+        dedupeGlobs: string[] = [],
+        includePaths: string[] = [],
+        ignoredImports: string[] = []
+    ): Promise<BundleResult> {
         try {
             if (this.projectDirectory != null) {
                 file = path.resolve(this.projectDirectory, file);
@@ -61,7 +67,10 @@ export class Bundler {
             // Await all async operations and extract results
             const [content, dedupeFiles] = await Promise.all([contentPromise, dedupeFilesPromise]);
 
-            return this.bundle(file, content, dedupeFiles, includePaths);
+            // Convert string array into regular expressions
+            const ignoredImportsRegEx = ignoredImports.map(ignoredImport => new RegExp(ignoredImport));
+
+            return this.bundle(file, content, dedupeFiles, includePaths, ignoredImportsRegEx);
         } catch {
             return {
                 filePath: file,
@@ -70,7 +79,13 @@ export class Bundler {
         }
     }
 
-    private async bundle(filePath: string, content: string, dedupeFiles: string[], includePaths: string[]): Promise<BundleResult> {
+    private async bundle(
+        filePath: string,
+        content: string,
+        dedupeFiles: string[],
+        includePaths: string[],
+        ignoredImports: RegExp[]
+    ): Promise<BundleResult> {
         // Remove commented imports
         content = this.removeImportsFromComments(content);
 
@@ -91,6 +106,9 @@ export class Bundler {
                 importName += FILE_EXTENSION;
             }
 
+            // Determine if import should be ignored
+            const ignored = ignoredImports.findIndex(ignoredImportRegex => ignoredImportRegex.test(importName)) !== -1;
+
             let fullPath: string;
             // Check for tilde import.
             const tilde: boolean = importName.startsWith(TILDE);
@@ -106,7 +124,8 @@ export class Bundler {
                 tilde: tilde,
                 path: importName,
                 fullPath: fullPath,
-                found: false
+                found: false,
+                ignored: ignored
             };
 
             await this.resolveImport(importData, includePaths);
@@ -145,7 +164,7 @@ export class Bundler {
                 const impContent = await fs.readFile(imp.fullPath, "utf-8");
 
                 // and bundle it
-                const bundledImport = await this.bundle(imp.fullPath, impContent, dedupeFiles, includePaths);
+                const bundledImport = await this.bundle(imp.fullPath, impContent, dedupeFiles, includePaths, ignoredImports);
 
                 // Then add its bundled content to the registry
                 this.fileRegistry[imp.fullPath] = bundledImport.bundledContent;
@@ -179,28 +198,37 @@ export class Bundler {
                 };
             }
 
-            // Take contentToReplace from the fileRegistry
-            contentToReplace = this.fileRegistry[imp.fullPath];
-            // If the content is not found
-            if (contentToReplace == null) {
-                // Indicate this with a comment for easier debugging
-                contentToReplace = `/*** IMPORTED FILE NOT FOUND ***/${os.EOL}${imp.importString}/*** --- ***/`;
-            }
-
-            // If usedImports dictionary is defined
-            if (shouldCheckForDedupes && this.usedImports != null) {
-                // And current import path should be deduped and is used already
-                const timesUsed = this.usedImports[imp.fullPath];
-                if (dedupeFiles.indexOf(imp.fullPath) !== -1 && timesUsed != null && timesUsed > 1) {
-                    // Reset content to replace to an empty string to skip it
+            if (imp.ignored) {
+                if (this.usedImports[imp.fullPath] > 1) {
                     contentToReplace = "";
-                    // And indicate that import was deduped
-                    currentImport.deduped = true;
+                } else {
+                    contentToReplace = imp.importString;
                 }
-            }
+            } else {
 
+                // Take contentToReplace from the fileRegistry
+                contentToReplace = this.fileRegistry[imp.fullPath];
+                // If the content is not found
+                if (contentToReplace == null) {
+                    // Indicate this with a comment for easier debugging
+                    contentToReplace = `/*** IMPORTED FILE NOT FOUND ***/${os.EOL}${imp.importString}/*** --- ***/`;
+                }
+
+                // If usedImports dictionary is defined
+                if (shouldCheckForDedupes && this.usedImports != null) {
+                    // And current import path should be deduped and is used already
+                    const timesUsed = this.usedImports[imp.fullPath];
+                    if (dedupeFiles.indexOf(imp.fullPath) !== -1 && timesUsed != null && timesUsed > 1) {
+                        // Reset content to replace to an empty string to skip it
+                        contentToReplace = "";
+                        // And indicate that import was deduped
+                        currentImport.deduped = true;
+                    }
+                }
+
+            }
             // Finally, replace import string with bundled content or a debug message
-            content = content.replace(imp.importString, contentToReplace);
+            content = this.replaceLastOccurance(content, imp.importString, contentToReplace);
 
             // And push current import into the list
             currentImports.push(currentImport);
@@ -215,6 +243,11 @@ export class Bundler {
         }
 
         return bundleResult;
+    }
+
+    private replaceLastOccurance(content: string, importString: string, contentToReplace: string): string {
+        const index = content.lastIndexOf(importString);
+        return content.slice(0, index) + content.slice(index).replace(importString, contentToReplace);
     }
 
     private removeImportsFromComments(text: string): string {
