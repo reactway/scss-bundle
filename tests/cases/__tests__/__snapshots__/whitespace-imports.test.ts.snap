@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`whitespace-imports 1`] = `
+"$a-variable: green;
+$b-variable: blue;
+
+.class {
+    background-color: $a-variable;
+    color: $b-variable;
+}"
+`;
