@@ -1,9 +1,6 @@
 {
     "name": "scss-bundle",
-    "version": "2.3.0-beta",
-    "publishConfig": {
-        "tag": "next"
-    },
+    "version": "2.3.1",
     "description": "Bundling SCSS files to one bundled file.",
     "types": "@types/index.d.ts",
     "main": "index.js",
