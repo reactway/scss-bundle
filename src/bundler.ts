@@ -34,6 +34,7 @@ export interface BundleResult {
     filePath: string;
     bundledContent?: string;
     found: boolean;
+    ignored?: boolean;
 }
 
 export class Bundler {
@@ -156,7 +157,8 @@ export class Bundler {
                 currentImport = {
                     filePath: imp.fullPath,
                     tilde: imp.tilde,
-                    found: false
+                    found: false,
+                    ignored:  imp.ignored
                 };
             } else if (this.fileRegistry[imp.fullPath] == null) {
                 // If file is not yet in the registry

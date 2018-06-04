@@ -16,6 +16,7 @@ export interface BundleResult {
     filePath: string;
     bundledContent?: string;
     found: boolean;
+    ignored?: boolean;
 }
 export declare class Bundler {
     private fileRegistry;
