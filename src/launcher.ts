@@ -107,7 +107,8 @@ export class Launcher {
 
     private tildeImporter: nodeSass.Importer = (url: string) => {
         if (url[0] === "~") {
-            const filePath = path.resolve("node_modules", url.substr(1));
+            const projectDirectory = this.config.ProjectDirectory ? this.config.ProjectDirectory : ".";
+            const filePath = path.resolve(projectDirectory + "/node_modules", url.substr(1));
             return { file: filePath };
         }
         return { file: url };
