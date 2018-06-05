@@ -127,6 +127,9 @@ export class Launcher {
         if (bundleResult.deduped) {
             archyData.label += ` [DEDUPED]`;
         }
+        if (bundleResult.ignored) {
+            archyData.label += ` [IGNORED]`;
+        }
 
         if (bundleResult.imports != null) {
             archyData.nodes = bundleResult.imports.map(x => {
