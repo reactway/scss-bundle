@@ -93,7 +93,8 @@ export class Launcher {
             nodeSass.render(
                 {
                     data: content,
-                    importer: this.tildeImporter
+                    importer: this.tildeImporter,
+                    includePaths: this.config.IncludePaths,
                 },
                 (error, result) => {
                     if (error != null) {
