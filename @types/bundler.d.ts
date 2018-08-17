@@ -26,6 +26,7 @@ export declare class Bundler {
     constructor(fileRegistry?: FileRegistry, projectDirectory?: string);
     BundleAll(files: string[], dedupeGlobs?: string[]): Promise<BundleResult[]>;
     Bundle(file: string, dedupeGlobs?: string[], includePaths?: string[], ignoredImports?: string[]): Promise<BundleResult>;
+    private isExtensionExists(importName);
     private bundle(filePath, content, dedupeFiles, includePaths, ignoredImports);
     private replaceLastOccurance(content, importString, contentToReplace);
     private removeImportsFromComments(text);
