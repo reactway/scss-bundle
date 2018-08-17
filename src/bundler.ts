@@ -8,7 +8,8 @@ import * as Helpers from "./helpers";
 const IMPORT_PATTERN = /@import\s+['"](.+)['"];/g;
 const COMMENT_PATTERN = /\/\/.*$/gm;
 const MULTILINE_COMMENT_PATTERN = /\/\*[\s\S]*?\*\//g;
-const FILE_EXTENSION = ".scss";
+const DEFAULT_FILE_EXTENSION = ".scss";
+const ALLOWED_FILE_EXTENSIONS = [".scss", ".css"];
 const NODE_MODULES = "node_modules";
 const TILDE = "~";
 
@@ -80,6 +81,9 @@ export class Bundler {
         }
     }
 
+    private isExtensionExists(importName: string): boolean {
+        return ALLOWED_FILE_EXTENSIONS.some((extension => importName.indexOf(extension) !== -1));
+    }
     private async bundle(
         filePath: string,
         content: string,
@@ -103,8 +107,8 @@ export class Bundler {
         const importsPromises = Helpers.getAllMatches(content, IMPORT_PATTERN).map(async match => {
             let importName = match[1];
             // Append extension if it's absent
-            if (importName.indexOf(FILE_EXTENSION) === -1) {
-                importName += FILE_EXTENSION;
+            if (!this.isExtensionExists(importName)) {
+                importName += DEFAULT_FILE_EXTENSION;
             }
 
             // Determine if import should be ignored
