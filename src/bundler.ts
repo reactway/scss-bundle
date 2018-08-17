@@ -9,7 +9,7 @@ const IMPORT_PATTERN = /@import\s+['"](.+)['"];/g;
 const COMMENT_PATTERN = /\/\/.*$/gm;
 const MULTILINE_COMMENT_PATTERN = /\/\*[\s\S]*?\*\//g;
 const DEFAULT_FILE_EXTENSION = ".scss";
-const ALLOWED_FILE_EXTENSIONS = [".scss", ".saas", ".css"];
+const ALLOWED_FILE_EXTENSIONS = [".scss", ".css"];
 const NODE_MODULES = "node_modules";
 const TILDE = "~";
 
