@@ -53,7 +53,9 @@
         "scss-bundle": "./dist/bundle-cli.js"
     },
     "dependencies": {
+        "@types/chokidar": "^1.7.5",
         "archy": "^1.0.0",
+        "chokidar": "^2.0.4",
         "fs-extra": "^5.0.0",
         "globs": "^0.1.3",
         "node-sass": "^4.9.0",
