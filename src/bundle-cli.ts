@@ -38,6 +38,7 @@ async function main(argumentValues: Contracts.ArgumentsValues): Promise<void> {
 
     if (argumentValues.verbosity !== Contracts.Verbosity.None && isWatching && argumentValues.watch === "") {
         console.error("[Error] 'watch' must be defined.");
+        process.exit(1);
     }
 
     if (isWatching) {
