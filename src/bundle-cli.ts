@@ -44,18 +44,18 @@ async function main(argumentValues: Contracts.ArgumentsValues): Promise<void> {
     if (isWatching) {
         chokidar.watch(argumentValues.watch).on("change", async () => {
             if (config.Verbosity === Contracts.Verbosity.Verbose) {
-                console.log("[Watcher] File change detected.");
+                console.info("[Watcher] File change detected.");
             }
             await bundler.Bundle();
             if (config.Verbosity === Contracts.Verbosity.Verbose) {
-                console.log("[Watcher] Waiting for changes...");
+                console.info("[Watcher] Waiting for changes...");
             }
         });
     }
 
     await bundler.Bundle();
     if (isWatching && config.Verbosity === Contracts.Verbosity.Verbose) {
-        console.log("[Watcher] Waiting for changes...");
+        console.info("[Watcher] Waiting for changes...");
     }
 }
 
