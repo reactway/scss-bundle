@@ -1,4 +1,5 @@
 {
-    "entry": ".\\examples\\partial-in-subdir\\main.scss",
-    "dest": ".\\examples\\output\\partial-in-subdir.scss"
+    "entry": "./tests/cases/partial-in-subdir/main.scss",
+    "dest": "./tests/cases/__temp__/output/partial-in-subdir.scss",
+    "watch": "./tests/cases/partial-in-subdir/**/*.scss"
 }
