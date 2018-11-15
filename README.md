@@ -67,14 +67,15 @@ $ scss-bundle -c scss-bundle.config.json
 }
 ```
 
-| Argument             | Type           | Description                                         | Values                | Default |
-| -------------------- | -------------- | --------------------------------------------------- | --------------------- | ------- |
-| entry <sup>`*`</sup> | string         | Main entry file where to start bundling.            |                       |         |
-| dest <sup>`*`</sup>  | string         | Destination file when bundling is done.             |                       |         |
-| verbosity            | string choices | Destination file when bundling is done.             | None, Errors, Verbose | Verbose |
-| includePaths         | array          | Include paths for resolving imports                 |                       |         |
-| project              | string         | Project location, where `node_modules` are located. |                       |         |
-| ignoredImports       | array          | Ignore resolving import content by matching a regular expression.|          |         |
+| Argument             | Type           | Description                                                       | Values                | Default |
+| -------------------- | -------------- | ----------------------------------------------------------------- | --------------------- | ------- |
+| entry <sup>`*`</sup> | string         | Main entry file where to start bundling.                          |                       |         |
+| dest <sup>`*`</sup>  | string         | Destination file when bundling is done.                           |                       |         |
+| watch                | string         | Path that will be watched.                                        |                       |         |
+| verbosity            | string choices | Destination file when bundling is done.                           | None, Errors, Verbose | Verbose |
+| includePaths         | array          | Include paths for resolving imports                               |                       |         |
+| project              | string         | Project location, where `node_modules` are located.               |                       |         |
+| ignoredImports       | array          | Ignore resolving import content by matching a regular expression. |                       |         |
 `*` - Required
 
 ## Output verbosity
