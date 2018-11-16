@@ -1,6 +1,9 @@
 {
     "name": "scss-bundle",
-    "version": "2.4.0",
+    "version": "2.5.0-beta",
+    "publishConfig": {
+        "tag": "next"
+    },
     "description": "Bundling SCSS files to one bundled file.",
     "types": "@types/index.d.ts",
     "main": "index.js",
@@ -13,7 +16,8 @@
         "build": "tsc -p . --newLine lf",
         "watch": "tsc -w",
         "prepublishOnly": "npm run build",
-        "build-tests": "test-generator-cli"
+        "build-tests": "test-generator-cli",
+        "start": "node dist/bundle-cli.js -c scss-bundle.config.json"
     },
     "keywords": [
         "scss",
@@ -53,10 +57,14 @@
         "scss-bundle": "./dist/bundle-cli.js"
     },
     "dependencies": {
+        "@types/chokidar": "^1.7.5",
+        "@types/lodash.debounce": "^4.0.4",
         "archy": "^1.0.0",
+        "chokidar": "^2.0.4",
         "fs-extra": "^5.0.0",
         "globs": "^0.1.3",
-        "node-sass": "^4.9.0",
+        "lodash.debounce": "^4.0.8",
+        "node-sass": "^4.10.0",
         "pretty-bytes": "^4.0.2",
         "promise": "^8.0.1",
         "yargs": "^11.0.0"

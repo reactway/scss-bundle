@@ -34,6 +34,11 @@ export const argv = yargs
         type: "string",
         default: "."
     })
+    .options("w", {
+        alias: "watch",
+        describe: "Watch files for changes.",
+        type: "string"
+    })
     .options("verbosity", {
         describe: "Verbosity of output.",
         choices: verbosityValues,
@@ -50,5 +55,4 @@ export const argv = yargs
     .array(DEDUPE_KEY)
     .default(DEDUPE_KEY, [], "[]")
     .usage("Usage: scss-bundle [options]")
-    .string(["c", "e", "d"])
-    .argv as Contracts.ArgumentsValues;
+    .string(["c", "e", "d"]).argv as Contracts.ArgumentsValues;

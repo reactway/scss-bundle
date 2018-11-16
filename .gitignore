@@ -292,5 +292,7 @@ coverage
 /common/rush-recycler
 package-deps.json
 
+__temp__
+
 # Tests
 **/tests/cases/__tests__/*.test.ts
