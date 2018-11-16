@@ -2,6 +2,7 @@
 
 import * as path from "path";
 import * as chokidar from "chokidar";
+import debounce = require("lodash.debounce");
 
 import * as Contracts from "./contracts";
 import { argv } from "./arguments";
@@ -42,7 +43,7 @@ async function main(argumentValues: Contracts.ArgumentsValues): Promise<void> {
     }
 
     if (isWatching) {
-        chokidar.watch(argumentValues.watch).on("change", async () => {
+        const onFilesChange = debounce(async () => {
             if (config.Verbosity === Contracts.Verbosity.Verbose) {
                 console.info("[Watcher] File change detected.");
             }
@@ -50,7 +51,9 @@ async function main(argumentValues: Contracts.ArgumentsValues): Promise<void> {
             if (config.Verbosity === Contracts.Verbosity.Verbose) {
                 console.info("[Watcher] Waiting for changes...");
             }
-        });
+        }, 500);
+
+        chokidar.watch(argumentValues.watch).on("change", onFilesChange);
     }
 
     await bundler.Bundle();
