@@ -2,6 +2,7 @@
 
 import * as path from "path";
 import * as chokidar from "chokidar";
+// tslint:disable-next-line:no-require-imports
 import debounce = require("lodash.debounce");
 
 import * as Contracts from "./contracts";
