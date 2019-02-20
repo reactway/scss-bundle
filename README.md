@@ -67,15 +67,16 @@ $ scss-bundle -c scss-bundle.config.json
 }
 ```
 
-| Argument             | Type           | Description                                                       | Values                | Default |
-| -------------------- | -------------- | ----------------------------------------------------------------- | --------------------- | ------- |
-| entry <sup>`*`</sup> | string         | Main entry file where to start bundling.                          |                       |         |
-| dest <sup>`*`</sup>  | string         | Destination file when bundling is done.                           |                       |         |
-| watch                | string         | Path that will be watched.                                        |                       |         |
-| verbosity            | string choices | Destination file when bundling is done.                           | None, Errors, Verbose | Verbose |
-| includePaths         | array          | Include paths for resolving imports                               |                       |         |
-| project              | string         | Project location, where `node_modules` are located.               |                       |         |
-| ignoredImports       | array          | Ignore resolving import content by matching a regular expression. |                       |         |
+| CLI Flag                   | Argument             | Type           | Description                                                       | Values                | Default |
+| -------------------------- | -------------------- | -------------- | ----------------------------------------------------------------- | --------------------- | ------- |
+| --entry, -e <sup>`*`</sup> | entry <sup>`*`</sup> | string         | Main entry file where to start bundling.                          |                       |         |
+| --dest, -d <sup>`*`</sup>  | dest <sup>`*`</sup>  | string         | Destination file when bundling is done.                           |                       |         |
+| --watch, -w                | watch                | string         | Path that will be watched.                                        |                       |         |
+| --verbosity                | verbosity            | string choices | Destination file when bundling is done.                           | None, Errors, Verbose | Verbose |
+| --includePaths             | includePaths         | array          | Include paths for resolving imports                               |                       |         |
+| --project, -p              | project              | string         | Project location, where `node_modules` are located.               |                       |         |
+| --ignoredImports           | ignoredImports       | array          | Ignore resolving import content by matching a regular expression. |                       |         |
+| --watch, -w                | watch                | boolean        | Watch files for changes.                                          |                       |         |
 `*` - Required
 
 ## Output verbosity
