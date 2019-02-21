@@ -77,6 +77,7 @@ $ scss-bundle -c scss-bundle.config.json
 | --project, -p              | project              | string         | Project location, where `node_modules` are located.               |                       |         |
 | --ignoredImports           | ignoredImports       | array          | Ignore resolving import content by matching a regular expression. |                       |         |
 | --watch, -w                | watch                | boolean        | Watch files for changes.                                          |                       |         |
+
 `*` - Required
 
 ## Output verbosity

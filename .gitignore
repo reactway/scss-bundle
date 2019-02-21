@@ -296,3 +296,4 @@ __temp__
 
 # Tests
 **/tests/cases/__tests__/*.test.ts
+junit.xml
