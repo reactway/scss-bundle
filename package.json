@@ -1,6 +1,6 @@
 {
     "name": "scss-bundle",
-    "version": "2.5.0",
+    "version": "2.5.1",
     "description": "Bundling SCSS files to one bundled file.",
     "types": "@types/index.d.ts",
     "main": "index.js",
@@ -65,7 +65,7 @@
         "node-sass": "^4.10.0",
         "pretty-bytes": "^4.0.2",
         "promise": "^8.0.1",
-        "yargs": "^11.0.0"
+        "yargs": "^13.1.0"
     },
     "jest": {
         "collectCoverage": true,
