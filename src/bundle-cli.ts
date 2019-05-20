@@ -30,7 +30,7 @@ function argumentsToConfig(argumentValues: Contracts.ArgumentsValues): Contracts
 
 async function main(argumentValues: Contracts.ArgumentsValues): Promise<void> {
     const config = argumentsToConfig(argumentValues);
-    const isWatching = argumentValues.watch != null;
+    const isWatching = argumentValues.watch != null && argumentValues.watch !== "false";
     const bundler = new Launcher(config);
 
     if (argumentValues.verbosity !== Contracts.Verbosity.None && (argumentValues.entry == null || argumentValues.dest == null)) {
