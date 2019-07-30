@@ -21,7 +21,7 @@ export interface ArgumentsValues extends yargs.Arguments {
   entry: string;
   dest: string;
   watch: string;
-  noWatch: string;
+  noWatch?: string;
   verbosity: Verbosity;
   dedupe?: string[];
   includePaths?: string[];
