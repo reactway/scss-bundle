@@ -3,18 +3,18 @@
 Bundles all SCSS imports into a single file recursively.
 
 [![Build Status](https://travis-ci.org/SimplrJS/scss-bundle.svg?branch=master)](https://travis-ci.org/SimplrJS/scss-bundle)
-[![NPM version](http://img.shields.io/npm/v/scss-bundle.svg)](https://www.npmjs.com/package/scss-bundle) 
+[![NPM version](http://img.shields.io/npm/v/scss-bundle.svg)](https://www.npmjs.com/package/scss-bundle)
 [![npm (tag)](https://img.shields.io/npm/v/scss-bundle/next.svg)](https://www.npmjs.com/package/scss-bundle)
-[![dependencies Status](https://david-dm.org/simplrjs/scss-bundle/status.svg)](https://david-dm.org/simplrjs/scss-bundle) 
+[![dependencies Status](https://david-dm.org/simplrjs/scss-bundle/status.svg)](https://david-dm.org/simplrjs/scss-bundle)
 [![devDependencies Status](https://david-dm.org/simplrjs/scss-bundle/dev-status.svg)](https://david-dm.org/simplrjs/scss-bundle?type=dev)
 
 ### Who uses `scss-bundle`
 
 A few of the projects who use the package:
 
-*   [Angular/material2](https://github.com/angular/material2)
-*   [Grassy](https://github.com/lazarljubenovic/grassy)
-*   [Copictures](https://copictures.com)
+- [Angular/material2](https://github.com/angular/material2)
+- [Grassy](https://github.com/lazarljubenovic/grassy)
+- [Copictures](https://copictures.com)
 
 ## Get started
 
@@ -62,21 +62,22 @@ $ scss-bundle -c scss-bundle.config.json
 
 ```json
 {
-    "entry": "./src/main.scss",
-    "dest": "bundled.scss"
+  "entry": "./src/main.scss",
+  "dest": "./src/bundled.scss",
+  "watch": "./src/*.scss"
 }
 ```
 
-| CLI Flag                   | Argument             | Type           | Description                                                       | Values                | Default |
-| -------------------------- | -------------------- | -------------- | ----------------------------------------------------------------- | --------------------- | ------- |
-| --entry, -e <sup>`*`</sup> | entry <sup>`*`</sup> | string         | Main entry file where to start bundling.                          |                       |         |
-| --dest, -d <sup>`*`</sup>  | dest <sup>`*`</sup>  | string         | Destination file when bundling is done.                           |                       |         |
-| --watch, -w                | watch                | string         | Path that will be watched.                                        |                       |         |
-| --verbosity                | verbosity            | string choices | Destination file when bundling is done.                           | None, Errors, Verbose | Verbose |
-| --includePaths             | includePaths         | array          | Include paths for resolving imports                               |                       |         |
-| --project, -p              | project              | string         | Project location, where `node_modules` are located.               |                       |         |
-| --ignoredImports           | ignoredImports       | array          | Ignore resolving import content by matching a regular expression. |                       |         |
-| --watch, -w                | watch                | boolean        | Watch files for changes.                                          |                       |         |
+| CLI Flag                   | Argument             | Type           | Description                                                                     | Values                | Default |
+| -------------------------- | -------------------- | -------------- | ------------------------------------------------------------------------------- | --------------------- | ------- |
+| --entry, -e <sup>`*`</sup> | entry <sup>`*`</sup> | string         | Main entry file where to start bundling.                                        |                       |         |
+| --dest, -d <sup>`*`</sup>  | dest <sup>`*`</sup>  | string         | Destination file when bundling is done.                                         |                       |         |
+| --watch, -w                | watch                | string         | Path that will be watched.                                                      |
+| --noWatch, -nw             | noWatch              | string         | Disables watching of file changes and ends process following initial build run. |
+| --verbosity                | verbosity            | string choices | Destination file when bundling is done.                                         | None, Errors, Verbose | Verbose |
+| --includePaths             | includePaths         | array          | Include paths for resolving imports                                             |                       |         |
+| --project, -p              | project              | string         | Project location, where `node_modules` are located.                             |                       |         |
+| --ignoredImports           | ignoredImports       | array          | Ignore resolving import content by matching a regular expression.               |                       |         |
 
 `*` - Required
 
@@ -99,13 +100,12 @@ import * as path from "path";
 import { Bundler } from "scss-bundle";
 
 (async () => {
-    // Absolute project directory path.
-    const projectDirectory = path.resolve(__dirname, "./cases/tilde-import");
-    const bundler = new Bundler(undefined, projectDirectory);
-    // Relative file path to project directory path.
-    const result = await bundler.Bundle("./main.scss");
+  // Absolute project directory path.
+  const projectDirectory = path.resolve(__dirname, "./cases/tilde-import");
+  const bundler = new Bundler(undefined, projectDirectory);
+  // Relative file path to project directory path.
+  const result = await bundler.Bundle("./main.scss");
 })();
-
 ```
 
 # API
@@ -124,8 +124,8 @@ constructor(fileRegistry: FileRegistry = {}, projectDirectory?: string) {}
 
 ##### Arguments
 
-*   `fileRegistry?:` [Registry](#registry) - Dictionary of files contents by full path
-*   `projectDirectory?: string` - Absolute project location, where `node_modules` are located. Used for resolving tilde imports
+- `fileRegistry?:` [Registry](#registry) - Dictionary of files contents by full path
+- `projectDirectory?: string` - Absolute project location, where `node_modules` are located. Used for resolving tilde imports
 
 ### Methods
 
@@ -137,8 +137,8 @@ public static async Bundle(file: string, fileRegistry: Registry = {}): Promise<B
 
 ##### Arguments
 
-*   `file: string` - Main file full path
-*   `fileRegistry:` [Registry](#registry) - Dictionary of files contents by full path
+- `file: string` - Main file full path
+- `fileRegistry:` [Registry](#registry) - Dictionary of files contents by full path
 
 ##### Returns
 
@@ -152,8 +152,8 @@ public static async BundleAll(files: string[], fileRegistry: Registry = {}): Pro
 
 ##### Arguments
 
-*   `files: string[]` - Array of full path files
-*   `fileRegistry:`[Registry](#registry) - Dictionary of files contents by full path
+- `files: string[]` - Array of full path files
+- `fileRegistry:`[Registry](#registry) - Dictionary of files contents by full path
 
 ##### Returns
 
@@ -169,21 +169,21 @@ import { BundleResult } from "scss-bundle";
 
 ```typescript
 interface BundleResult {
-    imports?: BundleResult[];
-    tilde?: boolean;
-    filePath: string;
-    content?: string;
-    found: boolean;
+  imports?: BundleResult[];
+  tilde?: boolean;
+  filePath: string;
+  content?: string;
+  found: boolean;
 }
 ```
 
 ##### Properties
 
-*   `imports:` [BundleResult](#bundleresult)`[]` - File imports array
-*   `tidle?: boolean` - Used tilde import
-*   `filePath: string` - Full file path
-*   `content: string` - File content
-*   `found: boolean` - Is file found
+- `imports:` [BundleResult](#bundleresult)`[]` - File imports array
+- `tidle?: boolean` - Used tilde import
+- `filePath: string` - Full file path
+- `content: string` - File content
+- `found: boolean` - Is file found
 
 #### Registry
 
@@ -193,7 +193,7 @@ import { Registry } from "scss-bundle";
 
 ```typescript
 interface Registry {
-    [id: string]: string | undefined;
+  [id: string]: string | undefined;
 }
 ```
 
