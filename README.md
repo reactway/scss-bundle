@@ -63,7 +63,7 @@ $ scss-bundle -c scss-bundle.config.json
 ```json
 {
   "entry": "./src/main.scss",
-  "dest": "bundled.scss",
+  "dest": "./bundled.scss",
   "watch": "./src/*.scss"
 }
 ```
