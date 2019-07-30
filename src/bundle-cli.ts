@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-import * as path from "path";
-import * as chokidar from "chokidar";
+import * as path from 'path';
+import * as chokidar from 'chokidar';
 // tslint:disable-next-line:no-require-imports
-import debounce = require("lodash.debounce");
+import debounce = require('lodash.debounce');
 
-import * as Contracts from "./contracts";
-import { argv } from "./arguments";
-import { Launcher } from "./launcher";
+import * as Contracts from './contracts';
+import { argv } from './arguments';
+import { Launcher } from './launcher';
 
 function resolveVerbosity(verbosity: any): number {
   // Convert given value to an appropriate Verbosity enum value.
@@ -33,7 +33,7 @@ function argumentsToConfig(
 async function main(argumentValues: Contracts.ArgumentsValues): Promise<void> {
   const config = argumentsToConfig(argumentValues);
   const isWatching = argumentValues.watch !== null;
-  const noWatch = argumentValues.watch === "";
+  const noWatch = argumentValues.watch === '';
   const bundler = new Launcher(config);
 
   if (
@@ -45,9 +45,10 @@ async function main(argumentValues: Contracts.ArgumentsValues): Promise<void> {
   }
 
   if (
+    argumentValues.verbosity !== Contracts.Verbosity.None &&
     !noWatch &&
     isWatching &&
-    argumentValues.verbosity !== Contracts.Verbosity.None
+    argumentValues.watch == null
   ) {
     console.error("[Error] 'watch' must be defined.");
     process.exit(1);
@@ -56,11 +57,11 @@ async function main(argumentValues: Contracts.ArgumentsValues): Promise<void> {
   if (!noWatch && isWatching && !Contracts.Verbosity.None) {
     const onFilesChange = debounce(async () => {
       if (config.Verbosity === Contracts.Verbosity.Verbose) {
-        console.info("[Watcher] Waiting for changes...");
+        console.info('[Watcher] Waiting for changes...');
       }
       await bundler.Bundle();
     }, 500);
-    chokidar.watch(argumentValues.watch).on("change", onFilesChange);
+    chokidar.watch(argumentValues.watch).on('change', onFilesChange);
   }
 
   await bundler.Bundle();
@@ -70,7 +71,7 @@ async function main(argumentValues: Contracts.ArgumentsValues): Promise<void> {
     isWatching &&
     config.Verbosity === Contracts.Verbosity.Verbose
   ) {
-    console.info("[Watcher] Waiting for changes...");
+    console.info('[Watcher] Waiting for changes...');
   } else {
     process.exit();
   }
