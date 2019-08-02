@@ -9,26 +9,12 @@
         "noEmit": true,
         "experimentalDecorators": false,
         "baseUrl": "./",
-        "typeRoots": [
-            "../"
-        ],
-        "types": [
-            "jest",
-            "typescript",
-            "node"
-        ],
-        "lib": [
-            "es6",
-            "dom"
-        ],
+        "typeRoots": ["../"],
+        "types": ["jest", "typescript", "node"],
+        "lib": ["es6", "dom"],
         "paths": {
-            "@src/*": [
-                "../src/*"
-            ]
+            "@src/*": ["../src/*"]
         },
-        "rootDirs": [
-            "./",
-            "../src"
-        ]
+        "rootDirs": ["./", "../src"]
     }
 }

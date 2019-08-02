@@ -1,5 +1,9 @@
 {
-    "entry": "./tests/cases/partial-in-subdir/main.scss",
-    "dest": "./tests/cases/__temp__/output/partial-in-subdir.scss",
-    "watch": "./tests/cases/partial-in-subdir/**/*.scss"
+    "bundlerOptions": {
+        "entryFile": "./tests/cases/simple/main.scss",
+        "rootDir": "./tests/cases/simple/",
+        "outFile": "./bundled.scss",
+        "ignoreImports": ["~@angular/.*"],
+        "logLevel": "silent"
+    }
 }

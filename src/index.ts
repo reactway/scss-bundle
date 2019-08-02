@@ -1,1 +1,1 @@
-export * from "./bundler";
+export class Something {}

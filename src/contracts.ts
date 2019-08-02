@@ -1,29 +1,39 @@
-import * as yargs from "yargs";
-
-export interface Config {
-    Entry: string;
-    Destination: string;
-    Verbosity: Verbosity;
-    ProjectDirectory?: string;
-    DedupeGlobs?: string[];
-    IncludePaths?: string[];
-    IgnoredImports?: string[];
+export interface ScssBundleConfig {
+    bundlerOptions: BundlerOptions;
 }
 
-export enum Verbosity {
-    None = 0,
-    Errors = 8,
-    Verbose = 256
-}
-
-export interface ArgumentsValues extends yargs.Arguments {
-    config?: string;
-    entry: string;
-    dest: string;
-    watch: string;
-    verbosity: Verbosity;
-    dedupe?: string[];
+export interface BundlerOptions {
+    entryFile?: string;
+    outFile?: string;
+    rootDir?: string;
+    ignoreImports?: string[];
     includePaths?: string[];
-    ignoredImports?: string[];
-    project?: string;
+    dedupeGlobs?: string[];
+    watch?: boolean;
+    logLevel?: string;
+}
+
+export interface FileRegistry {
+    [id: string]: string | undefined;
+}
+
+export interface ImportData {
+    importString: string;
+    tilde: boolean;
+    path: string;
+    fullPath: string;
+    found: boolean;
+    ignored?: boolean;
+}
+
+export interface BundleResult {
+    // Child imports (if any)
+    imports?: BundleResult[];
+    tilde?: boolean;
+    deduped?: boolean;
+    // Full path of the file
+    filePath: string;
+    bundledContent?: string;
+    found: boolean;
+    ignored?: boolean;
 }
