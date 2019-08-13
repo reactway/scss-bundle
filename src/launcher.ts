@@ -4,7 +4,7 @@ import * as os from "os";
 import * as archy from "archy";
 import * as prettyBytes from "pretty-bytes";
 
-import * as nodeSass from "node-sass";
+import * as sass from "sass";
 
 import * as Contracts from "./contracts";
 import { Bundler, BundleResult, FileRegistry } from "./bundler";
@@ -90,7 +90,7 @@ export class Launcher {
 
     private async renderScss(content: string): Promise<{}> {
         return new Promise((resolve, reject) => {
-            nodeSass.render(
+            sass.render(
                 {
                     data: content,
                     importer: this.tildeImporter,
@@ -106,7 +106,7 @@ export class Launcher {
         });
     }
 
-    private tildeImporter: nodeSass.Importer = (url: string) => {
+    private tildeImporter: sass.Importer = (url: string) => {
         if (url[0] === "~") {
             const projectDirectory = this.config.ProjectDirectory ? this.config.ProjectDirectory : ".";
             const filePath = path.resolve(projectDirectory + "/node_modules", url.substr(1));
