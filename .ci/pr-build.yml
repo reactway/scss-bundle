@@ -21,3 +21,15 @@ steps:
     - script: |
           npm test
       displayName: "npm test"
+
+    - task: PublishTestResults@2
+      displayName: "Publish Test Results junit.xml"
+      inputs:
+          testResultsFiles: junit.xml
+          failTaskOnFailedTests: true
+
+    - task: PublishCodeCoverageResults@1
+      displayName: "Publish code coverage from $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml"
+      inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: "$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml"
