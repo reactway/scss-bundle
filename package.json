@@ -9,7 +9,7 @@
         "watch": "tsc -p . -w",
         "start": "node dist/cli/main.js",
         "pretest": "tsc -p . --noEmit && eslint \"src/**/*.ts*\"",
-        "test": "jest",
+        "test": "npm run build-tests && jest",
         "build-tests": "test-generator-cli"
     },
     "keywords": [
