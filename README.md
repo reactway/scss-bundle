@@ -82,7 +82,7 @@ $ scss-bundle
 | --ignoreImports \<list\>                | ignoreImports            | string[] | Ignore resolving import content by matching a regular expression.                |                                            |         |
 | --includePaths \<list\>                 | includePaths             | string[] | Include paths for resolving imports.                                             |                                            |         |
 | --dedupeGlobs \<list\>                  | dedupeGlobs              | string[] | Files that will be emitted in a bundle once.                                     |                                            |         |
-| --logLevel \<level\>                    |                          | string   | Console log level.                                                               | silent, error, warning, info, debug, trace | info    |
+| --logLevel \<level\>                    | logLevel                 | string   | Console log level.                                                               | silent, error, warning, info, debug, trace | info    |
 
 `*` - Required
 
