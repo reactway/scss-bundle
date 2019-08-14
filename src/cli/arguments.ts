@@ -17,7 +17,7 @@ export function resolveArguments(cmd: commander.Command, argv: string[]): Argume
         .option("-e, --entryFile <path>", "bundle entry file location", resolvePath)
         .option("-o, --outFile <path>", "bundle output location", resolvePath)
         .option("--rootDir <path>", "specifies the root directory of input files", resolvePath)
-        .option("-w, --watch [boolean]", 'watch files for changes. Works with "rootDir"', resolveBoolean)
+        .option("-w, --watch [boolean]", `watch files for changes. Works with "rootDir"`, resolveBoolean)
         .option("--ignoreImports <list>", "ignore resolving import content by matching a regular expression", resolveList)
         .option("--includePaths <list>", "include paths for resolving imports", resolveList)
         .option("--dedupeGlobs <list>", "files that will be emitted in a bundle once", resolveList)
