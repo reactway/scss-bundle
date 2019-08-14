@@ -74,7 +74,7 @@ $ scss-bundle
 
 | CLI Flag                                | Bundler options          | Type     | Description                                                                      | Values                                     | Default |
 | --------------------------------------- | ------------------------ | -------- | -------------------------------------------------------------------------------- | ------------------------------------------ | ------- |
-| -p, --project \<path\>                  |                          | string   | Project location where 'scss-bundle.config.json' and 'node_modules' are located. |                                            | _cwd_   |
+| -p, --project \<path\>                  |                          | string   | Project location where `scss-bundle.config.json` and `node_modules` are located. |                                            | _cwd_   |
 | -e, --entryFile \<path\> <sup>`*`</sup> | entryFile <sup>`*`</sup> | string   | Bundle entry file location.                                                      |                                            |         |
 | -o, --outFile \<path\> <sup>`*`</sup>   | outFile <sup>`*`</sup>   | string   | Bundle output location.                                                          |                                            |         |
 | --rootDir \<path\>                      | rootDir                  | string   | Specifies the root directory of input files.                                     |                                            |         |
