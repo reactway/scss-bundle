@@ -24,6 +24,9 @@
         "*.js",
         "!*.config.js"
     ],
+    "bin": {
+        "scss-bundle": "./dist/cli/main.js"
+    },
     "author": "ReactWay <dev@reactway.com> (https://github.com/reactway)",
     "license": "MIT",
     "devDependencies": {
