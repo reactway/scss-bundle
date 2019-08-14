@@ -6,7 +6,7 @@ import chokidar from "chokidar";
 
 import { BundlerOptions, FileRegistry, BundleResult } from "../contracts";
 import { resolveArguments } from "./arguments";
-import { CONFIG_FILE_NAME, LogLevel } from "../constants";
+import { CONFIG_FILE_NAME, LogLevel } from "./constants";
 import { resolveConfig } from "./config";
 import { Log } from "./logging";
 import { Bundler } from "../bundler";

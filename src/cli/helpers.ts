@@ -1,5 +1,5 @@
 import path from "path";
-import { LogLevel } from "../constants";
+import { LogLevel } from "./constants";
 
 export function resolveBoolean(value: string): boolean | undefined {
     if (value === "true") {
