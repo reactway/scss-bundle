@@ -24,11 +24,19 @@ If you want to use `scss-bundle` globally
 $ npm install scss-bundle -g
 ```
 
-Latest pre-release is published under `canary` tag.
+Latest dev build is published under `canary` tag.
 
 ```sh
 $ npm install scss-bundle@canary
 ```
+
+To start using the tool, create `scss-bundle.config.json` a [config](#example-config) file and run command:
+
+```
+$ scss-bundle
+```
+
+It will bundle all scss files in specified `outFile` location.
 
 ## CLI Usage
 
@@ -36,41 +44,9 @@ $ npm install scss-bundle@canary
 $ scss-bundle -h
 ```
 
-### Examples
+## Configuration
 
-_Without config file:_
-
-If you want to use `scss-bundle` without configuration file, `entryFile` and `outFile` arguments are required.
-
-```sh
-$ scss-bundle -e ./src/main.scss -o bundled.scss
-```
-
-Or specifying `logLevel`.
-
-```sh
-$ scss-bundle -e ./src/main.scss -d bundled.scss --logLevel error
-```
-
-_With config file in project root directory:_
-
-```sh
-$ scss-bundle
-```
-
-## Config example
-
-```json
-{
-    "bundlerOptions": {
-        "entryFile": "./tests/cases/simple/main.scss",
-        "rootDir": "./tests/cases/simple/",
-        "outFile": "./bundled.scss",
-        "ignoreImports": ["~@angular/.*"],
-        "logLevel": "silent"
-    }
-}
-```
+Config file properties can be overridden with CLI flags.
 
 | CLI Flag                                | Bundler options          | Type     | Description                                                                      | Values                                     | Default |
 | --------------------------------------- | ------------------------ | -------- | -------------------------------------------------------------------------------- | ------------------------------------------ | ------- |
@@ -85,6 +61,20 @@ $ scss-bundle
 | --logLevel \<level\>                    | logLevel                 | string   | Console log level.                                                               | silent, error, warning, info, debug, trace | info    |
 
 `*` - Required
+
+### Example config
+
+```json
+{
+    "bundlerOptions": {
+        "entryFile": "./tests/cases/simple/main.scss",
+        "rootDir": "./tests/cases/simple/",
+        "outFile": "./bundled.scss",
+        "ignoreImports": ["~@angular/.*"],
+        "logLevel": "silent"
+    }
+}
+```
 
 ## Non-CLI usage
 
