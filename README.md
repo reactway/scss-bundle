@@ -52,7 +52,7 @@ Or specifying `logLevel`.
 $ scss-bundle -e ./src/main.scss -d bundled.scss --logLevel error
 ```
 
-_With config file:_
+_With config file in project root directory:_
 
 ```sh
 $ scss-bundle
@@ -72,7 +72,7 @@ $ scss-bundle
 }
 ```
 
-| CLI Flag                                | Config property          | Type     | Description                                                                      | Values                                     | Default |
+| CLI Flag                                | Bundler options          | Type     | Description                                                                      | Values                                     | Default |
 | --------------------------------------- | ------------------------ | -------- | -------------------------------------------------------------------------------- | ------------------------------------------ | ------- |
 | -p, --project \<path\>                  |                          | string   | Project location where 'scss-bundle.config.json' and 'node_modules' are located. |                                            | _cwd_   |
 | -e, --entryFile \<path\> <sup>`*`</sup> | entryFile <sup>`*`</sup> | string   | Bundle entry file location.                                                      |                                            |         |
