@@ -30,7 +30,7 @@ Latest dev build is published under `canary` tag.
 $ npm install scss-bundle@canary
 ```
 
-To start using the tool, create `scss-bundle.config.json` a [config](#example-config) file and run command:
+To start using the tool, create a [config](#example-config) file and run command:
 
 ```
 $ scss-bundle
@@ -63,6 +63,8 @@ Config file properties can be overridden with CLI flags.
 `*` - Required
 
 ### Example config
+
+Default name for configuration is `scss-bundle.config.json`.
 
 ```json
 {
@@ -117,7 +119,7 @@ constructor(fileRegistry: FileRegistry = {}, projectDirectory?: string) {}
 #### bundle
 
 ```typescript
-public static async bundle(file: string, fileRegistry: Registry = {}): Promise<BundleResult>
+public async bundle(file: string, fileRegistry: Registry = {}): Promise<BundleResult>
 ```
 
 ##### Arguments
@@ -150,7 +152,7 @@ interface BundleResult {
 ##### Properties
 
 -   `imports:` [BundleResult](#bundleresult)`[]` - File imports array
--   `tidle?: boolean` - Used tilde import
+-   `tilde?: boolean` - Used tilde import
 -   `filePath: string` - Full file path
 -   `content: string` - File content
 -   `found: boolean` - Is file found
