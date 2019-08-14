@@ -1,6 +1,6 @@
 {
     "name": "scss-bundle",
-    "version": "1.0.0",
+    "version": "3.0.0",
     "description": "Bundling SCSS files to one bundled file.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -24,7 +24,7 @@
         "*.js",
         "!*.config.js"
     ],
-    "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
+    "author": "ReactWay <dev@reactway.com> (https://github.com/reactway)",
     "license": "MIT",
     "devDependencies": {
         "@types/jest": "^24.0.17",
