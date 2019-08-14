@@ -1,8 +1,8 @@
 import path from "path";
-import nodeSass from "node-sass";
+import nodeSass from "sass";
 import { CompilationError } from "../errors/compilation-error";
 
-function sassImporter(projectPath: string): nodeSass.AsyncImporter {
+function sassImporter(projectPath: string): nodeSass.Importer {
     return (url, _prev, done) => {
         if (url[0] === "~") {
             const filePath = path.resolve(projectPath, "node_modules", url.substr(1));

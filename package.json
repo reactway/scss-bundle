@@ -42,7 +42,6 @@
         "@types/fs-extra": "^8.0.0",
         "@types/glob": "^7.1.1",
         "@types/lodash.debounce": "^4.0.6",
-        "@types/node-sass": "^4.11.0",
         "@types/sass": "^1.16.0",
         "archy": "^1.0.0",
         "chalk": "^2.4.2",
