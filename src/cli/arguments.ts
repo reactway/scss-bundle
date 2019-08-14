@@ -7,7 +7,7 @@ export interface Arguments extends BundlerOptions {
 }
 
 export function resolveArguments(cmd: commander.Command, argv: string[]): Arguments {
-    const { project, entryFile, ignoreImports, includePaths, outFile, rootDir, watch, logLevel } = (cmd
+    const parsedArguments = (cmd
         .option(
             "-p, --project <path>",
             "project location where 'scss-bundle.config.json' and 'node_modules' are located",
@@ -24,6 +24,8 @@ export function resolveArguments(cmd: commander.Command, argv: string[]): Argume
         .option("--logLevel <level>", "console log level", resolveLogLevelKey)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .parse(argv) as any) as Arguments;
+
+    const { project, entryFile, ignoreImports, includePaths, outFile, rootDir, watch, logLevel } = parsedArguments;
 
     return {
         project,
