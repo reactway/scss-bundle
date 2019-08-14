@@ -10,13 +10,14 @@ import { CONFIG_FILE_NAME, LogLevel } from "./constants";
 import { resolveConfig } from "./config";
 import { Log } from "./logging";
 import { Bundler } from "../bundler";
-import { EntryOutFileNotDefinedError } from "./errors/entry-out-file-not-defined-error";
 import { EntryFileNotFoundError } from "./errors/entry-file-not-found-error";
 import { ImportFileNotFoundError } from "./errors/import-file-not-found-error";
 import { BundleResultHasNoContentError } from "./errors/bundle-result-has-no-content-error";
+import { OutFileNotDefinedError } from "./errors/out-file-not-defined-error";
+import { EntryFileNotDefinedError } from "./errors/entry-file-not-defined-error";
 import { renderScss } from "./utils/scss";
 import { renderBundleInfo } from "./utils/bundle-info";
-import { renderArch } from "./utils/archy";
+import { renderArchy } from "./utils/archy";
 import { LogLevelDesc } from "loglevel";
 import { resolveLogLevelKey, mergeObjects } from "./helpers";
 
@@ -32,8 +33,12 @@ function bundleResultForEach(bundleResult: BundleResult, cb: (bundleResult: Bund
 }
 
 async function build(project: string, config: BundlerOptions): Promise<{ bundleResult: BundleResult; fileRegistry: FileRegistry }> {
-    if (config.entryFile == null || config.outFile == null) {
-        throw new EntryOutFileNotDefinedError();
+    if (config.entryFile == null) {
+        throw new EntryFileNotDefinedError();
+    }
+
+    if (config.outFile == null) {
+        throw new OutFileNotDefinedError();
     }
 
     const fileRegistry: FileRegistry = {};
@@ -120,7 +125,7 @@ async function main(argv: string[]): Promise<void> {
             const { fileRegistry, bundleResult } = await build(project, config);
 
             Log.info("Imports tree:");
-            Log.info(renderArch(bundleResult, project));
+            Log.info(renderArchy(bundleResult, project));
 
             Log.info(renderBundleInfo(bundleResult, fileRegistry));
         } catch (error) {

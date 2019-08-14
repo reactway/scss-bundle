@@ -3,6 +3,6 @@ import { BaseError } from "./base-error";
 
 export class ConfigReadError extends BaseError {
     constructor(configPath: string) {
-        super(`Failed to read config (maybe it is missing?):${os.EOL}${configPath}`);
+        super(`Failed to read config (maybe it's missing?):${os.EOL}${configPath}`);
     }
 }

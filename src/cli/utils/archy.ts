@@ -32,6 +32,6 @@ function getArchyData(bundleResult: BundleResult, sourceDirectory?: string): arc
     return archyData;
 }
 
-export function renderArch(bundleResult: BundleResult, sourceDirectory?: string): string {
+export function renderArchy(bundleResult: BundleResult, sourceDirectory?: string): string {
     return archy(getArchyData(bundleResult, sourceDirectory));
 }
