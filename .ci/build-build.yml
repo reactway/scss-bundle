@@ -23,9 +23,13 @@ steps:
       displayName: "npm test"
 
     - script: |
-          npm version
+          npm version 0.0.0-canary.$(git rev-parse --short HEAD) --no-git-tag-version
       displayName: "Apply cannary version"
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+
+    - script: |
+          npm pack
+      displayName: "npm pack"
 
     - script: |
           mkdir $(Build.ArtifactStagingDirectory)/packages
