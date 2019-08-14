@@ -8,6 +8,7 @@
         "build": "tsc -p .",
         "watch": "tsc -p . -w",
         "start": "node dist/cli/main.js",
+        "pretest": "tsc -p . --noEmit && eslint \"src/**/*.ts*\"",
         "test": "jest",
         "build-tests": "test-generator-cli"
     },
