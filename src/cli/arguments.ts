@@ -15,7 +15,7 @@ export function resolveArguments(cmd: commander.Command, argv: string[]): Argume
             process.cwd()
         )
         .option("-e, --entryFile <path>", "bundle entry file location", resolvePath)
-        .option("--outFile <path>", "bundle output location", resolvePath)
+        .option("-o, --outFile <path>", "bundle output location", resolvePath)
         .option("--rootDir <path>", "specifies the root directory of input files", resolvePath)
         .option("-w, --watch [boolean]", "watch files for changes", resolveBoolean)
         .option("--ignoreImports <list>", "ignore resolving import content by matching a regular expression", resolveList)
