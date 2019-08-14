@@ -22,3 +22,20 @@ export function resolvePath(value: string): string {
 export function resolveLogLevelKey(value: string): string | undefined {
     return Object.keys(LogLevel).find(x => x.toLowerCase() === value.toLowerCase());
 }
+
+export function mergeObjects<TAObject extends object, TBObject extends object>(a: TAObject, b: TBObject): TAObject & TBObject {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result: { [key: string]: unknown } = a as any;
+
+    for (const key of Object.keys(b)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const value = (b as any)[key];
+        if (value == null) {
+            continue;
+        }
+
+        result[key] = value;
+    }
+
+    return result as TAObject & TBObject;
+}

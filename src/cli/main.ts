@@ -18,8 +18,7 @@ import { renderScss } from "./utils/scss";
 import { renderBundleInfo } from "./utils/bundle-info";
 import { renderArch } from "./utils/archy";
 import { LogLevelDesc } from "loglevel";
-import { resolveLogLevelKey } from "./helpers";
-import { mergeObjects } from "../helpers";
+import { resolveLogLevelKey, mergeObjects } from "./helpers";
 
 const PACKAGE_JSON_PATH = path.resolve(__dirname, "../../package.json");
 
