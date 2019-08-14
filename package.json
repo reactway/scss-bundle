@@ -28,6 +28,9 @@
         "scss-bundle": "./dist/cli/main.js"
     },
     "author": "ReactWay <dev@reactway.com> (https://github.com/reactway)",
+    "bugs": "https://github.com/reactway/scss-bundle/issues",
+    "repository": "reactway/scss-bundle",
+    "homepage": "https://github.com/reactway/scss-bundle",
     "license": "MIT",
     "devDependencies": {
         "@types/jest": "^24.0.17",
