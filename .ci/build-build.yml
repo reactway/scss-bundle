@@ -1,0 +1,45 @@
+trigger: none
+pr: none
+
+pool:
+    vmImage: "ubuntu-latest"
+
+steps:
+    - task: NodeTool@0
+      inputs:
+          versionSpec: "10.x"
+      displayName: "Install Node.js"
+
+    - script: |
+          npm install
+      displayName: "npm install"
+
+    - script: |
+          npm run build
+      displayName: "npm run build"
+
+    - script: |
+          npm test
+      displayName: "npm test"
+
+    - script: |
+          npm version
+      displayName: "Apply cannary version"
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+
+    - script: |
+          mkdir $(Build.ArtifactStagingDirectory)/packages
+          mv *.tgz $(Build.ArtifactStagingDirectory)/packages
+      displayName: "Move tgz to artifacts folder"
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifact: packages"
+      inputs:
+          PathtoPublish: "$(Build.ArtifactStagingDirectory)/packages"
+          ArtifactName: packages
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifact: package.json"
+      inputs:
+          PathtoPublish: "$(System.DefaultWorkingDirectory)/package.json"
+          ArtifactName: packageJson
