@@ -21,7 +21,7 @@ export function resolveArguments(cmd: commander.Command, argv: string[]): Argume
         .option("--ignoreImports <list>", "ignore resolving import content by matching a regular expression", resolveList)
         .option("--includePaths <list>", "include paths for resolving imports", resolveList)
         .option("--dedupeGlobs <list>", "files that will be emitted in a bundle once", resolveList)
-        .option("--logLevel <level>", "Console log level.", resolveLogLevelKey)
+        .option("--logLevel <level>", "console log level", resolveLogLevelKey)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .parse(argv) as any) as Arguments;
 
