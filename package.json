@@ -71,7 +71,8 @@
         "collectCoverageFrom": [
             "src/**/*.{ts,tsx}",
             "!src/**/__tests__/*",
-            "!src/index.ts"
+            "!src/index.ts",
+            "!src/cli/**/*"
         ],
         "coverageReporters": [
             "cobertura"
