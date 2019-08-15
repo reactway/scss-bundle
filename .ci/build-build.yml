@@ -1,0 +1,61 @@
+trigger: none
+pr: none
+
+pool:
+    vmImage: "ubuntu-latest"
+
+steps:
+    - task: NodeTool@0
+      inputs:
+          versionSpec: "10.x"
+      displayName: "Install Node.js"
+
+    - script: |
+          npm install
+      displayName: "npm install"
+
+    - script: |
+          npm run build
+      displayName: "npm run build"
+
+    - script: |
+          npm test
+      displayName: "npm test"
+
+    - task: PublishTestResults@2
+      displayName: "Publish Test Results junit.xml"
+      inputs:
+          testResultsFiles: junit.xml
+          failTaskOnFailedTests: true
+
+    - task: PublishCodeCoverageResults@1
+      displayName: "Publish code coverage from $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml"
+      inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: "$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml"
+
+    - script: |
+          npm version 0.0.0-canary.$(git rev-parse --short HEAD) --no-git-tag-version
+      displayName: "Apply cannary version"
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+
+    - script: |
+          npm pack
+      displayName: "npm pack"
+
+    - script: |
+          mkdir $(Build.ArtifactStagingDirectory)/packages
+          mv *.tgz $(Build.ArtifactStagingDirectory)/packages
+      displayName: "Move tgz to artifacts folder"
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifact: packages"
+      inputs:
+          PathtoPublish: "$(Build.ArtifactStagingDirectory)/packages"
+          ArtifactName: packages
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifact: package.json"
+      inputs:
+          PathtoPublish: "$(System.DefaultWorkingDirectory)/package.json"
+          ArtifactName: packageJson

@@ -4,11 +4,11 @@ import { Bundler } from "@src/bundler";
 test("{{caseName}}", async done => {
     const projectDirectory = "{{projectDirectory}}";
     const testConfig = {{{json testConfig}}};
-    const entryFile = path.join(projectDirectory, testConfig.Entry);
+    const entryFile = path.join(projectDirectory, testConfig.entry);
 
     try {
         const bundleResult = await new Bundler(undefined, projectDirectory)
-            .Bundle(entryFile, [], [], testConfig.IgnoredImports)
+            .bundle(entryFile, [], [], testConfig.ignoredImports)
             
         expect(bundleResult.bundledContent).toMatchSnapshot();
         done();

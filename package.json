@@ -1,20 +1,16 @@
 {
     "name": "scss-bundle",
-    "version": "2.5.1",
+    "version": "3.0.0",
     "description": "Bundling SCSS files to one bundled file.",
-    "types": "@types/index.d.ts",
-    "main": "index.js",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "scripts": {
-        "pretest": "npm run build -- --noEmit && npm run build-tests && npm run tslint",
-        "test": "jest",
-        "test-ci": "npm run pretest && npm run tslint && jest --maxWorkers=4 -b",
-        "test-watch": "start npm run build-tests -- --watchAll && jest --watchAll",
-        "tslint": "tslint --config ./tslint.json --project . --exclude test/**/* && echo TsLint test successfully passed.",
-        "build": "tsc -p . --newLine lf",
-        "watch": "tsc -w",
-        "prepublishOnly": "npm run build",
-        "build-tests": "test-generator-cli",
-        "start": "node dist/bundle-cli.js -c scss-bundle.config.json"
+        "build": "tsc -p .",
+        "watch": "tsc -p . -w",
+        "start": "node dist/cli/main.js",
+        "pretest": "tsc -p . --noEmit && eslint \"src/**/*.ts*\"",
+        "test": "npm run build-tests && jest",
+        "build-tests": "test-generator-cli"
     },
     "keywords": [
         "scss",
@@ -26,74 +22,70 @@
         "dist",
         "**/*.md",
         "*.js",
-        "@types",
         "!*.config.js"
     ],
-    "author": "simplrjs <simplr@quatrodev.com> (https://github.com/simplrjs)",
-    "bugs": "https://github.com/SimplrJS/scss-bundle/issues",
-    "repository": "SimplrJS/scss-bundle",
-    "homepage": "https://github.com/SimplrJS/scss-bundle",
+    "bin": {
+        "scss-bundle": "./dist/cli/main.js"
+    },
+    "author": "ReactWay <dev@reactway.com> (https://github.com/reactway)",
+    "bugs": "https://github.com/reactway/scss-bundle/issues",
+    "repository": "reactway/scss-bundle",
+    "homepage": "https://github.com/reactway/scss-bundle",
     "license": "MIT",
     "devDependencies": {
+        "@types/jest": "^24.0.17",
+        "jest": "^24.8.0",
+        "ts-jest": "^24.0.2",
+        "@reactway/eslint-config": "^1.0.0-alpha.2",
+        "eslint": "^6.1.0",
+        "typescript": "^3.5.3",
         "@simplrjs/test-generator-cli": "^0.1.3",
-        "@types/archy": "0.0.31",
-        "@types/fs-extra": "^5.0.1",
-        "@types/jest": "^22.2.2",
-        "@types/node": "^9.6.1",
-        "@types/node-sass": "3.10.32",
-        "@types/promise": "^7.1.30",
-        "@types/yargs": "11.0.0",
-        "jest": "^22.4.3",
-        "jest-junit": "^6.3.0",
-        "simplr-tslint": "1.0.0-alpha.5",
-        "ts-jest": "^22.4.2",
-        "ts-node": "^5.0.1",
-        "tslint": "^5.9.1",
-        "typescript": "^2.8.1"
-    },
-    "bin": {
-        "scss-bundle": "./dist/bundle-cli.js"
+        "jest-junit": "^7.0.0"
     },
     "dependencies": {
-        "@types/chokidar": "^1.7.5",
-        "@types/lodash.debounce": "^4.0.4",
+        "@types/archy": "^0.0.31",
+        "@types/debug": "^4.1.4",
+        "@types/fs-extra": "^8.0.0",
+        "@types/glob": "^7.1.1",
+        "@types/lodash.debounce": "^4.0.6",
+        "@types/sass": "^1.16.0",
         "archy": "^1.0.0",
-        "chokidar": "^2.0.4",
-        "fs-extra": "^5.0.0",
-        "globs": "^0.1.3",
+        "chalk": "^2.4.2",
+        "chokidar": "^3.0.2",
+        "commander": "^2.20.0",
+        "fs-extra": "^8.1.0",
+        "globs": "^0.1.4",
         "lodash.debounce": "^4.0.8",
-        "node-sass": "^4.10.0",
-        "pretty-bytes": "^4.0.2",
-        "promise": "^8.0.1",
-        "yargs": "^13.1.0"
+        "loglevel": "^1.6.3",
+        "loglevel-plugin-prefix": "^0.8.4",
+        "pretty-bytes": "^5.3.0",
+        "sass": "^1.22.9"
     },
     "jest": {
-        "collectCoverage": true,
+        "verbose": true,
+        "preset": "ts-jest",
         "reporters": [
+            "default",
             "jest-junit"
         ],
-        "transform": {
-            ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-        },
-        "globals": {
-            "ts-jest": {
-                "skipBabel": true,
-                "tsConfigFile": "tests/tsconfig.json"
-            }
-        },
-        "testRegex": "/__tests__/.*\\.(test|spec).(ts|tsx|js)$",
+        "collectCoverage": true,
+        "testRegex": "/__tests__/.*\\.(test|spec).(ts|tsx)$",
         "moduleNameMapper": {
             "@src/(.*)": "<rootDir>/src/$1"
         },
-        "coveragePathIgnorePatterns": [
-            "/node_modules/",
-            "/tests/"
+        "collectCoverageFrom": [
+            "src/**/*.{ts,tsx}",
+            "!src/**/__tests__/*",
+            "!src/index.ts",
+            "!src/cli/**/*"
         ],
-        "moduleFileExtensions": [
-            "ts",
-            "tsx",
-            "js"
+        "coverageReporters": [
+            "cobertura"
         ],
-        "verbose": true
+        "globals": {
+            "ts-jest": {
+                "tsConfig": "./tests/tsconfig.json"
+            }
+        }
     }
 }

@@ -9,26 +9,13 @@
         "noEmit": true,
         "experimentalDecorators": false,
         "baseUrl": "./",
-        "typeRoots": [
-            "../"
-        ],
-        "types": [
-            "jest",
-            "typescript",
-            "node"
-        ],
-        "lib": [
-            "es6",
-            "dom"
-        ],
+        "types": ["jest", "node"],
+        "lib": ["es6", "dom"],
+        "moduleResolution": "node",
+        "esModuleInterop": true,
         "paths": {
-            "@src/*": [
-                "../src/*"
-            ]
+            "@src/*": ["../src/*"]
         },
-        "rootDirs": [
-            "./",
-            "../src"
-        ]
+        "rootDirs": ["./", "../src"]
     }
 }

@@ -1,31 +1,18 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es6",
-        "removeComments": false,
-        "preserveConstEnums": true,
-        "noLib": false,
-        "inlineSourceMap": true,
-        "inlineSources": true,
+        "target": "es5",
         "outDir": "dist",
         "rootDir": "src",
-        "noUnusedParameters": true,
+        "jsx": "react",
         "noUnusedLocals": true,
-        "noImplicitReturns": true,
         "declaration": true,
-        "declarationDir": "@types",
-        "typeRoots": [
-            "node_modules/@types"
-        ],
-        "lib": [
-            "es6",
-            "es2017.object"
-        ]
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noEmitHelpers": true,
+        "importHelpers": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node"
     },
-    "exclude": [
-        "node_modules",
-        "dist",
-        "@types",
-        "tests"
-    ]
+    "exclude": ["**/__tests__", "dist"]
 }

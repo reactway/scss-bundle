@@ -1,0 +1,7 @@
+$a-variable: green;
+$b-variable: blue;
+
+.class {
+    background-color: $a-variable;
+    color: $b-variable;
+}

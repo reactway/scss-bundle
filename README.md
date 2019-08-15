@@ -2,19 +2,19 @@
 
 Bundles all SCSS imports into a single file recursively.
 
-[![Build Status](https://travis-ci.org/SimplrJS/scss-bundle.svg?branch=master)](https://travis-ci.org/SimplrJS/scss-bundle)
-[![NPM version](http://img.shields.io/npm/v/scss-bundle.svg)](https://www.npmjs.com/package/scss-bundle) 
-[![npm (tag)](https://img.shields.io/npm/v/scss-bundle/next.svg)](https://www.npmjs.com/package/scss-bundle)
-[![dependencies Status](https://david-dm.org/simplrjs/scss-bundle/status.svg)](https://david-dm.org/simplrjs/scss-bundle) 
-[![devDependencies Status](https://david-dm.org/simplrjs/scss-bundle/dev-status.svg)](https://david-dm.org/simplrjs/scss-bundle?type=dev)
+[![NPM version](https://img.shields.io/npm/v/scss-bundle.svg?logo=npm)](https://www.npmjs.com/package/scss-bundle)
+[![NPM version](https://img.shields.io/npm/v/scss-bundle/canary.svg?logo=npm)](https://www.npmjs.com/package/scss-bundle/v/canary)
+[![Build Status](https://img.shields.io/azure-devops/build/reactway/reactway/13/master.svg?logo=azuredevops)](https://dev.azure.com/reactway/ReactWay/_build/latest?definitionId=13&branchName=master)
+[![Code coverage](https://img.shields.io/azure-devops/coverage/reactway/reactway/13/master.svg)](https://dev.azure.com/reactway/ReactWay/_build/latest?definitionId=13&branchName=master)
+[![Dependencies](https://img.shields.io/david/reactway/tiny-emitter.svg)](https://david-dm.org/reactway/scss-bundle)
+[![Dev dependencies](https://img.shields.io/david/dev/reactway/tiny-emitter.svg)](https://david-dm.org/reactway/scss-bundle?type=dev)
 
 ### Who uses `scss-bundle`
 
 A few of the projects who use the package:
 
-*   [Angular/material2](https://github.com/angular/material2)
-*   [Grassy](https://github.com/lazarljubenovic/grassy)
-*   [Copictures](https://copictures.com)
+-   [Angular/material2](https://github.com/angular/material2)
+-   [Grassy](https://github.com/lazarljubenovic/grassy)
 
 ## Get started
 
@@ -24,11 +24,19 @@ If you want to use `scss-bundle` globally
 $ npm install scss-bundle -g
 ```
 
-Latest pre-release is published under `next` tag.
+Latest dev build is published under `canary` tag.
 
 ```sh
-$ npm install scss-bundle@next
+$ npm install scss-bundle@canary
 ```
+
+To start using the tool, create a [config](#example-config) file and run command:
+
+```
+$ scss-bundle
+```
+
+It will bundle all scss files in specified `outFile` location.
 
 ## CLI Usage
 
@@ -36,66 +44,46 @@ $ npm install scss-bundle@next
 $ scss-bundle -h
 ```
 
-### Examples
+## Configuration
 
-_Without config file:_
+Config file properties can be overridden with CLI flags.
 
-If you want to use `scss-bundle` without configuration file, `entry` and `dest` arguments are required.
-
-```sh
-$ scss-bundle -e ./src/main.scss -d bundled.scss
-```
-
-Or specifying output `verbosity` level.
-
-```sh
-$ scss-bundle -e ./src/main.scss -d bundled.scss --verbosity Errors
-```
-
-_With config file:_
-
-```sh
-$ scss-bundle -c scss-bundle.config.json
-```
-
-## Config example
-
-```json
-{
-    "entry": "./src/main.scss",
-    "dest": "bundled.scss"
-}
-```
-
-| CLI Flag                   | Argument             | Type           | Description                                                       | Values                | Default |
-| -------------------------- | -------------------- | -------------- | ----------------------------------------------------------------- | --------------------- | ------- |
-| --entry, -e <sup>`*`</sup> | entry <sup>`*`</sup> | string         | Main entry file where to start bundling.                          |                       |         |
-| --dest, -d <sup>`*`</sup>  | dest <sup>`*`</sup>  | string         | Destination file when bundling is done.                           |                       |         |
-| --watch, -w                | watch                | string         | Path that will be watched.                                        |                       |         |
-| --verbosity                | verbosity            | string choices | Destination file when bundling is done.                           | None, Errors, Verbose | Verbose |
-| --includePaths             | includePaths         | array          | Include paths for resolving imports                               |                       |         |
-| --project, -p              | project              | string         | Project location, where `node_modules` are located.               |                       |         |
-| --ignoredImports           | ignoredImports       | array          | Ignore resolving import content by matching a regular expression. |                       |         |
-| --watch, -w                | watch                | boolean        | Watch files for changes.                                          |                       |         |
+| CLI Flag                                | Bundler options          | Type     | Description                                                                      | Values                                     | Default |
+| --------------------------------------- | ------------------------ | -------- | -------------------------------------------------------------------------------- | ------------------------------------------ | ------- |
+| -p, --project \<path\>                  |                          | string   | Project location where `scss-bundle.config.json` and `node_modules` are located. |                                            | _cwd_   |
+| -e, --entryFile \<path\> <sup>`*`</sup> | entryFile <sup>`*`</sup> | string   | Bundle entry file location.                                                      |                                            |         |
+| -o, --outFile \<path\> <sup>`*`</sup>   | outFile <sup>`*`</sup>   | string   | Bundle output location.                                                          |                                            |         |
+| --rootDir \<path\>                      | rootDir                  | string   | Specifies the root directory of input files.                                     |                                            |         |
+| -w, --watch [boolean]                   | watch                    | boolean  | Watch files for changes. Works with `rootDir`.                                   |                                            |         |
+| --ignoreImports \<list\>                | ignoreImports            | string[] | Ignore resolving import content by matching a regular expression.                |                                            |         |
+| --includePaths \<list\>                 | includePaths             | string[] | Include paths for resolving imports.                                             |                                            |         |
+| --dedupeGlobs \<list\>                  | dedupeGlobs              | string[] | Files that will be emitted in a bundle once.                                     |                                            |         |
+| --logLevel \<level\>                    | logLevel                 | string   | Console log level.                                                               | silent, error, warning, info, debug, trace | info    |
 
 `*` - Required
 
-## Output verbosity
+### Example config
 
-CLI option `verbosity` is used to control how much output you get. By default, you will get `Verbose` level of verbosity with the most output.
+Default name for configuration is `scss-bundle.config.json`.
 
-| Value   | Description                                                                    |
-| ------- | ------------------------------------------------------------------------------ |
-| None    | Produces no output, only process success/error return code.                    |
-| Errors  | Outputs all errors and skips any additional information.                       |
-| Verbose | Outputs the most information. This is the `default` value for verbosity level. |
+```json
+{
+    "bundlerOptions": {
+        "entryFile": "./tests/cases/simple/main.scss",
+        "rootDir": "./tests/cases/simple/",
+        "outFile": "./bundled.scss",
+        "ignoreImports": ["~@angular/.*"],
+        "logLevel": "silent"
+    }
+}
+```
 
 ## Non-CLI usage
 
 ### Simple example
 
 ```typescript
-import * as path from "path";
+import path from "path";
 import { Bundler } from "scss-bundle";
 
 (async () => {
@@ -103,9 +91,8 @@ import { Bundler } from "scss-bundle";
     const projectDirectory = path.resolve(__dirname, "./cases/tilde-import");
     const bundler = new Bundler(undefined, projectDirectory);
     // Relative file path to project directory path.
-    const result = await bundler.Bundle("./main.scss");
+    const result = await bundler.bundle("./main.scss");
 })();
-
 ```
 
 # API
@@ -124,40 +111,25 @@ constructor(fileRegistry: FileRegistry = {}, projectDirectory?: string) {}
 
 ##### Arguments
 
-*   `fileRegistry?:` [Registry](#registry) - Dictionary of files contents by full path
-*   `projectDirectory?: string` - Absolute project location, where `node_modules` are located. Used for resolving tilde imports
+-   `fileRegistry?:` [Registry](#registry) - Dictionary of files contents by full path
+-   `projectDirectory?: string` - Absolute project location, where `node_modules` are located. Used for resolving tilde imports
 
 ### Methods
 
-#### Bundle
+#### bundle
 
 ```typescript
-public static async Bundle(file: string, fileRegistry: Registry = {}): Promise<BundleResult>
+public async bundle(file: string, fileRegistry: Registry = {}): Promise<BundleResult>
 ```
 
 ##### Arguments
 
-*   `file: string` - Main file full path
-*   `fileRegistry:` [Registry](#registry) - Dictionary of files contents by full path
+-   `file: string` - Main file full path
+-   `fileRegistry:` [Registry](#registry) - Dictionary of files contents by full path
 
 ##### Returns
 
 `Promise<`[BundleResult](#bundleresult)`>`
-
-#### BundleAll
-
-```typescript
-public static async BundleAll(files: string[], fileRegistry: Registry = {}): Promise<BundleResult[]>
-```
-
-##### Arguments
-
-*   `files: string[]` - Array of full path files
-*   `fileRegistry:`[Registry](#registry) - Dictionary of files contents by full path
-
-##### Returns
-
-`Promise<`[BundleResult](#bundleresult)`[]>`
 
 ### Contracts
 
@@ -179,11 +151,11 @@ interface BundleResult {
 
 ##### Properties
 
-*   `imports:` [BundleResult](#bundleresult)`[]` - File imports array
-*   `tidle?: boolean` - Used tilde import
-*   `filePath: string` - Full file path
-*   `content: string` - File content
-*   `found: boolean` - Is file found
+-   `imports:` [BundleResult](#bundleresult)`[]` - File imports array
+-   `tilde?: boolean` - Used tilde import
+-   `filePath: string` - Full file path
+-   `content: string` - File content
+-   `found: boolean` - Is file found
 
 #### Registry
 
