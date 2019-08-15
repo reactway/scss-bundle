@@ -25,7 +25,7 @@
         "!*.config.js"
     ],
     "bin": {
-        "scss-bundle": "./dist/cli/main.js"
+        "scss-bundle": "dist/cli/main.js"
     },
     "author": "ReactWay <dev@reactway.com> (https://github.com/reactway)",
     "bugs": "https://github.com/reactway/scss-bundle/issues",
@@ -44,7 +44,7 @@
     },
     "dependencies": {
         "@types/archy": "^0.0.31",
-        "@types/debug": "^4.1.4",
+        "@types/debug": "^4.1.5",
         "@types/fs-extra": "^8.0.0",
         "@types/glob": "^7.1.1",
         "@types/lodash.debounce": "^4.0.6",
@@ -52,14 +52,15 @@
         "archy": "^1.0.0",
         "chalk": "^2.4.2",
         "chokidar": "^3.0.2",
-        "commander": "^2.20.0",
+        "commander": "^3.0.0",
         "fs-extra": "^8.1.0",
         "globs": "^0.1.4",
         "lodash.debounce": "^4.0.8",
         "loglevel": "^1.6.3",
         "loglevel-plugin-prefix": "^0.8.4",
         "pretty-bytes": "^5.3.0",
-        "sass": "^1.22.9"
+        "sass": "^1.22.9",
+        "tslib": "^1.10.0"
     },
     "jest": {
         "verbose": true,
