@@ -9,7 +9,6 @@ Bundles all SCSS imports into a single file recursively.
 [![Build Status](https://img.shields.io/azure-devops/build/reactway/reactway/13/master.svg?logo=azuredevops)](https://dev.azure.com/reactway/ReactWay/_build/latest?definitionId=13&branchName=master)
 [![Code coverage](https://img.shields.io/azure-devops/coverage/reactway/reactway/13/master.svg)](https://dev.azure.com/reactway/ReactWay/_build/latest?definitionId=13&branchName=master)
 
-
 [![Dependencies](https://img.shields.io/david/reactway/tiny-emitter.svg)](https://david-dm.org/reactway/scss-bundle)
 [![Dev dependencies](https://img.shields.io/david/dev/reactway/tiny-emitter.svg)](https://david-dm.org/reactway/scss-bundle?type=dev)
 
