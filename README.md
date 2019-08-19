@@ -4,8 +4,12 @@ Bundles all SCSS imports into a single file recursively.
 
 [![NPM version](https://img.shields.io/npm/v/scss-bundle.svg?logo=npm)](https://www.npmjs.com/package/scss-bundle)
 [![NPM version](https://img.shields.io/npm/v/scss-bundle/canary.svg?logo=npm)](https://www.npmjs.com/package/scss-bundle/v/canary)
+
+[![Total downloads](https://img.shields.io/npm/dt/scss-bundle.svg)](https://www.npmjs.com/package/scss-bundle)
 [![Build Status](https://img.shields.io/azure-devops/build/reactway/reactway/13/master.svg?logo=azuredevops)](https://dev.azure.com/reactway/ReactWay/_build/latest?definitionId=13&branchName=master)
 [![Code coverage](https://img.shields.io/azure-devops/coverage/reactway/reactway/13/master.svg)](https://dev.azure.com/reactway/ReactWay/_build/latest?definitionId=13&branchName=master)
+
+
 [![Dependencies](https://img.shields.io/david/reactway/tiny-emitter.svg)](https://david-dm.org/reactway/scss-bundle)
 [![Dev dependencies](https://img.shields.io/david/dev/reactway/tiny-emitter.svg)](https://david-dm.org/reactway/scss-bundle?type=dev)
 
