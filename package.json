@@ -1,6 +1,6 @@
 {
     "name": "scss-bundle",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "description": "Bundling SCSS files to one bundled file.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -20,7 +20,7 @@
     ],
     "files": [
         "dist",
-        "**/*.md",
+        "docs",
         "*.js",
         "!*.config.js"
     ],
