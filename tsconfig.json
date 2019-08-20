@@ -12,7 +12,8 @@
         "noEmitHelpers": true,
         "importHelpers": true,
         "esModuleInterop": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "newLine": "LF"
     },
     "exclude": ["**/__tests__", "dist"]
 }
