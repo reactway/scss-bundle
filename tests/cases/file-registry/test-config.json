@@ -1,0 +1,9 @@
+{
+  "entry": "main.scss",
+  "registries": [
+    {
+      "path": "not-exists-in-disk.scss",
+      "content": "@import \"foo\";"
+    }
+  ]
+}

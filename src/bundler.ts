@@ -135,21 +135,21 @@ export class Bundler {
                     found: false,
                     ignored: imp.ignored
                 };
-            } else if (this.fileRegistry[imp.fullPath] == null) {
+            } else if (this.usedImports[imp.fullPath] == null) {
+                // Add it to used imports
+                this.usedImports[imp.fullPath] = 1;
+
                 // If file is not yet in the registry
                 // Read
-                const impContent = await fs.readFile(imp.fullPath, "utf-8");
+                const impContent = this.fileRegistry[imp.fullPath] == null
+                    ? await fs.readFile(imp.fullPath, "utf-8")
+                    : this.fileRegistry[imp.fullPath] as string;
 
                 // and bundle it
                 const bundledImport = await this._bundle(imp.fullPath, impContent, dedupeFiles, includePaths, ignoredImports);
 
                 // Then add its bundled content to the registry
                 this.fileRegistry[imp.fullPath] = bundledImport.bundledContent;
-
-                // Add it to used imports, if it's not there
-                if (this.usedImports != null && this.usedImports[imp.fullPath] == null) {
-                    this.usedImports[imp.fullPath] = 1;
-                }
 
                 // And whole BundleResult to current imports
                 currentImport = bundledImport;
@@ -236,6 +236,11 @@ export class Bundler {
     }
 
     private async resolveImport(importData: ImportData, includePaths: string[]): Promise<ImportData> {
+        if (this.fileRegistry[importData.fullPath]) {
+            importData.found = true;
+            return importData;
+        }
+
         try {
             await fs.access(importData.fullPath);
             importData.found = true;
