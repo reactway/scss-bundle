@@ -14,10 +14,14 @@ Bundles all SCSS imports into a single file recursively.
 
 ### Who uses `scss-bundle`
 
-A few of the projects who use the package:
+#### Projects
 
 -   [Angular/material2](https://github.com/angular/material2)
 -   [Grassy](https://github.com/lazarljubenovic/grassy)
+
+#### Community plugins
+
+-   [rollup-plugin-bundle-scss](https://github.com/weizhenye/rollup-plugin-bundle-scss)
 
 ## Get started
 

@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`file-registry 1`] = `
+".foo {
+    color: red;
+}
+
+"
+`;
