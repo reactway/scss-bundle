@@ -86,6 +86,17 @@ async function main(argv: string[]): Promise<void> {
             configLocation = cliOptions.config;
         }
     }
+    let projectLocation: string | undefined;
+    if (cliOptions.project != null) {
+        const stats = await fs.stat(cliOptions.project);
+        if (stats.isDirectory()) {
+            projectLocation = cliOptions.project;
+        } else {
+            Log.warn(`[DEPRECATED]: Flag "project" usage as pointing to the configuration is deprecated.`);
+            configLocation = cliOptions.project;
+            projectLocation = path.dirname(cliOptions.project);
+        }
+    }
 
     let config: BundlerOptions;
     if (configLocation != null) {
@@ -101,19 +112,12 @@ async function main(argv: string[]): Promise<void> {
         config = cliOptions;
     }
 
-    let projectLocation: string;
-    if (cliOptions.project != null) {
-        const stats = await fs.stat(cliOptions.project);
-        if (stats.isDirectory()) {
-            projectLocation = cliOptions.project;
-        } else {
-            Log.warn(`DEPRECATED: Flag "project" usage as pointing to the configuration is deprecated.`);
-            projectLocation = path.dirname(cliOptions.project);
-        }
-    } else if (configLocation != null && config.project != null) {
+    if (configLocation != null && config.project != null) {
         const configLocationDir = path.dirname(configLocation);
         projectLocation = path.resolve(configLocationDir, config.project);
-    } else {
+    }
+
+    if (projectLocation == null) {
         Log.error(`Could not resolve "project" directory.`);
         process.exit(1);
     }
