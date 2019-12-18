@@ -3,6 +3,7 @@ export interface ScssBundleConfig {
 }
 
 export interface BundlerOptions {
+    project?: string;
     entryFile?: string;
     outFile?: string;
     rootDir?: string;

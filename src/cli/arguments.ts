@@ -3,17 +3,13 @@ import { resolveBoolean, resolveList, resolvePath, resolveLogLevelKey } from "./
 import { BundlerOptions } from "../contracts";
 
 export interface Arguments extends BundlerOptions {
-    project: string;
+    config?: string;
 }
 
 export function resolveArguments(cmd: commander.Command, argv: string[]): Arguments {
     const parsedArguments = (cmd
-        .option(
-            "-p, --project <path>",
-            "project location where 'scss-bundle.config.json' and 'node_modules' are located",
-            resolvePath,
-            process.cwd()
-        )
+        .option("-c, --config <path>", "configuration file location", resolvePath)
+        .option("-p, --project <path>", "project location where 'node_modules' folder is located", resolvePath)
         .option("-e, --entryFile <path>", "bundle entry file location", resolvePath)
         .option("-o, --outFile <path>", "bundle output location", resolvePath)
         .option("--rootDir <path>", "specifies the root directory of input files", resolvePath)
@@ -25,9 +21,10 @@ export function resolveArguments(cmd: commander.Command, argv: string[]): Argume
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .parse(argv) as any) as Arguments;
 
-    const { project, entryFile, ignoreImports, includePaths, outFile, rootDir, watch, logLevel } = parsedArguments;
+    const { config, project, entryFile, ignoreImports, includePaths, outFile, rootDir, watch, logLevel } = parsedArguments;
 
     return {
+        config,
         project,
         entryFile,
         ignoreImports,
