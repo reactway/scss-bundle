@@ -114,9 +114,9 @@ async function main(argv: string[]): Promise<void> {
     }
 
     // Resolve project location from config file.
-    if (configLocation != null && config.project != null) {
+    if (projectLocation == null && configLocation != null) {
         const configLocationDir = path.dirname(configLocation);
-        projectLocation = path.resolve(configLocationDir, config.project);
+        projectLocation = path.resolve(configLocationDir, config.project ?? "./");
     }
     if (projectLocation == null) {
         Log.error(`Could not resolve "project" directory.`);
