@@ -86,13 +86,14 @@ async function main(argv: string[]): Promise<void> {
             configLocation = cliOptions.config;
         }
     }
+    // Resolve project location from CLI.
     let projectLocation: string | undefined;
     if (cliOptions.project != null) {
         const stats = await fs.stat(cliOptions.project);
         if (stats.isDirectory()) {
             projectLocation = cliOptions.project;
         } else {
-            Log.warn(`[DEPRECATED]: Flag "project" usage as pointing to the configuration is deprecated.`);
+            Log.warn(`[DEPRECATED]: Flag "project" usage as pointing to the config file directly is deprecated.`);
             configLocation = cliOptions.project;
             projectLocation = path.dirname(cliOptions.project);
         }
@@ -112,11 +113,11 @@ async function main(argv: string[]): Promise<void> {
         config = cliOptions;
     }
 
+    // Resolve project location from config file.
     if (configLocation != null && config.project != null) {
         const configLocationDir = path.dirname(configLocation);
         projectLocation = path.resolve(configLocationDir, config.project);
     }
-
     if (projectLocation == null) {
         Log.error(`Could not resolve "project" directory.`);
         process.exit(1);
@@ -135,7 +136,10 @@ async function main(argv: string[]): Promise<void> {
     if (config.watch) {
         const onFileChange = debounce(async () => {
             Log.info("File changes detected.");
-            await build(projectLocation, config);
+
+            // This is already checked as fail fast.
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            await build(projectLocation!, config);
             Log.info("Waiting for changes...");
         });
 
