@@ -103,7 +103,13 @@ async function main(argv: string[]): Promise<void> {
 
     let projectLocation: string;
     if (cliOptions.project != null) {
-        projectLocation = path.resolve(process.cwd(), cliOptions.project);
+        const stats = await fs.stat(cliOptions.project);
+        if (stats.isDirectory()) {
+            projectLocation = cliOptions.project;
+        } else {
+            Log.warn(`DEPRECATED: Flag "project" usage as pointing to the configuration is deprecated.`);
+            projectLocation = path.dirname(cliOptions.project);
+        }
     } else if (configLocation != null && config.project != null) {
         const configLocationDir = path.dirname(configLocation);
         projectLocation = path.resolve(configLocationDir, config.project);
