@@ -58,7 +58,7 @@ Config file properties can be overridden with CLI flags.
 | CLI Flag                                | Bundler options          | Type     | Description                                                       | Values                                     | Default |
 | --------------------------------------- | ------------------------ | -------- | ----------------------------------------------------------------- | ------------------------------------------ | ------- |
 | -c, --config \<path\>                   |                          | string   | Configuration file location.                                      |                                            |         |
-| -p, --project \<path\>                  | project                  | string   | Project location where `node_modules` is located.                 |                                            | _cwd_   |
+| -p, --project \<path\>                  | project                  | string   | Project location where `node_modules` is located.                 |                                            |         |
 | -e, --entryFile \<path\> <sup>`*`</sup> | entryFile <sup>`*`</sup> | string   | Bundle entry file location.                                       |                                            |         |
 | -o, --outFile \<path\> <sup>`*`</sup>   | outFile <sup>`*`</sup>   | string   | Bundle output location.                                           |                                            |         |
 | --rootDir \<path\>                      | rootDir                  | string   | Specifies the root directory of input files.                      |                                            |         |

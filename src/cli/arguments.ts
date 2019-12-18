@@ -9,7 +9,7 @@ export interface Arguments extends BundlerOptions {
 export function resolveArguments(cmd: commander.Command, argv: string[]): Arguments {
     const parsedArguments = (cmd
         .option("-c, --config <path>", "configuration file location", resolvePath)
-        .option("-p, --project <path>", "project location where 'node_modules' folder is located", resolvePath, process.cwd())
+        .option("-p, --project <path>", "project location where 'node_modules' folder is located", resolvePath)
         .option("-e, --entryFile <path>", "bundle entry file location", resolvePath)
         .option("-o, --outFile <path>", "bundle output location", resolvePath)
         .option("--rootDir <path>", "specifies the root directory of input files", resolvePath)
