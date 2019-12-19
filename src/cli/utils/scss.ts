@@ -15,12 +15,12 @@ function sassImporter(projectPath: string): nodeSass.Importer {
     };
 }
 
-export async function renderScss(projectPath: string, includePaths: string[] | undefined, content: string): Promise<{}> {
+export async function renderScss(projectPath: string | undefined, includePaths: string[] | undefined, content: string): Promise<{}> {
     return new Promise((resolve, reject) => {
         nodeSass.render(
             {
                 data: content,
-                importer: sassImporter(projectPath),
+                importer: projectPath != null ? sassImporter(projectPath) : undefined,
                 includePaths: includePaths
             },
             (error, result) => {
