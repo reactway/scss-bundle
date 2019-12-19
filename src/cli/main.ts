@@ -34,7 +34,10 @@ function bundleResultForEach(bundleResult: BundleResult, cb: (bundleResult: Bund
     }
 }
 
-async function build(project: string, config: BundlerOptions): Promise<{ bundleResult: BundleResult; fileRegistry: FileRegistry }> {
+async function build(
+    project: string | undefined,
+    config: BundlerOptions
+): Promise<{ bundleResult: BundleResult; fileRegistry: FileRegistry }> {
     if (config.entryFile == null) {
         throw new EntryFileNotDefinedError();
     }
@@ -44,7 +47,7 @@ async function build(project: string, config: BundlerOptions): Promise<{ bundleR
     }
 
     const fileRegistry: FileRegistry = {};
-    const bundler = new Bundler(fileRegistry, config.rootDir);
+    const bundler = new Bundler(fileRegistry, project);
     const bundleResult = await bundler.bundle(config.entryFile, config.dedupeGlobs, config.includePaths, config.ignoreImports);
 
     if (!bundleResult.found) {
@@ -52,8 +55,8 @@ async function build(project: string, config: BundlerOptions): Promise<{ bundleR
     }
 
     bundleResultForEach(bundleResult, result => {
-        if (!result.found && result.tilde && config.rootDir == null) {
-            Log.warn("Found tilde import, but rootDir was not specified.");
+        if (!result.found && result.tilde && project == null) {
+            Log.warn(`Found tilde import, but "project" was not specified.`);
             throw new ImportFileNotFoundError(result.filePath);
         }
     });
@@ -118,10 +121,6 @@ async function main(argv: string[]): Promise<void> {
         const configLocationDir = path.dirname(configLocation);
         projectLocation = path.resolve(configLocationDir, config.project ?? "./");
     }
-    if (projectLocation == null) {
-        Log.error(`Could not resolve "project" directory.`);
-        process.exit(1);
-    }
 
     let resolvedLogLevel: LogLevelDesc | undefined;
     if (config.logLevel != null) {
@@ -137,13 +136,15 @@ async function main(argv: string[]): Promise<void> {
         const onFileChange = debounce(async () => {
             Log.info("File changes detected.");
 
-            // This is already checked as fail fast.
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            await build(projectLocation!, config);
+            await build(projectLocation, config);
             Log.info("Waiting for changes...");
         });
 
-        const watchFolder = config.rootDir != null ? config.rootDir : projectLocation;
+        if (config.rootDir) {
+            Log.warn("rootDir property is missing, using cwd.");
+        }
+
+        const watchFolder = config.rootDir ?? process.cwd();
 
         Log.info("Waiting for changes...");
         chokidar.watch(watchFolder).on("change", onFileChange);
