@@ -96,7 +96,7 @@ async function main(argv: string[]): Promise<void> {
         if (stats.isDirectory()) {
             projectLocation = cliOptions.project;
         } else {
-            Log.warn(`[DEPRECATED]: Flag "project" usage as pointing to the config file directly is deprecated.`);
+            Log.warn(`[DEPRECATED]: Flag "project" pointing to the config file directly is deprecated. Provide a path to the directory where the project is.`);
             configLocation = cliOptions.project;
             projectLocation = path.dirname(cliOptions.project);
         }
