@@ -55,17 +55,18 @@ $ scss-bundle -h
 
 Config file properties can be overridden with CLI flags.
 
-| CLI Flag                                | Bundler options          | Type     | Description                                                                      | Values                                     | Default |
-| --------------------------------------- | ------------------------ | -------- | -------------------------------------------------------------------------------- | ------------------------------------------ | ------- |
-| -p, --project \<path\>                  |                          | string   | Project location where `scss-bundle.config.json` and `node_modules` are located. |                                            | _cwd_   |
-| -e, --entryFile \<path\> <sup>`*`</sup> | entryFile <sup>`*`</sup> | string   | Bundle entry file location.                                                      |                                            |         |
-| -o, --outFile \<path\> <sup>`*`</sup>   | outFile <sup>`*`</sup>   | string   | Bundle output location.                                                          |                                            |         |
-| --rootDir \<path\>                      | rootDir                  | string   | Specifies the root directory of input files.                                     |                                            |         |
-| -w, --watch [boolean]                   | watch                    | boolean  | Watch files for changes. Works with `rootDir`.                                   |                                            |         |
-| --ignoreImports \<list\>                | ignoreImports            | string[] | Ignore resolving import content by matching a regular expression.                |                                            |         |
-| --includePaths \<list\>                 | includePaths             | string[] | Include paths for resolving imports.                                             |                                            |         |
-| --dedupeGlobs \<list\>                  | dedupeGlobs              | string[] | Files that will be emitted in a bundle once.                                     |                                            |         |
-| --logLevel \<level\>                    | logLevel                 | string   | Console log level.                                                               | silent, error, warning, info, debug, trace | info    |
+| CLI Flag                                | Bundler options          | Type     | Description                                                       | Values                                     | Default |
+| --------------------------------------- | ------------------------ | -------- | ----------------------------------------------------------------- | ------------------------------------------ | ------- |
+| -c, --config \<path\>                   |                          | string   | Configuration file location.                                      |                                            |         |
+| -p, --project \<path\>                  | project                  | string   | Project location where `node_modules` is located.                 |                                            |         |
+| -e, --entryFile \<path\> <sup>`*`</sup> | entryFile <sup>`*`</sup> | string   | Bundle entry file location.                                       |                                            |         |
+| -o, --outFile \<path\> <sup>`*`</sup>   | outFile <sup>`*`</sup>   | string   | Bundle output location.                                           |                                            |         |
+| --rootDir \<path\>                      | rootDir                  | string   | Specifies the root directory of input files.                      |                                            |         |
+| -w, --watch [boolean]                   | watch                    | boolean  | Watch files for changes. Works with `rootDir`.                    |                                            |         |
+| --ignoreImports \<list\>                | ignoreImports            | string[] | Ignore resolving import content by matching a regular expression. |                                            |         |
+| --includePaths \<list\>                 | includePaths             | string[] | Include paths for resolving imports.                              |                                            |         |
+| --dedupeGlobs \<list\>                  | dedupeGlobs              | string[] | Files that will be emitted in a bundle once.                      |                                            |         |
+| --logLevel \<level\>                    | logLevel                 | string   | Console log level.                                                | silent, error, warning, info, debug, trace | info    |
 
 `*` - Required
 

@@ -34,7 +34,10 @@ function bundleResultForEach(bundleResult: BundleResult, cb: (bundleResult: Bund
     }
 }
 
-async function build(project: string, config: BundlerOptions): Promise<{ bundleResult: BundleResult; fileRegistry: FileRegistry }> {
+async function build(
+    project: string | undefined,
+    config: BundlerOptions
+): Promise<{ bundleResult: BundleResult; fileRegistry: FileRegistry }> {
     if (config.entryFile == null) {
         throw new EntryFileNotDefinedError();
     }
@@ -44,7 +47,7 @@ async function build(project: string, config: BundlerOptions): Promise<{ bundleR
     }
 
     const fileRegistry: FileRegistry = {};
-    const bundler = new Bundler(fileRegistry, config.rootDir);
+    const bundler = new Bundler(fileRegistry, project);
     const bundleResult = await bundler.bundle(config.entryFile, config.dedupeGlobs, config.includePaths, config.ignoreImports);
 
     if (!bundleResult.found) {
@@ -52,8 +55,8 @@ async function build(project: string, config: BundlerOptions): Promise<{ bundleR
     }
 
     bundleResultForEach(bundleResult, result => {
-        if (!result.found && result.tilde && config.rootDir == null) {
-            Log.warn("Found tilde import, but rootDir was not specified.");
+        if (!result.found && result.tilde && project == null) {
+            Log.warn(`Found tilde import, but "project" was not specified.`);
             throw new ImportFileNotFoundError(result.filePath);
         }
     });
@@ -77,28 +80,46 @@ async function main(argv: string[]): Promise<void> {
     const packageJson: { version: string } = await fs.readJson(PACKAGE_JSON_PATH);
     const cliOptions = resolveArguments(commander.version(packageJson.version, "-v, --version"), argv);
 
-    const stats = await fs.stat(cliOptions.project);
-    let configPath: string;
-    if (stats.isDirectory()) {
-        configPath = path.resolve(cliOptions.project, CONFIG_FILE_NAME);
-    } else {
-        configPath = cliOptions.project;
+    let configLocation: string | undefined;
+    if (cliOptions.config != null) {
+        const stats = await fs.stat(cliOptions.config);
+        if (stats.isDirectory()) {
+            configLocation = path.resolve(cliOptions.config, CONFIG_FILE_NAME);
+        } else {
+            configLocation = cliOptions.config;
+        }
     }
-    const project = path.dirname(configPath);
+    // Resolve project location from CLI.
+    let projectLocation: string | undefined;
+    if (cliOptions.project != null) {
+        const stats = await fs.stat(cliOptions.project);
+        if (stats.isDirectory()) {
+            projectLocation = cliOptions.project;
+        } else {
+            Log.warn(`[DEPRECATED]: Flag "project" pointing to the config file directly is deprecated. Provide a path to the directory where the project is.`);
+            configLocation = cliOptions.project;
+            projectLocation = path.dirname(cliOptions.project);
+        }
+    }
 
     let config: BundlerOptions;
-    if (configPath != null) {
+    if (configLocation != null) {
         try {
-            const jsonConfig = await resolveConfig(configPath);
+            const jsonConfig = await resolveConfig(configLocation);
 
             config = mergeObjects(jsonConfig.bundlerOptions, cliOptions);
         } catch (error) {
             Log.error(error);
             process.exit(1);
-            return;
         }
     } else {
         config = cliOptions;
+    }
+
+    // Resolve project location from config file.
+    if (projectLocation == null && configLocation != null) {
+        const configLocationDir = path.dirname(configLocation);
+        projectLocation = path.resolve(configLocationDir, config.project ?? "./");
     }
 
     let resolvedLogLevel: LogLevelDesc | undefined;
@@ -114,20 +135,25 @@ async function main(argv: string[]): Promise<void> {
     if (config.watch) {
         const onFileChange = debounce(async () => {
             Log.info("File changes detected.");
-            await build(project, config);
+
+            await build(projectLocation, config);
             Log.info("Waiting for changes...");
         });
 
-        const watchFolder = config.rootDir != null ? config.rootDir : project;
+        if (config.rootDir) {
+            Log.warn("rootDir property is missing, using cwd.");
+        }
+
+        const watchFolder = config.rootDir ?? process.cwd();
 
         Log.info("Waiting for changes...");
         chokidar.watch(watchFolder).on("change", onFileChange);
     } else {
         try {
-            const { fileRegistry, bundleResult } = await build(project, config);
+            const { fileRegistry, bundleResult } = await build(projectLocation, config);
 
             Log.info("Imports tree:");
-            Log.info(renderArchy(bundleResult, project));
+            Log.info(renderArchy(bundleResult, projectLocation));
 
             Log.info(renderBundleInfo(bundleResult, fileRegistry));
         } catch (error) {
