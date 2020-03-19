@@ -140,8 +140,8 @@ async function main(argv: string[]): Promise<void> {
             Log.info("Waiting for changes...");
         });
 
-        if (config.rootDir) {
-            Log.warn("rootDir property is missing, using cwd.");
+        if (!config.rootDir) {
+            Log.warn(`rootDir property is missing in config, using current working directory: ${process.cwd()}`);
         }
 
         const watchFolder = config.rootDir ?? process.cwd();
