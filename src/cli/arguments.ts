@@ -21,7 +21,7 @@ export function resolveArguments(cmd: commander.Command, argv: string[]): Argume
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .parse(argv) as any) as Arguments;
 
-    const { config, project, entryFile, ignoreImports, includePaths, outFile, rootDir, watch, logLevel } = parsedArguments;
+    const { config, project, entryFile, ignoreImports, includePaths, outFile, rootDir, watch, logLevel, dedupeGlobs } = parsedArguments;
 
     return {
         config,
@@ -32,6 +32,7 @@ export function resolveArguments(cmd: commander.Command, argv: string[]): Argume
         outFile,
         rootDir,
         watch,
-        logLevel
+        logLevel,
+        dedupeGlobs
     };
 }
