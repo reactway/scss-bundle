@@ -67,7 +67,10 @@ async function build(
 
     await renderScss(project, config.includePaths, bundleResult.bundledContent);
 
-    await fs.mkdirp(path.dirname(config.outFile));
+    await /* TODO: JSFIX could not patch the breaking change:
+    Creating a directory with fs-extra no longer returns the path 
+    Suggested fix: The returned promise no longer includes the path of the new directory */
+    fs.mkdirp(path.dirname(config.outFile));
     await fs.writeFile(config.outFile, bundleResult.bundledContent);
 
     return {
