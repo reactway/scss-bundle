@@ -151,9 +151,11 @@ import { BundleResult } from "scss-bundle";
 interface BundleResult {
     imports?: BundleResult[];
     tilde?: boolean;
+    deduped?: boolean;
     filePath: string;
-    content?: string;
+    bundledContent?: string;
     found: boolean;
+    ignored?: boolean;
 }
 ```
 
@@ -162,7 +164,7 @@ interface BundleResult {
 -   `imports:` [BundleResult](#bundleresult)`[]` - File imports array
 -   `tilde?: boolean` - Used tilde import
 -   `filePath: string` - Full file path
--   `content: string` - File content
+-   `bundledContent?: string` - File content
 -   `found: boolean` - Is file found
 
 #### Registry
