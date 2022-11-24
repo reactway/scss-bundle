@@ -1,3 +1,6 @@
+> **Warning**
+> scss-bundle still works for use-cases without @use directive, but to support new SCSS module sytem [a bigger rewrite would be needed](https://github.com/reactway/scss-bundle/issues/90#issuecomment-619390804). Thus, we are archiving the project and if someone wants to take it over, please open an issue.
+
 # scss-bundle
 
 Bundles all SCSS imports into a single file recursively.
