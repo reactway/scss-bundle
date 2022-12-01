@@ -1,5 +1,6 @@
 > **Warning**
 > scss-bundle still works for use-cases without @use directive, but to support new SCSS module sytem [a bigger rewrite would be needed](https://github.com/reactway/scss-bundle/issues/90#issuecomment-619390804). Thus, we are not archiving the project to be read-only, but we will not contribute to it. In case someone wants to take it over, please open an issue.
+> If you use `scss-bundle` to export scss assets from an angular library, there is already [angular team solution](https://angular.io/guide/creating-libraries#managing-assets-in-a-library)
 
 # scss-bundle
 
